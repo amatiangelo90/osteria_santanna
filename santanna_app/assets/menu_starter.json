@@ -1,0 +1,38 @@
+[
+  {
+    "image": "images/cevice_salmone.jpg",
+    "name": "Cevice Salmone",
+    "ingredients": ["Salmone","Finocchio","Quinoa"],
+    "allergens": ["-"],
+    "changes": ["-"],
+    "price": 9.0,
+    "category": "starter"
+  },
+  {
+    "image": "images/melanzana.jpg",
+    "name": "Melanzana",
+    "ingredients": ["Melanzana","Mozzarella","Pomodoro"],
+    "allergens": ["Latticini"],
+    "changes": ["No Pomodoro","No Sghigno","No Sale","No patate"],
+    "price": 11.0,
+    "category": "starter"
+  },
+  {
+    "image": "images/qualcosa_di_fritto.jpg",
+    "name": "Polpette e Capocollo",
+    "ingredients": ["Capocollo","Pane","Sghigno"],
+    "allergens": ["Farinacei"],
+    "changes": [""],
+    "price": 11.0,
+    "category": "starter"
+  },
+  {
+    "image": "images/melanzana_stracciatella.jpeg",
+    "name": "Melanzana Speciala",
+    "ingredients": ["Melanzana","Mozzarella","Pomodoro"],
+    "allergens": ["Latticini"],
+    "changes": [""],
+    "price": 10.0,
+    "category": "starter"
+  }
+]

@@ -1,0 +1,51 @@
+[
+  {
+    "image": "images/wines/darapri_brut.jpg",
+    "name": "D'Arapri' Brut",
+    "ingredients": ["Bombino Bianco","Pinot Nero"],
+    "allergens": ["-"],
+    "changes": [""],
+    "price": 30.0,
+    "category": "wine"
+  },{
+  "image": "images/wines/darapri_rose.jpg",
+  "name": "D'Arapri' Rosè",
+  "ingredients": ["Montepulciano","Pinot Nero"],
+  "allergens": ["-"],
+  "changes": [""],
+  "price": 30.0,
+  "category": "wine"
+},{
+  "image": "images/wines/moet_chandon_imperial.png",
+  "name": "Moet & Chandon Imperial",
+  "ingredients": ["Chardonnay","Pinot Nero", "Pinot Menieur"],
+  "allergens": ["-"],
+  "changes": [""],
+  "price": 60.0,
+  "category": "wine"
+},{
+  "image": "images/wines/charles_de_gaulle_champagne.jpeg",
+  "name": "Charles De Gaulle - Champagne Brut",
+  "ingredients": ["Pinot Noir", "Chardonnay"],
+  "allergens": ["-"],
+  "changes": [""],
+  "price": 65.0,
+  "category": "wine"
+},{
+  "image": "images/wines/brut_nature_drappier.jpeg",
+  "name": "Brut Nature - Champagne Brut",
+  "ingredients": ["Pinot Noir"],
+  "allergens": ["-"],
+  "changes": [""],
+  "price": 55.0,
+  "category": "wine"
+},{
+  "image": "images/wines/champagne_brut_nature_rose_drappier.jpg",
+  "name": "Brut Nature Rosè - Champagne Rosè",
+  "ingredients": ["Pinot Noir"],
+  "allergens": ["-"],
+  "changes": [""],
+  "price": 65.0,
+  "category": "wine"
+}
+]

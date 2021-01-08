@@ -1,0 +1,56 @@
+[
+  {
+    "image": "images/poke_salmone_avocado.jpg",
+    "name": "Poke Salmone",
+    "ingredients": ["Salmone","Mais","Avocado","Fave Novelle", "Barbabietole"],
+    "allergens": ["-"],
+    "changes": [""],
+    "price": 10.0,
+    "category": "sushi"
+  },
+  {
+    "image": "images/ramen.jpg",
+    "name": "Ramen",
+    "ingredients": ["Noodles","Carne Suina","Uova Sode"],
+    "allergens": ["Latticini"],
+    "changes": [""],
+    "price": 9.0,
+    "category": "sushi"
+  },
+  {
+    "image": "images/sashimi.jpg",
+    "name": "Sashimi",
+    "ingredients": ["Gamberi Rossi","Scampi","Tonno Rosso","Salmone"],
+    "allergens": ["Farinacei"],
+    "changes": [""],
+    "price": 16.0,
+    "category": "sushi"
+  },
+  {
+    "image": "images/sushi_tonno.jpg",
+    "name": "Sushi Misto",
+    "ingredients": ["Tonno Rosso","Salmone","Riso","Alga Nori"],
+    "allergens": ["-"],
+    "changes": [""],
+    "price": 20.0,
+    "category": "sushi"
+  },
+  {
+    "image": "images/tacos.jpg",
+    "name": "Tacos",
+    "ingredients": ["Salmone"],
+    "allergens": ["-"],
+    "changes": [""],
+    "price": 11.0,
+    "category": "sushi"
+  },
+  {
+    "image": "images/parmigiana_sushi.jpg",
+    "name": "Parmigiana Sushi",
+    "ingredients": ["Melanzane","Riso","Salmone","Alga Nori"],
+    "allergens": ["-"],
+    "changes": [""],
+    "price": 11.0,
+    "category": "sushi"
+  }
+]
