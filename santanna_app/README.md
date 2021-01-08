@@ -1,4 +1,4 @@
-# santanna_app
+# Sant'Anna App
 
 OsteriaSantAnna Delivery App
 
