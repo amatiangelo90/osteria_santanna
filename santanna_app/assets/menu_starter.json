@@ -5,6 +5,7 @@
     "ingredients": ["Salmone","Finocchio","Quinoa"],
     "allergens": ["-"],
     "changes": ["-"],
+    "discountApplied": 25,
     "price": 9.0,
     "category": "starter"
   },
@@ -14,6 +15,7 @@
     "ingredients": ["Melanzana","Mozzarella","Pomodoro"],
     "allergens": ["Latticini"],
     "changes": ["No Pomodoro","No Sghigno","No Sale","No patate"],
+    "discountApplied": 0,
     "price": 11.0,
     "category": "starter"
   },
@@ -23,6 +25,7 @@
     "ingredients": ["Capocollo","Pane","Sghigno"],
     "allergens": ["Farinacei"],
     "changes": [""],
+    "discountApplied": 0,
     "price": 11.0,
     "category": "starter"
   },
@@ -32,6 +35,7 @@
     "ingredients": ["Melanzana","Mozzarella","Pomodoro"],
     "allergens": ["Latticini"],
     "changes": [""],
+    "discountApplied": 0,
     "price": 10.0,
     "category": "starter"
   }

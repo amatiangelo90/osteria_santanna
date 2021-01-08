@@ -5,6 +5,7 @@
     "ingredients": ["Capocollo Martina Franca","Funghi Cardoncelli","Cacioricotta"],
     "allergens": ["-"],
     "changes": [""],
+    "discountApplied": 0,
     "price": 9.0,
     "category": "main"
   },
@@ -14,6 +15,7 @@
     "ingredients": ["Ricci","Provolone","Pane"],
     "allergens": ["-"],
     "changes": [""],
+    "discountApplied": 0,
     "price": 8.0,
     "category": "main"
   },
@@ -23,6 +25,7 @@
     "ingredients": ["Vongole","Salicornia","Prezzemolo"],
     "allergens": ["Molluschi"],
     "changes": [""],
+    "discountApplied": 0,
     "price": 12.0,
     "category": "main"
   }

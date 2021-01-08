@@ -5,6 +5,7 @@
     "ingredients": ["Tonno","Agrumi","Touch of Cinese"],
     "allergens": ["-"],
     "changes": [""],
+    "discountApplied": 0,
     "price": 24.0,
     "category": "second_main"
   },
@@ -14,6 +15,7 @@
     "ingredients": ["Petto d'Oca","Pomodori","Amore e passione"],
     "allergens": ["-"],
     "changes": [""],
+    "discountApplied": 0,
     "price": 20.0,
     "category": "second_main"
   },
@@ -23,6 +25,7 @@
     "ingredients": ["Baccalà","Porri","L'ha fatto Peppino"],
     "allergens": ["-"],
     "changes": [""],
+    "discountApplied": 0,
     "price": 18.0,
     "category": "second_main"
   }

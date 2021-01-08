@@ -5,6 +5,7 @@
     "ingredients": ["Salmone","Mais","Avocado","Fave Novelle", "Barbabietole"],
     "allergens": ["-"],
     "changes": [""],
+    "discountApplied": 0,
     "price": 10.0,
     "category": "sushi"
   },
@@ -14,6 +15,7 @@
     "ingredients": ["Noodles","Carne Suina","Uova Sode"],
     "allergens": ["Latticini"],
     "changes": [""],
+    "discountApplied": 0,
     "price": 9.0,
     "category": "sushi"
   },
@@ -23,6 +25,7 @@
     "ingredients": ["Gamberi Rossi","Scampi","Tonno Rosso","Salmone"],
     "allergens": ["Farinacei"],
     "changes": [""],
+    "discountApplied": 0,
     "price": 16.0,
     "category": "sushi"
   },
@@ -32,6 +35,7 @@
     "ingredients": ["Tonno Rosso","Salmone","Riso","Alga Nori"],
     "allergens": ["-"],
     "changes": [""],
+    "discountApplied": 0,
     "price": 20.0,
     "category": "sushi"
   },
@@ -41,6 +45,7 @@
     "ingredients": ["Salmone"],
     "allergens": ["-"],
     "changes": [""],
+    "discountApplied": 0,
     "price": 11.0,
     "category": "sushi"
   },
@@ -50,6 +55,7 @@
     "ingredients": ["Melanzane","Riso","Salmone","Alga Nori"],
     "allergens": ["-"],
     "changes": [""],
+    "discountApplied": 0,
     "price": 11.0,
     "category": "sushi"
   }

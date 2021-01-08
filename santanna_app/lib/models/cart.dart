@@ -8,4 +8,11 @@ class Cart{
 
   Cart({@required this.product,
     @required this.numberOfItem});
+
+  @override
+  String toString() {
+    return 'Cart : ' + this.product.toString() + ' x ' + this.numberOfItem.toString();
+  }
+
+
 }

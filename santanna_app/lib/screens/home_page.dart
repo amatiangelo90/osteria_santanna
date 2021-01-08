@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:santanna_app/models/cart.dart';
 import 'package:santanna_app/models/product.dart';
 import 'package:santanna_app/screens/cart_screen.dart';
 import 'package:santanna_app/screens/costants.dart';
 import 'package:santanna_app/utils/round_icon_botton.dart';
+import 'package:toast/toast.dart';
 
 const starterMenuType = 'assets/menu_starter.json';
 const sushiMenuType = 'assets/menu_sushi.json';
@@ -22,10 +24,11 @@ class OsteriaHomePage extends StatefulWidget {
 
 class _OsteriaHomePageState extends State<OsteriaHomePage> {
 
-  List<Product> cartItems = List<Product>();
+  List<Cart> cartProductList = List<Cart>();
 
   final scaffoldState = GlobalKey<ScaffoldState>();
   String currentMenuType = starterMenuType;
+  int currentMenuItem = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -111,8 +114,9 @@ class _OsteriaHomePageState extends State<OsteriaHomePage> {
                       Stack(
                         children: <Widget>[
                           IconButton(icon: Icon(Icons.shopping_cart_outlined), onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => CartScreen(cartItems)));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => CartScreen(cartProductList)));
                           }),
+                          currentMenuItem == 0 ? Text('') :
                           Positioned(
                             top: 6.0,
                             right: 10.0,
@@ -122,7 +126,7 @@ class _OsteriaHomePageState extends State<OsteriaHomePage> {
                                 Positioned(
                                   right: 5.0,
                                   top: 2.0,
-                                  child: Center(child: Text('0', style: TextStyle(fontSize: 8.0, color: Colors.white, fontFamily: 'LoraFont'),
+                                  child: Center(child: Text(currentMenuItem.toString() , style: TextStyle(fontSize: 8.0, color: Colors.white, fontFamily: 'LoraFont'),
                                   ),
                                   ),
                                 ),
@@ -178,6 +182,9 @@ class _OsteriaHomePageState extends State<OsteriaHomePage> {
     );
   }
 
+  void updateMenuItemCount(int count){
+    currentMenuItem = count;
+  }
   void updateMenuType(int menuType){
     switch(menuType){
       case 0:
@@ -247,105 +254,131 @@ class _OsteriaHomePageState extends State<OsteriaHomePage> {
               ]
           ),
           child: GestureDetector(
-            /*onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetails(image: product['image'], productItem: product,))),*/
-            onTap: () async {
-              await showDialog(
-                context: this.context,
-                child: AlertDialog(
-                  content: Container(
+            onTap: (){
+              showDialog(
+                context: context,
+                builder: (context) {
+                  int _counter = 0;
+                  return StatefulBuilder(
+                    builder: (context, setState) {
+                      return Container(
+                        child: AlertDialog(
 
-                    height: MediaQuery.of(context).size.height - 200,
-                    width: MediaQuery.of(context).size.width - 50,
-                    child: Scaffold(
-                      backgroundColor: Colors.white70,
-                      body: SafeArea(
-                        child: ListView(
-                          children: [
-                            Center(
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(3.0),
-                                    child: Text(product.name, style: TextStyle(fontSize: 20.0, fontFamily: 'LoraFont'),),
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(60.0)),
-                                      gradient: LinearGradient(
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                          colors: [Colors.transparent, Colors.black]),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.all(Radius.circular(60.0)),
-                                      child: Image.asset(product.image),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(ingredientString, overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 13.0, fontFamily: 'LoraFont'),),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text('Allergeni: ' +  allergensString, overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 13.0, fontFamily: 'LoraFont'),),
-                                  ),
-                                  Text('€ ' + product.price.toString(), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 20.0, fontFamily: 'LoraFont'),),
-
-                                  buildChoiceChipList(product.changes),
-
-                                  Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        RoundIconButton(
-                                          icon: FontAwesomeIcons.minus,
-                                          function: () {
-                                            setState(() {
-
-                                            });
-                                          },
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            "1", overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 20.0, fontFamily: 'LoraFont'),
+                          title: Center(child: Text(product.name, style: TextStyle(fontSize: 20.0, fontFamily: 'LoraFont'),)),
+                          content: Container(
+                            height: MediaQuery.of(context).size.height - 200,
+                            width: MediaQuery.of(context).size.width - 50,
+                            child: Scaffold(
+                              backgroundColor: Colors.white70,
+                              body: SafeArea(
+                                child: ListView(
+                                  children: [
+                                    Center(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(Radius.circular(60.0)),
+                                              gradient: LinearGradient(
+                                                  begin: Alignment.topCenter,
+                                                  end: Alignment.bottomCenter,
+                                                  colors: [Colors.transparent, Colors.black]),
+                                            ),
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.all(Radius.circular(60.0)),
+                                              child: Image.asset(product.image),
+                                            ),
                                           ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(ingredientString, overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 13.0, fontFamily: 'LoraFont'),),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text('Allergeni: ' +  allergensString, overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 13.0, fontFamily: 'LoraFont'),),
+                                          ),
+                                          Text('€ ' + product.price.toString(), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 19.0, fontFamily: 'LoraFont'),),
 
-                                        ),
-                                        RoundIconButton(
-                                          icon: FontAwesomeIcons.plus,
-                                          function: () {
-                                            setState(() {
+                                          /*buildChoiceChipList(product.changes),*/
 
-                                            });
-                                          },
-                                        ),
-                                      ],
+                                          Padding(
+                                            padding: const EdgeInsets.all(12.0),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                RoundIconButton(
+                                                  icon: FontAwesomeIcons.minus,
+                                                  function: () {
+                                                    setState(() {
+                                                      if(_counter > 0)
+                                                        _counter = _counter - 1;
+                                                    });
+                                                  },
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Text(_counter.toString(), style: TextStyle(fontSize: 20.0, fontFamily: 'LoraFont'),),
+                                                ),
+                                                RoundIconButton(
+                                                  icon: FontAwesomeIcons.plus,
+                                                  function: () {
+                                                    setState(() {
+                                                      _counter = _counter + 1;
+                                                    });
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          FlatButton(
+                                            onPressed: () {
+                                              setState(() => {
+                                                if(_counter != 0){
+                                                  cartProductList.add(Cart(product: product, numberOfItem: _counter)),
+                                                  updateMenuItemCount(cartProductList.toSet().length),
+                                                }
+                                              });
+                                              if(_counter != 0 ){
+                                                Toast.show(
+                                                    _counter.toString() + ' x ' + product.name + ' aggiunto al carrello',
+                                                    context,
+                                                    duration: 2,
+                                                    backgroundColor: Colors.green.shade500,
+                                                    gravity: 0
+                                                );
+                                              }else{
+                                                Toast.show(
+                                                    'Nessuna aggiunta',
+                                                    context,
+                                                    duration: 2,
+                                                    backgroundColor: Colors.redAccent,
+                                                    gravity: 0
+                                                );
+                                              }
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text(
+                                              "Aggiungi al Carrello", overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 20.0, fontFamily: 'LoraFont'),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  FlatButton(
-
-                                    onPressed: () {
-
-                                    },
-                                    child: Text(
-                                      "Aggiungi al Carrello", overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 18.0, fontFamily: 'LoraFont'),
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                ),
+                      );
+                    },
+                  );
+                },
               );
-              setState(() {
-              });
             },
             child: Row(
               mainAxisSize: MainAxisSize.max,
@@ -386,26 +419,5 @@ class _OsteriaHomePageState extends State<OsteriaHomePage> {
       );
     });
     return items;
-  }
-
-  buildChoiceChipList(List<dynamic> changes) {
-    if(changes.isNotEmpty){
-      List<ChoiceChip> choiceChips = List<ChoiceChip>();
-
-      changes.forEach((element) {
-        choiceChips.add(ChoiceChip(
-          label: Text(element),
-          selected: false,
-          onSelected: (bool selected) {
-            setState(() {});
-          },
-        ),
-        );
-      });
-      return Wrap(
-        spacing: 2.0,
-        children: choiceChips,
-      );
-    }
   }
 }

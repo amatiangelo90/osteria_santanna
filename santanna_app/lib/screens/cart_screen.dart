@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
+import 'package:santanna_app/models/cart.dart';
 import 'package:santanna_app/models/product.dart';
 
 class CartScreen extends StatefulWidget {
 
-  final List<Product> cartItems;
+  final List<Cart> cartItems;
   CartScreen(this.cartItems);
 
   @override
@@ -22,19 +23,23 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   _getTotal() {
+    print('CCC' + this.widget.cartItems.toString());
+
     _total = 0.0;
-    this.widget.cartItems.forEach((product){
+
+    this.widget.cartItems.forEach((cartItem){
       setState(() {
-        _total += (product.price - (product.price % product.discountApplied)) * product.quantity;
+        _total = _total + ((cartItem.product.price - ((cartItem.product.price/100)*cartItem.product.discountApplied)) * cartItem.numberOfItem);
       });
     });
+    print('Totale' + _total.toString());
   }
 
 
   @override
   Widget build(BuildContext context) {
 
-    String dropDownCity = 'XXXXXXXXXXXXX';
+    String dropDownCity = '';
 
     return Scaffold(
       appBar: AppBar(
@@ -46,12 +51,42 @@ class _CartScreenState extends State<CartScreen> {
         elevation: 0.0,
       ),
       backgroundColor: Colors.white,
-      body: Container(
-        child: Column(
-          children: [
-            this.widget.cartItems.isEmpty ? Container(child: Center(child: Text("Il Carrello è vuoto",style: TextStyle(color: Colors.black, fontSize: 13.0, fontFamily: 'LoraFont')))) : Text(''),
-          ],
-        ),
+      body: this.widget.cartItems.isEmpty ?
+      Container(child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(child: Text("Il Carrello è vuoto",style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'))),
+        ],
+      ))
+          : Container(
+          child: Column(
+            children: [
+              FutureBuilder(
+                initialData: <Widget>[Text('')],
+                future: buildListFromCart(),
+                builder: (context, snapshot){
+                  if(snapshot.hasData){
+                    return Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Container(
+                        child: SafeArea(
+                          child: SingleChildScrollView(
+                            child: ListView(
+                              primary: false,
+                              shrinkWrap: true,
+                              children: snapshot.data,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }else{
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+            ],
+          )
       ),
       bottomSheet: Container(
         color: Colors.white,
@@ -73,81 +108,10 @@ class _CartScreenState extends State<CartScreen> {
                 padding: const EdgeInsets.all(15.0),
                 child: RaisedButton(
                     child: Text('Checkout',style: TextStyle(color: Colors.white, fontSize: 20.0, fontFamily: 'LoraFont')),
-                    color: _total == 0.0 ? Colors.green : Colors.grey,
+                    color: _total != 0.0 ? Colors.green : Colors.grey,
                     elevation: 1.0,
-                    onPressed: () async {
-                      await showDialog(
-                        context: this.context,
-                        child: AlertDialog(
-                          content: Container(
-                            height: MediaQuery.of(context).size.height,
-                            width: MediaQuery.of(context).size.width,
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 30.0),
-                                  child: Center(child: Text('Riepilogo Ordine', style: TextStyle(color: Colors.black, fontSize: 18.0, fontFamily: 'LoraFont'),),),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'Nome',
-
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'Indirizzo',
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'Città',
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: DropdownButton<String>(
-                                    elevation: 16,
-                                    underline: Expanded(
-                                      child: Container(
-                                        height: 30,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10.0),
-
-                                        ),
-                                      ),
-                                    ),
-
-                                    onChanged: (String newValue) {
-                                      setState(() {
-                                        dropDownCity = newValue;
-                                      });
-                                    },
-                                    items: <String>['Cisternino', 'Fasano', 'Ostuni', 'Martina Franca']
-                                        .map<DropdownMenuItem<String>>((String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value, style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
-                                      );
-                                    }).toList(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                    onPressed: (){
+                      FlutterOpenWhatsapp.sendSingleMessage("393402776601", buildMessageFromCart(this.widget.cartItems)
                       );
                     }),
               ),
@@ -156,5 +120,95 @@ class _CartScreenState extends State<CartScreen> {
         ),
       ),
     );
+  }
+
+
+  Future<List<Widget>> buildListFromCart() async{
+
+    List<Widget> items = List<Widget>();
+
+
+    this.widget.cartItems.forEach((cartItem) {
+
+      items.add(Padding(
+        padding: EdgeInsets.all(6.0),
+        child: Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  spreadRadius: 2.0,
+                  blurRadius: 5.0,
+                ),
+              ]
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              ClipRRect(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0)),
+                child: Image.asset(cartItem.product.image, width: 90.0, height: 90.0, fit: BoxFit.cover,),
+              ),
+              SizedBox(
+                width: 250.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5.0, bottom: 5.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(cartItem.product.name, style: TextStyle(fontSize: 16.0, fontFamily: 'LoraFont'),),
+                            Text(' x ' + cartItem.numberOfItem.toString() , style: TextStyle(color: Colors.green, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                          ],
+                        ),
+                      ),
+                      Text('',),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: Text('€ ' + cartItem.product.price.toString(), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 14.0, fontFamily: 'LoraFont'),),
+                      ),
+                      cartItem.product.discountApplied != 0 ?
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5.0, top: 5),
+                        child: Text('Sconto ' + cartItem.product.discountApplied.toString() + ' %', overflow: TextOverflow.ellipsis , style: TextStyle(color: Colors.green, fontSize: 13.0, fontFamily: 'LoraFont'),),
+                      ) : Text(''),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      );
+    });
+    return items;
+  }
+
+  buildMessageFromCart(List<Cart> cartItems) {
+    String itemList = '';
+
+    cartItems.forEach((element) {
+      itemList = itemList + "\n" + element.numberOfItem.toString() + " x " + element.product.name;
+    });
+
+    String message = "Osteria Sant'Anna Delivery\n\n"
+        + itemList + "\n"
+        + "\nTotale ordine : " + _total.toString() +
+        "\n"
+            "\nConsegna: - "
+            "\nData: - "
+            "\nOre: - "
+            "\n"
+            "\nOsteria Sant'Anna confermerà il vostro ordine nel minor tempo possibile"
+            "\n"
+            "\nOrdine Effettuato da: Angelo Amati";
+    return message;
   }
 }
