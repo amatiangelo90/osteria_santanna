@@ -1,0 +1,72 @@
+[
+  {
+    "image": "images/sbriciolata.jpeg",
+    "name": "Sbriciolata",
+    "ingredients": ["Cioccolato","Vaniglia","Nocciole","Antani"],
+    "allergens": ["Nocciole"],
+    "changes": ["-"],
+    "discountApplied": 0,
+    "price": 7.0,
+    "category": "dessert"
+  },
+  {
+    "image": "images/mousse_santanna.jpg",
+    "name": "Mousse Sant'Anna",
+    "ingredients": ["Mousse Ricotta","Dacquoise Mandorle","Frutti di bosco", "Sorbetto Fragola"],
+    "allergens": ["-"],
+    "changes": [""],
+    "discountApplied": 0,
+    "price": 5.0,
+    "category": "dessert"
+  },
+  {
+    "image": "images/mimosa.jpg",
+    "name": "Mimosa",
+    "ingredients": ["Torta mimosa","Sorbetto Fragola"],
+    "allergens": ["-"],
+    "changes": [""],
+    "discountApplied": 0,
+    "price": 8.0,
+    "category": "dessert"
+  },
+  {
+    "image": "images/mousse_cioccolato.jpg",
+    "name": "Mousse Cioccolato",
+    "ingredients": ["Cioccolato","Gelato Cioccolato Bianco", "Granella di qualcosa"],
+    "allergens": [""],
+    "changes": [""],
+    "discountApplied": 0,
+    "price": 9.0,
+    "category": "dessert"
+  },
+  {
+    "image": "images/dessert_egg.jpg",
+    "name": "Uovo",
+    "ingredients": ["Sorbetto mango e cocco","Cioccolato Bianco", "Gelato Vaniglia"],
+    "allergens": ["-"],
+    "changes": [""],
+    "discountApplied": 10,
+    "price": 7.0,
+    "category": "dessert"
+  },
+  {
+    "image": "images/green_apple.jpg",
+    "name": "Mela Verde",
+    "ingredients": ["Mela Verde","Sorbetto Mela"],
+    "allergens": ["-"],
+    "changes": [""],
+    "discountApplied": 0,
+    "price": 7.5,
+    "category": "dessert"
+  },
+  {
+    "image": "images/creme_brule.jpg",
+    "name": "Creme Brule",
+    "ingredients": ["Sorbetto Mango","Meringhe" , "Awanaghana"],
+    "allergens": ["-"],
+    "changes": [""],
+    "discountApplied": 0,
+    "price": 7.5,
+    "category": "dessert"
+  }
+]
