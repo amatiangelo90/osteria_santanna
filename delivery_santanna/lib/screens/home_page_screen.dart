@@ -253,7 +253,6 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
 
     productList.forEach((product) {
       items.add(InkWell(
-
         hoverColor: Colors.blueGrey,
         splashColor: Colors.greenAccent,
         highlightColor: Colors.blueGrey.withOpacity(0.5),

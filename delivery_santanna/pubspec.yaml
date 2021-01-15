@@ -58,6 +58,11 @@ flutter:
   assets:
     - images/
     - images/wines/
+    - images/dessert/
+    - images/starters/
+    - images/main_course/
+    - images/second_main/
+    - images/sushi/
     - assets/
 
   fonts:

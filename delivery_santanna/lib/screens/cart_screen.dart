@@ -97,120 +97,136 @@ class _CartScreenState extends State<CartScreen> {
               : Container(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-
-              child: ListView.builder(
-                itemCount: this.widget.cartItems.length,
-                itemBuilder: (context, index) {
-                  final item = this.widget.cartItems[index].product.name;
-                  return Dismissible(
-                    key: Key(item),
-                    confirmDismiss: (DismissDirection direction) async {
-                      if(direction == DismissDirection.endToStart){
-                        return await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text("Conferma"),
-                              content: Text("Eliminare  "+this.widget.cartItems[index].numberOfItem.toString() +
-                                  " x " + this.widget.cartItems[index].product.name.toString() + " ?"),
-                              actions: <Widget>[
-                                FlatButton(
-                                    onPressed: () => Navigator.of(context).pop(true),
-                                    child: const Text("Cancella")
-                                ),
-                                FlatButton(
-                                  onPressed: () => Navigator.of(context).pop(false),
-                                  child: const Text("Indietro"),
-                                ),
-                              ],
-                            );
+              child: Column(
+                children: [
+                  Flexible(
+                    flex: 7,
+                    child: ListView.builder(
+                      itemCount: this.widget.cartItems.length,
+                      itemBuilder: (context, index) {
+                        final item = this.widget.cartItems[index].product.name;
+                        return Dismissible(
+                          key: Key(item),
+                          confirmDismiss: (DismissDirection direction) async {
+                            if(direction == DismissDirection.endToStart){
+                              return await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text("Conferma"),
+                                    content: Text("Eliminare  "+this.widget.cartItems[index].numberOfItem.toString() +
+                                        " x " + this.widget.cartItems[index].product.name.toString() + " ?"),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                          onPressed: () => Navigator.of(context).pop(true),
+                                          child: const Text("Cancella")
+                                      ),
+                                      FlatButton(
+                                        onPressed: () => Navigator.of(context).pop(false),
+                                        child: const Text("Indietro"),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }else{
+                              return await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text("Aggiunto"),
+                                    content: Text("1 x " + this.widget.cartItems[index].product.name.toString()),
+                                  );
+                                },
+                              );
+                            }
                           },
-                        );
-                      }else{
-                        return await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text("Aggiunto"),
-                              content: Text("1 x " + this.widget.cartItems[index].product.name.toString()),
-                            );
+
+                          onDismissed: (direction) {
+                            _removeItemFromCartList(this.widget.cartItems[index]);
                           },
+
+                          secondaryBackground: Container(
+                              color: Colors.redAccent,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Center(child: Icon(
+                                      FontAwesomeIcons.trash,
+                                      color: Colors.white,
+                                    ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                          ),
+                          background: Container(
+                              color: Colors.lightGreen,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Center(child: Text('+ 1', style: TextStyle(color: Colors.white, fontSize: 20.0, fontFamily: 'LoraFont'),)),
+                                  ),
+                                ],
+                              )
+                          ),
+                          child: buildListFromCart(this.widget.cartItems[index]),
                         );
-                      }
-                    },
-
-                    onDismissed: (direction) {
-                      _removeItemFromCartList(this.widget.cartItems[index]);
-                    },
-
-                    secondaryBackground: Container(
-                        color: Colors.redAccent,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Center(child: Icon(
-                                FontAwesomeIcons.trash,
-                                color: Colors.white,
-                              ),
-                              ),
-                            ),
-                          ],
-                        )
+                      },
                     ),
-                    background: Container(
-                        color: Colors.lightGreen,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Center(child: Text('+ 1', style: TextStyle(color: Colors.white, fontSize: 20.0, fontFamily: 'LoraFont'),)),
-                            ),
-                          ],
-                        )
+                  ),
+                  Flexible(
+                    flex: 1,
+                    fit: FlexFit.tight,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(28.0),
+                            child: Text("Totale € " +  _total.toString() ,style: TextStyle(color: Colors.black, fontSize: 17.0, fontFamily: 'LoraFont')),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: RaisedButton(
+                                child: Text('Conferma',style: TextStyle(color: Colors.white, fontSize: 20.0, fontFamily: 'LoraFont')),
+                                color: _total != 0.0 ? Colors.green : Colors.grey,
+                                elevation: 1.0,
+                                onPressed: (){
+                                  _total != 0.0 ? showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        /*return InputFormScreen(cartItems: this.widget.cartItems, total: _total,);*/
+                                        return DeliveryPickupScreen(cartItems: this.widget.cartItems, total: _total,);
+                                      }
+                                  ) : showDialog(
+                                      context: context,
+                                      builder: (context){
+                                        return AlertDialog(
+                                          title: Center(child: Text("Carrello Vuoto", style: TextStyle(color: Colors.black, fontSize: 20.0, fontFamily: 'LoraFont'))),
+                                          content: Text(''),
+                                        );
+                                      }
+                                  );
+                                }),
+                          ),
+                        ],
+                      ),
                     ),
-                    child: buildListFromCart(this.widget.cartItems[index]),
-                  );
-                },
+                  ),
+
+                ],
               ),
             ),
           ),
         ),
-      ),
-      bottomSheet: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(28.0),
-            child: Text("Totale € " +  _total.toString() ,style: TextStyle(color: Colors.black, fontSize: 17.0, fontFamily: 'LoraFont')),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: RaisedButton(
-                child: Text('Conferma',style: TextStyle(color: Colors.white, fontSize: 20.0, fontFamily: 'LoraFont')),
-                color: _total != 0.0 ? Colors.green : Colors.grey,
-                elevation: 1.0,
-                onPressed: (){
-                  _total != 0.0 ? showDialog(
-                      context: context,
-                      builder: (context) {
-                        /*return InputFormScreen(cartItems: this.widget.cartItems, total: _total,);*/
-                        return DeliveryPickupScreen(cartItems: this.widget.cartItems, total: _total,);
-                      }
-                  ) : showDialog(
-                      context: context,
-                      builder: (context){
-                        return AlertDialog(
-                          title: Center(child: Text("Carrello Vuoto", style: TextStyle(color: Colors.black, fontSize: 20.0, fontFamily: 'LoraFont'))),
-                          content: Text(''),
-                        );
-                      }
-                  );
-                }),
-          ),
-        ],
       ),
     );
   }
@@ -250,8 +266,8 @@ class _CartScreenState extends State<CartScreen> {
                           child: Wrap(
                             crossAxisAlignment: WrapCrossAlignment.start,
                             children: [
-                              Text(cartItem.product.name, style: TextStyle(fontSize: 16.0, fontFamily: 'LoraFont'),),
-                              Text(' x ' + cartItem.numberOfItem.toString() , style: TextStyle(color: Colors.teal.shade800, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                              Text(cartItem.product.name, overflow: TextOverflow.fade, style: TextStyle(fontSize: 16.0, fontFamily: 'LoraFont'),),
+                              Text(' x ' + cartItem.numberOfItem.toString() , overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.teal.shade800, fontSize: 16.0, fontFamily: 'LoraFont'),),
                             ],
                           ),
                         ),

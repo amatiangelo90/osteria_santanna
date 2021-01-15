@@ -1,6 +1,6 @@
 [
   {
-    "image": "images/poke_salmone_avocado.jpg",
+    "image": "images/sushi/poke_salmone_avocado.jpg",
     "name": "Poke Salmone",
     "ingredients": ["Salmone","Mais","Avocado","Fave Novelle", "Barbabietole"],
     "allergens": ["-"],
@@ -10,7 +10,7 @@
     "category": "sushi"
   },
   {
-    "image": "images/ramen.jpg",
+    "image": "images/sushi/ramen.jpg",
     "name": "Ramen",
     "ingredients": ["Noodles","Carne Suina","Uova Sode"],
     "allergens": ["Latticini"],
@@ -20,7 +20,7 @@
     "category": "sushi"
   },
   {
-    "image": "images/sashimi.jpg",
+    "image": "images/sushi/sashimi.jpg",
     "name": "Sashimi",
     "ingredients": ["Gamberi Rossi","Scampi","Tonno Rosso","Salmone"],
     "allergens": ["Farinacei"],
@@ -30,7 +30,7 @@
     "category": "sushi"
   },
   {
-    "image": "images/sushi_tonno.jpg",
+    "image": "images/sushi/sushi_tonno.jpg",
     "name": "Sushi Misto",
     "ingredients": ["Tonno Rosso","Salmone","Riso","Alga Nori"],
     "allergens": ["-"],
@@ -40,7 +40,7 @@
     "category": "sushi"
   },
   {
-    "image": "images/tacos.jpg",
+    "image": "images/sushi/tacos.jpg",
     "name": "Tacos",
     "ingredients": ["Salmone"],
     "allergens": ["-"],
@@ -50,7 +50,7 @@
     "category": "sushi"
   },
   {
-    "image": "images/parmigiana_sushi.jpg",
+    "image": "images/sushi/parmigiana_sushi.jpg",
     "name": "Parmigiana Sushi",
     "ingredients": ["Melanzane","Riso","Salmone","Alga Nori"],
     "allergens": ["-"],

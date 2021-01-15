@@ -86,7 +86,7 @@ class _PickupScreenState extends State<PickupScreen> {
                       children: [
                         Card(
                           elevation: 0.0,
-                          child: Center(child: Text('Dati Asporto', style: TextStyle(color: Colors.black, fontSize: 20.0, fontFamily: 'LoraFont'),),),
+                          child: Center(child: Text('Asporto', style: TextStyle(color: Colors.black, fontSize: 20.0, fontFamily: 'LoraFont'),),),
                         ),
                         Card(
                           elevation: 0.0,
@@ -122,7 +122,7 @@ class _PickupScreenState extends State<PickupScreen> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Center(child: Text('Orario Asporto', style: TextStyle(color: Colors.black, fontSize: 12.0, fontFamily: 'LoraFont'),)),
+                          child: Center(child: Text('Orario Ritiro', style: TextStyle(color: Colors.black, fontSize: 12.0, fontFamily: 'LoraFont'),)),
                         ),
 
                         Padding(

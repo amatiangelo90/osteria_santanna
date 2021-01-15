@@ -1,6 +1,6 @@
 [
   {
-    "image": "images/sbriciolata.jpeg",
+    "image": "images/dessert/sbriciolata.jpeg",
     "name": "Sbriciolata",
     "ingredients": ["Cioccolato","Vaniglia","Nocciole","Antani"],
     "allergens": ["Nocciole"],
@@ -10,7 +10,7 @@
     "category": "dessert"
   },
   {
-    "image": "images/mousse_santanna.jpg",
+    "image": "images/dessert/mousse_santanna.jpg",
     "name": "Mousse Sant'Anna",
     "ingredients": ["Mousse Ricotta","Dacquoise Mandorle","Frutti di bosco", "Sorbetto Fragola"],
     "allergens": ["-"],
@@ -20,7 +20,7 @@
     "category": "dessert"
   },
   {
-    "image": "images/mimosa.jpg",
+    "image": "images/dessert/mimosa.jpg",
     "name": "Mimosa",
     "ingredients": ["Torta mimosa","Sorbetto Fragola"],
     "allergens": ["-"],
@@ -30,7 +30,7 @@
     "category": "dessert"
   },
   {
-    "image": "images/mousse_cioccolato.jpg",
+    "image": "images/dessert/mousse_cioccolato.jpg",
     "name": "Mousse Cioccolato",
     "ingredients": ["Cioccolato","Gelato Cioccolato Bianco", "Granella di qualcosa"],
     "allergens": [""],
@@ -40,7 +40,7 @@
     "category": "dessert"
   },
   {
-    "image": "images/dessert_egg.jpg",
+    "image": "images/dessert/dessert_egg.jpg",
     "name": "Uovo",
     "ingredients": ["Sorbetto mango e cocco","Cioccolato Bianco", "Gelato Vaniglia"],
     "allergens": ["-"],
@@ -50,7 +50,7 @@
     "category": "dessert"
   },
   {
-    "image": "images/green_apple.jpg",
+    "image": "images/dessert/green_apple.jpg",
     "name": "Mela Verde",
     "ingredients": ["Mela Verde","Sorbetto Mela"],
     "allergens": ["-"],
@@ -60,7 +60,7 @@
     "category": "dessert"
   },
   {
-    "image": "images/creme_brule.jpg",
+    "image": "images/dessert/creme_brule.jpg",
     "name": "Creme Brule",
     "ingredients": ["Sorbetto Mango","Meringhe" , "Awanaghana"],
     "allergens": ["-"],

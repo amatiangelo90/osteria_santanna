@@ -1,6 +1,6 @@
 [
   {
-    "image": "images/laganari_cardoncelli_capocollo.jpg",
+    "image": "images/main_course/laganari_cardoncelli_capocollo.jpg",
     "name": "Laganari alla Martinese",
     "ingredients": ["Capocollo Martina Franca","Funghi Cardoncelli","Cacioricotta"],
     "allergens": ["-"],
@@ -10,7 +10,7 @@
     "category": "main"
   },
   {
-    "image": "images/spaghetti_ricci_pane.jpg",
+    "image": "images/main_course/spaghetti_ricci_pane.jpg",
     "name": "Spaghetti Ricci e Pane",
     "ingredients": ["Ricci","Provolone","Pane"],
     "allergens": ["-"],
@@ -20,7 +20,7 @@
     "category": "main"
   },
   {
-    "image": "images/spaghetti_vongole.jpg",
+    "image": "images/main_course/spaghetti_vongole.jpg",
     "name": "Spaghetti Vongole",
     "ingredients": ["Vongole","Salicornia","Prezzemolo"],
     "allergens": ["Molluschi"],
