@@ -29,37 +29,40 @@ class _DeliveryPickupScreenState extends State<DeliveryPickupScreen> {
             padding: const EdgeInsets.all(20.0),
             child: Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
           ),
-          Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                    child: ReusableCard(
-                      color: Colors.white,
-                      cardChild: IconContent(label: 'ASPORTO', icon: FontAwesomeIcons.shoppingBag,color: Colors.teal.shade800,description: '',),
-                      onPress: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return PickupScreen(cartItems: this.widget.cartItems, total: this.widget.total,);
-                            }
-                        );
-                      },
-                    )),
-                Expanded(
-                    child: ReusableCard(
-                      color: Colors.white,
-                      cardChild: IconContent(label: 'DELIVERY', icon: FontAwesomeIcons.bicycle, color: Colors.teal.shade800, description: 'Costo spedizione €3. Per ordini superiori a 50 € la spedizione è gratuita',),
-                      onPress: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return DeliveryScreen(cartItems: this.widget.cartItems, total: this.widget.total, );
-                            }
-                        );
-                      },
-                    )),
-              ],
+          Flexible(
+            flex: 6,
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                      child: ReusableCard(
+                        color: Colors.white,
+                        cardChild: IconContent(label: 'ASPORTO', icon: Icons.shopping_bag_outlined,color: Colors.teal.shade800,description: '',),
+                        onPress: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return PickupScreen(cartItems: this.widget.cartItems, total: this.widget.total,);
+                              }
+                          );
+                        },
+                      )),
+                  Expanded(
+                      child: ReusableCard(
+                        color: Colors.white,
+                        cardChild: IconContent(label: 'DELIVERY', icon: Icons.delivery_dining, color: Colors.teal.shade800, description: 'Costo spedizione €3. Per ordini superiori a 50 € la spedizione è gratuita',),
+                        onPress: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return DeliveryScreen(cartItems: this.widget.cartItems, total: this.widget.total, );
+                              }
+                          );
+                        },
+                      )),
+                ],
+              ),
             ),
           ),
         ],

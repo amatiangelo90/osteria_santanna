@@ -121,8 +121,34 @@ class _PickupScreenState extends State<PickupScreen> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(child: Text('Orario Ritiro', style: TextStyle(color: Colors.black, fontSize: 12.0, fontFamily: 'LoraFont'),)),
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Text('Indirizzo ritiro: ', style: TextStyle(color: Colors.black, fontSize: 15.0, fontFamily: 'LoraFont'),),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Card(
+                            elevation: 2.0,
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text('Viale Stazione 12', style: TextStyle(color: Colors.black, fontSize: 18.0, fontFamily: 'LoraFont'),),
+                                ),
+                                Text('Cisternino (BR)', style: TextStyle(color: Colors.black, fontSize: 18.0, fontFamily: 'LoraFont'),),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 12),
+                                  child: Text('Cap 72014', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+
+
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Center(child: Text('Orario Ritiro', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),)),
                         ),
 
                         Padding(
@@ -170,14 +196,32 @@ class _PickupScreenState extends State<PickupScreen> {
                                     IconButton(
                                         icon: Image.asset('images/whatapp_icon.png'),
                                         iconSize: 100.0, onPressed: (){
-                                      HttpService.sendMessage("393454937047",
-                                        buildMessageFromCartPickUp(
-                                            this.widget.cartItems,
-                                            _nameController.value.text,
-                                            this.widget.total.toString(),
-                                            getCurrentDateTime(),
-                                            _selectedTimeSlotPikup.slot),
-                                      );
+                                      if(_nameController.value.text == ''){
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                              content: Text('Inserire il nome', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  onPressed: () => Navigator.of(context).pop(false),
+                                                  child: const Text("Indietro"),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      }else{
+                                        HttpService.sendMessage("393454937047",
+                                          buildMessageFromCartPickUp(
+                                              this.widget.cartItems,
+                                              _nameController.value.text,
+                                              this.widget.total.toString(),
+                                              getCurrentDateTime(),
+                                              _selectedTimeSlotPikup.slot),
+                                        );
+                                      }
                                     }),
                                     Text('Invia', style: TextStyle(color: Colors.black, fontSize: 19.0, fontFamily: 'LoraFont'),),
                                   ],
@@ -211,7 +255,7 @@ class _PickupScreenState extends State<PickupScreen> {
             "%0aOsteria Sant'Anna%0a"
             + itemList + "%0a"
             + "%0aTotale ordine : " + total + " € " +
-            "%0a----------------------------------"
+            "%0a-------------------------------------------------"
                 "%0aIndirizzo Ritiro: Viale Stazione 12"
                 "%0aCittà: Cisternino (72014)"
                 "%0aProvincia: BR"

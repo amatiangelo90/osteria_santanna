@@ -1,5 +1,6 @@
 import 'package:delivery_santanna/models/cart.dart';
 import 'package:delivery_santanna/screens/input_form_screen.dart';
+import 'package:delivery_santanna/utils/scrolling.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -100,7 +101,7 @@ class _CartScreenState extends State<CartScreen> {
               child: Column(
                 children: [
                   Flexible(
-                    flex: 7,
+                    flex: 8,
                     child: ListView.builder(
                       itemCount: this.widget.cartItems.length,
                       itemBuilder: (context, index) {
@@ -184,26 +185,34 @@ class _CartScreenState extends State<CartScreen> {
                     fit: FlexFit.tight,
                     child: Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
+                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                          color: Colors.white70,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              spreadRadius: 2.0,
+                              blurRadius: 10.0,
+                            ),
+                          ]
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(28.0),
-                            child: Text("Totale € " +  _total.toString() ,style: TextStyle(color: Colors.black, fontSize: 17.0, fontFamily: 'LoraFont')),
+                            child: Text("Totale € " +  _total.toString() ,style: TextStyle(color: Colors.teal.shade800, fontSize: 20.0, fontFamily: 'LoraFont')),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: RaisedButton(
+
                                 child: Text('Conferma',style: TextStyle(color: Colors.white, fontSize: 20.0, fontFamily: 'LoraFont')),
                                 color: _total != 0.0 ? Colors.green : Colors.grey,
-                                elevation: 1.0,
+                                elevation: 5.0,
                                 onPressed: (){
                                   _total != 0.0 ? showDialog(
                                       context: context,
                                       builder: (context) {
-                                        /*return InputFormScreen(cartItems: this.widget.cartItems, total: _total,);*/
                                         return DeliveryPickupScreen(cartItems: this.widget.cartItems, total: _total,);
                                       }
                                   ) : showDialog(
@@ -262,19 +271,33 @@ class _CartScreenState extends State<CartScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 0.0, bottom: 5.0),
+                          padding: const EdgeInsets.only(left: 8.0, bottom: 5.0),
                           child: Wrap(
                             crossAxisAlignment: WrapCrossAlignment.start,
                             children: [
-                              Text(cartItem.product.name, overflow: TextOverflow.fade, style: TextStyle(fontSize: 16.0, fontFamily: 'LoraFont'),),
-                              Text(' x ' + cartItem.numberOfItem.toString() , overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.teal.shade800, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                              RichText(
+                                text: TextSpan(
+                                  text: cartItem.product.name,
+                                  style: TextStyle(color: Colors.black, fontSize: 17.0, fontFamily: 'LoraFont'),
+                                  children: <TextSpan>[
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                         ),
                         Text('',),
                         Padding(
-                          padding: const EdgeInsets.only(left: 5.0),
-                          child: Text('€ ' + cartItem.product.price.toString(), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 14.0, fontFamily: 'LoraFont'),),
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: RichText(
+                            text: TextSpan(
+                              text: cartItem.numberOfItem.toString() + ' x ',
+                              style: TextStyle(color: Colors.teal.shade800, fontSize: 17.0, fontFamily: 'LoraFont'),
+                              children: <TextSpan>[
+                                TextSpan(text: cartItem.product.price.toString() + ' €', style: TextStyle(color: Colors.teal.shade800, fontSize: 17.0, fontFamily: 'LoraFont'),),
+                              ],
+                            ),
+                          ),
                         ),
                         cartItem.product.discountApplied != 0 ?
                         Padding(

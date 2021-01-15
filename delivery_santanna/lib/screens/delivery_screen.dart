@@ -247,16 +247,50 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                   IconButton(
                                       icon: Image.asset('images/whatapp_icon.png'),
                                       iconSize: 100.0, onPressed: (){
-                                    HttpService.sendMessage("393454937047",
-                                      buildMessageFromCartDelivery(
-                                          this.widget.cartItems,
-                                          _nameController.value.text,
-                                          _selectedCity.name + ' (${_selectedCity.cap})',
-                                          _addressController.value.text,
-                                          getCurrentDateTime(),
-                                          _currentTotal.toString(),
-                                          _selectedTimeSlotDelivery.slot),
-                                    );
+                                    if(_nameController.value.text == ''){
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                            content: Text('Inserire il nome', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                            actions: <Widget>[
+                                              FlatButton(
+                                                onPressed: () => Navigator.of(context).pop(false),
+                                                child: const Text("Indietro"),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }else if (_addressController.value.text == ''){
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                            content: Text('Inserire un indirizzo valido', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                            actions: <Widget>[
+                                              FlatButton(
+                                                onPressed: () => Navigator.of(context).pop(false),
+                                                child: const Text("Indietro"),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }else{
+                                      HttpService.sendMessage("393454937047",
+                                        buildMessageFromCartDelivery(
+                                            this.widget.cartItems,
+                                            _nameController.value.text,
+                                            _selectedCity.name + ' (${_selectedCity.cap})',
+                                            _addressController.value.text,
+                                            getCurrentDateTime(),
+                                            _currentTotal.toString(),
+                                            _selectedTimeSlotDelivery.slot),
+                                      );
+                                    }
                                   }),
                                   Text('Invia', style: TextStyle(color: Colors.black, fontSize: 19.0, fontFamily: 'LoraFont'),),
                                 ],
@@ -288,7 +322,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
             "%0a%0aOsteria Sant'Anna%0a" +
             itemList + "%0a"
             + "%0aTotale ordine : " + total + " € " +
-            "%0a----------------------------------"
+            "%0a-------------------------------------------------"
                 "%0aIndirizzo: $address"
                 "%0aCittà: $city"
                 "%0a%0aData Ordine: $date"

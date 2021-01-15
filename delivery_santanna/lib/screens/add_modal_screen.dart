@@ -39,14 +39,13 @@ class _ModalAddItemState extends State<ModalAddItem> {
                 SafeArea(
                   child: Center(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             SizedBox(
-                              height: 200,
+                              height: 110,
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.all(Radius.circular(60.0)),
@@ -71,7 +70,7 @@ class _ModalAddItemState extends State<ModalAddItem> {
                             ),
                             Text('€ ' + this.widget.product.price.toString(), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 19.0, fontFamily: 'LoraFont'),),
 
-                            /*buildChoiceChipList(product.changes),*/
+                            /*buildChoiceChipList(this.widget.product.changes),*/
 
                             Padding(
                               padding: const EdgeInsets.all(12.0),
