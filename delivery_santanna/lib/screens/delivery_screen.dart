@@ -305,6 +305,22 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                           );
                                         },
                                       );
+                                    }else if(_selectedDateTime == null){
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                            content: Text('Selezionare una data di consegna valida', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                            actions: <Widget>[
+                                              FlatButton(
+                                                onPressed: () => Navigator.of(context).pop(false),
+                                                child: const Text("Indietro"),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
                                     }else{
                                       HttpService.sendMessage("393454937047",
                                         buildMessageFromCartDelivery(

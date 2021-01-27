@@ -1,6 +1,4 @@
 import 'package:delivery_santanna/models/cart.dart';
-import 'package:delivery_santanna/screens/input_form_screen.dart';
-import 'package:delivery_santanna/utils/scrolling.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -108,6 +106,7 @@ class _CartScreenState extends State<CartScreen> {
                         final item = this.widget.cartItems[index].product.name;
                         return Dismissible(
                           key: Key(item),
+                          direction: DismissDirection.endToStart,
                           confirmDismiss: (DismissDirection direction) async {
                             if(direction == DismissDirection.endToStart){
                               return await showDialog(
@@ -147,7 +146,7 @@ class _CartScreenState extends State<CartScreen> {
                             _removeItemFromCartList(this.widget.cartItems[index]);
                           },
 
-                          secondaryBackground: Container(
+                          background: Container(
                               color: Colors.redAccent,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -159,18 +158,6 @@ class _CartScreenState extends State<CartScreen> {
                                       color: Colors.white,
                                     ),
                                     ),
-                                  ),
-                                ],
-                              )
-                          ),
-                          background: Container(
-                              color: Colors.lightGreen,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Center(child: Text('+ 1', style: TextStyle(color: Colors.white, fontSize: 20.0, fontFamily: 'LoraFont'),)),
                                   ),
                                 ],
                               )
@@ -314,9 +301,30 @@ class _CartScreenState extends State<CartScreen> {
                   FontAwesomeIcons.trash,
                   color: Colors.redAccent,
                 ),
-                onPressed: (){
-                  print('Removing current item from cart: ' + cartItem.product.name);
-                  _removeItemFromCartList(cartItem);
+                onPressed: () async {
+                  return await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text("Conferma"),
+                        content: Text("Eliminare  " + cartItem.numberOfItem.toString() +
+                            " x " + cartItem.product.name.toString() + " ?"),
+                        actions: <Widget>[
+                          FlatButton(
+                              onPressed: (){
+                                _removeItemFromCartList(cartItem);
+                                Navigator.of(context).pop(true);
+                              },
+                              child: const Text("Cancella")
+                          ),
+                          FlatButton(
+                            onPressed: () => Navigator.of(context).pop(false),
+                            child: const Text("Indietro"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
               ),
             ],
