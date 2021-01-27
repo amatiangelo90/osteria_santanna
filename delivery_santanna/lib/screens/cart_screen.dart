@@ -101,7 +101,7 @@ class _CartScreenState extends State<CartScreen> {
               child: Column(
                 children: [
                   Flexible(
-                    flex: 8,
+                    flex: 5,
                     child: ListView.builder(
                       itemCount: this.widget.cartItems.length,
                       itemBuilder: (context, index) {

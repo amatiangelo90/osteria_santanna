@@ -8,6 +8,7 @@ class Product {
   final double price;
   final int discountApplied;
   final String category;
+  final String available;
 
   Product(this.name,
       this.image,
@@ -16,7 +17,8 @@ class Product {
       this.price,
       this.discountApplied,
       this.changes,
-      this.category);
+      this.category,
+      this.available);
 
   factory Product.fromJson(dynamic json){
 
@@ -28,7 +30,10 @@ class Product {
         json['price'] as double,
         json['discountApplied'] as int,
         json['changes'] as List,
-        json['category']);
+        json['category'] as String,
+        json['available'] as String,
+
+    );
   }
 
   @override

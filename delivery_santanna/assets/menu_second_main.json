@@ -7,7 +7,8 @@
     "changes": [""],
     "discountApplied": 0,
     "price": 24.0,
-    "category": "second_main"
+    "category": "second_main",
+    "available": "true"
   },
   {
     "image": "images/second_main/petto_oca.jpg",
@@ -17,7 +18,8 @@
     "changes": [""],
     "discountApplied": 0,
     "price": 20.0,
-    "category": "second_main"
+    "category": "second_main",
+    "available": "false"
   },
   {
     "image": "images/second_main/baccala_confit_porri.jpg",
@@ -27,6 +29,7 @@
     "changes": [""],
     "discountApplied": 0,
     "price": 18.0,
-    "category": "second_main"
+    "category": "second_main",
+    "available": "false"
   }
 ]

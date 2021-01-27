@@ -1,6 +1,5 @@
 
 import 'package:delivery_santanna/screens/home_page_screen.dart';
-import 'package:delivery_santanna/screens/marquee.dart';
 import 'package:delivery_santanna/screens/splash_screen_santanna.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +15,6 @@ class MyApp extends StatelessWidget {
         routes:{
           SplashScreenSantAnna.id : (context) => SplashScreenSantAnna(),
           OsteriaSantAnnaHomePage.id : (context) => OsteriaSantAnnaHomePage(),
-          Marquee_class.id : (context) => Marquee_class(),
         }
     );
   }

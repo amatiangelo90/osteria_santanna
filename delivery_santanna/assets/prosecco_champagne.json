@@ -7,7 +7,8 @@
     "changes": [""],
     "discountApplied": 0,
     "price": 30.0,
-    "category": "wine"
+    "category": "wine",
+    "available": "true"
   },{
   "image": "images/wines/darapri_rose.jpg",
   "name": "D'Arapri' Rosè",
@@ -16,7 +17,8 @@
   "changes": [""],
   "discountApplied": 0,
   "price": 30.0,
-  "category": "wine"
+  "category": "wine",
+  "available": "false"
 },{
   "image": "images/wines/moet_chandon_imperial.png",
   "name": "Moet & Chandon Imperial",
@@ -25,7 +27,8 @@
   "changes": [""],
   "discountApplied": 0,
   "price": 60.0,
-  "category": "wine"
+  "category": "wine",
+  "available": "false"
 },{
   "image": "images/wines/charles_de_gaulle_champagne.jpeg",
   "name": "Charles De Gaulle - Champagne Brut",
@@ -34,7 +37,8 @@
   "changes": [""],
   "discountApplied": 0,
   "price": 65.0,
-  "category": "wine"
+  "category": "wine",
+  "available": "false"
 },{
   "image": "images/wines/brut_nature_drappier.jpeg",
   "name": "Brut Nature - Champagne Brut",
@@ -43,7 +47,8 @@
   "changes": [""],
   "discountApplied": 0,
   "price": 55.0,
-  "category": "wine"
+  "category": "wine",
+  "available": "false"
 },{
   "image": "images/wines/champagne_brut_nature_rose_drappier.jpg",
   "name": "Brut Nature Rosè - Champagne Rosè",
@@ -52,6 +57,7 @@
   "changes": [""],
   "discountApplied": 0,
   "price": 65.0,
-  "category": "wine"
+  "category": "wine",
+  "available": "false"
 }
 ]

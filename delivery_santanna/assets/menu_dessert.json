@@ -7,7 +7,8 @@
     "changes": ["-"],
     "discountApplied": 0,
     "price": 7.0,
-    "category": "dessert"
+    "category": "dessert",
+    "available": "true"
   },
   {
     "image": "images/dessert/mousse_santanna.jpg",
@@ -17,7 +18,8 @@
     "changes": [""],
     "discountApplied": 0,
     "price": 5.0,
-    "category": "dessert"
+    "category": "dessert",
+    "available": "true"
   },
   {
     "image": "images/dessert/mimosa.jpg",
@@ -27,7 +29,8 @@
     "changes": [""],
     "discountApplied": 0,
     "price": 8.0,
-    "category": "dessert"
+    "category": "dessert",
+    "available": "false"
   },
   {
     "image": "images/dessert/mousse_cioccolato.jpg",
@@ -37,7 +40,8 @@
     "changes": [""],
     "discountApplied": 0,
     "price": 9.0,
-    "category": "dessert"
+    "category": "dessert",
+    "available": "false"
   },
   {
     "image": "images/dessert/dessert_egg.jpg",
@@ -47,7 +51,8 @@
     "changes": [""],
     "discountApplied": 10,
     "price": 7.0,
-    "category": "dessert"
+    "category": "dessert",
+    "available": "false"
   },
   {
     "image": "images/dessert/green_apple.jpg",
@@ -57,7 +62,8 @@
     "changes": [""],
     "discountApplied": 0,
     "price": 7.5,
-    "category": "dessert"
+    "category": "dessert",
+    "available": "false"
   },
   {
     "image": "images/dessert/creme_brule.jpg",
@@ -67,6 +73,7 @@
     "changes": [""],
     "discountApplied": 0,
     "price": 7.5,
-    "category": "dessert"
+    "category": "dessert",
+    "available": "false"
   }
 ]

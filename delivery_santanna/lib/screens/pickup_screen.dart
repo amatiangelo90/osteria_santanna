@@ -1,5 +1,7 @@
+import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:delivery_santanna/models/cart.dart';
 import 'package:delivery_santanna/services/http_service.dart';
+import 'package:delivery_santanna/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -16,6 +18,8 @@ class PickupScreen extends StatefulWidget {
 
 class _PickupScreenState extends State<PickupScreen> {
 
+  DateTime _selectedDateTime;
+  final _datePikerController = DatePickerController();
 
   List<TimeSlotPickup> _slotsPicker = TimeSlotPickup.getPickupSlots();
 
@@ -144,7 +148,31 @@ class _PickupScreenState extends State<PickupScreen> {
                           ),
                         ),
 
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              DatePicker(
+                                DateTime.now(),
+                                activeDates: Utils.getAvailableData(),
+                                dateTextStyle: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),
+                                dayTextStyle: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),
+                                monthTextStyle: TextStyle(color: Colors.black, fontSize: 12.0, fontFamily: 'LoraFont'),
 
+                                selectionColor: Colors.teal,
+                                deactivatedColor: Colors.grey,
+                                selectedTextColor: Colors.white,
+                                daysCount: 25,
+                                locale: 'it',
+                                controller: _datePikerController,
+                                onDateChange: (date) {
+                                  setSelectedDate(date);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
 
                         Padding(
                           padding: const EdgeInsets.all(15.0),
@@ -219,7 +247,8 @@ class _PickupScreenState extends State<PickupScreen> {
                                               _nameController.value.text,
                                               this.widget.total.toString(),
                                               getCurrentDateTime(),
-                                              _selectedTimeSlotPikup.slot),
+                                              _selectedTimeSlotPikup.slot,
+                                              _selectedDateTime),
                                         );
                                       }
                                     }),
@@ -243,7 +272,14 @@ class _PickupScreenState extends State<PickupScreen> {
   }
 
 
-  String buildMessageFromCartPickUp(List<Cart> cartItems, String name, String total, String date, String slot) {
+  String buildMessageFromCartPickUp(
+      List<Cart> cartItems,
+      String name,
+      String total,
+      String date,
+      String slot,
+      DateTime selectedDateTime) {
+
     String itemList = '';
 
     cartItems.forEach((element) {
@@ -259,7 +295,7 @@ class _PickupScreenState extends State<PickupScreen> {
                 "%0aIndirizzo Ritiro: Viale Stazione 12"
                 "%0aCittà: Cisternino (72014)"
                 "%0aProvincia: BR"
-                "%0a%0aData Ordine: $date"
+                "%0a%0aData Consegna: ${selectedDateTime.day}/" + selectedDateTime.month.toString() +"/" + selectedDateTime.year.toString() +
                 "%0aOre Ritiro: $slot "
                 "%0a"
                 "%0a"
@@ -277,6 +313,12 @@ class _PickupScreenState extends State<PickupScreen> {
     var now = new DateTime.now();
     var formatter = new DateFormat.yMd().add_jm();
     return formatter.format(now);
+  }
+
+  void setSelectedDate(DateTime date) {
+    setState(() {
+      _selectedDateTime = date;
+    });
   }
 }
 

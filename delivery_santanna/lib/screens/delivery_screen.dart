@@ -1,7 +1,9 @@
 import 'package:delivery_santanna/models/cart.dart';
 import 'package:delivery_santanna/services/http_service.dart';
+import 'package:delivery_santanna/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:date_picker_timeline/date_picker_timeline.dart';
 
 class DeliveryScreen extends StatefulWidget {
 
@@ -24,11 +26,12 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
 
   City _selectedCity;
   TimeSlotDelivery _selectedTimeSlotDelivery;
-
+  DateTime _selectedDateTime;
   double _currentTotal = 0.0;
 
   final _nameController = TextEditingController();
   final _addressController = TextEditingController();
+  final _datePikerController = DatePickerController();
 
   @override
   void dispose() {
@@ -198,9 +201,32 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                           ),
                         ),
                       ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          DatePicker(
+                            DateTime.now(),
+                            activeDates: Utils.getAvailableData(),
+                            dateTextStyle: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),
+                            dayTextStyle: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),
+                            monthTextStyle: TextStyle(color: Colors.black, fontSize: 12.0, fontFamily: 'LoraFont'),
+
+                            selectionColor: Colors.teal,
+                            deactivatedColor: Colors.grey,
+                            selectedTextColor: Colors.white,
+                            daysCount: 25,
+                            locale: 'it',
+                            controller: _datePikerController,
+                            onDateChange: (date) {
+                              setSelectedDate(date);
+                            },
+                          ),
+                        ],
+                      ),
+
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Center(child: Text('Fascia Oraria', style: TextStyle(color: Colors.black, fontSize: 12.0, fontFamily: 'LoraFont'),)),
+                        child: Center(child: Text('Fascia Oraria', style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),)),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 6.0),
@@ -288,7 +314,8 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                             _addressController.value.text,
                                             getCurrentDateTime(),
                                             _currentTotal.toString(),
-                                            _selectedTimeSlotDelivery.slot),
+                                            _selectedTimeSlotDelivery.slot,
+                                            _selectedDateTime),
                                       );
                                     }
                                   }),
@@ -310,7 +337,15 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
     );
   }
 
-  buildMessageFromCartDelivery(List<Cart> cartItems, String name, String city, String address, String date, String total, String slot) {
+  buildMessageFromCartDelivery(List<Cart> cartItems,
+      String name,
+      String city,
+      String address,
+      String date,
+      String total,
+      String slot,
+      DateTime dateTime) {
+
     String itemList = '';
 
     cartItems.forEach((element) {
@@ -325,7 +360,8 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
             "%0a-------------------------------------------------"
                 "%0aIndirizzo: $address"
                 "%0aCittà: $city"
-                "%0a%0aData Ordine: $date"
+/*                "%0a%0aDa: $date"*/
+                "%0a%0aData Consegna: ${dateTime.day}/" + dateTime.month.toString() +"/" + dateTime.year.toString() +
                 "%0aOre Consegna: $slot "
                 "%0a"
                 "%0a"
@@ -341,6 +377,12 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
     var now = new DateTime.now();
     var formatter = new DateFormat.yMd().add_jm();
     return formatter.format(now);
+  }
+
+  void setSelectedDate(DateTime date) {
+    setState(() {
+      _selectedDateTime = date;
+    });
   }
 
 

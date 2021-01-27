@@ -7,7 +7,8 @@
     "changes": [""],
     "discountApplied": 0,
     "price": 18.0,
-    "category": "wine"
+    "category": "wine",
+    "available": "true"
   },{
   "image": "images/wines/brut_nature_drappier.jpeg",
   "name": "Apnea",
@@ -16,7 +17,8 @@
   "changes": [""],
   "discountApplied": 0,
   "price": 18.0,
-  "category": "wine"
+  "category": "wine",
+  "available": "true"
 },{
   "image": "images/wines/brut_nature_drappier.jpeg",
   "name": "Apnea",
@@ -25,7 +27,8 @@
   "changes": [""],
   "discountApplied": 0,
   "price": 18.0,
-  "category": "wine"
+  "category": "wine",
+  "available": "true"
 },{
   "image": "images/wines/brut_nature_drappier.jpeg",
   "name": "Apnea",
@@ -34,6 +37,7 @@
   "changes": [""],
   "discountApplied": 0,
   "price": 18.0,
-  "category": "wine"
+  "category": "wine",
+  "available": "true"
 }
 ]

@@ -34,7 +34,6 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
 
     setState(() {
       var _present = false;
-
       currentMenuItem = currentMenuItem + cartItemToAdd[0].numberOfItem;
       cartProductList.forEach((element) {
         if(element.product.name == cartItemToAdd[0].product.name){
@@ -164,9 +163,9 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
                         children: <Widget>[
                           IconButton(icon: Icon(Icons.shopping_cart_outlined), onPressed: (){
                             Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => CartScreen(cartItems: cartProductList,
-                                  function: removeProductFromCart,),
-                                ),
+                              MaterialPageRoute(builder: (context) => CartScreen(cartItems: cartProductList,
+                                function: removeProductFromCart,),
+                              ),
                             );
                           }),
                           currentMenuItem == 0 ? Text('') :
@@ -252,78 +251,160 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
     print(productList);
 
     productList.forEach((product) {
-      items.add(InkWell(
-        hoverColor: Colors.blueGrey,
-        splashColor: Colors.greenAccent,
-        highlightColor: Colors.blueGrey.withOpacity(0.5),
-        onTap: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return ModalAddItem(product: product, updateCountCallBack: updateCurrentMenuItemCount);
-              }
-          );
-        },
-        onLongPress: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return ModalAddItem(product: product, updateCountCallBack: updateCurrentMenuItemCount);
-              }
-          );
-        },
-        child: Padding(
-          padding: EdgeInsets.all(6.0),
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    spreadRadius: 2.0,
-                    blurRadius: 5.0,
+      items.add(
+        product.available == 'true' ?
+        InkWell(
+          hoverColor: Colors.blueGrey,
+          splashColor: Colors.greenAccent,
+          highlightColor: Colors.blueGrey.withOpacity(0.5),
+          onTap: () {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                    content: Text(product.name + ' Esaurito', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                    actions: <Widget>[
+                      FlatButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: const Text("Indietro"),
+                      ),
+                    ],
+                  );
+                }
+            );
+          },
+          child: Padding(
+            padding: EdgeInsets.all(6.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      spreadRadius: 2.0,
+                      blurRadius: 5.0,
+                    ),
+                  ]
+              ),
+              child: ClipRect(
+                child: Banner(
+                  message: 'Esaurito',
+                  location: BannerLocation.topEnd,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      ClipRRect(
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0)),
+                        child: Image.asset(product.image, width: 90.0, height: 90.0, fit: BoxFit.cover,),
+                      ),
+                      SizedBox(
+                        width: 250.0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5.0, bottom: 5.0),
+                                child: Text(product.name, style: TextStyle(fontSize: 16.0, fontFamily: 'LoraFont'),),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5.0),
+                                child: Text(Utils.getIngredientsFromProduct(product), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 11.0, fontFamily: 'LoraFont'),),
+                              ),
+                              Text('',),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5.0),
+                                child: Text('€ ' + product.price.toString(), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 14.0, fontFamily: 'LoraFont'),),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ]
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0)),
-                  child: Image.asset(product.image, width: 90.0, height: 90.0, fit: BoxFit.cover,),
                 ),
-                SizedBox(
-                  width: 250.0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5.0, bottom: 5.0),
-                          child: Text(product.name, style: TextStyle(fontSize: 16.0, fontFamily: 'LoraFont'),),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5.0),
-                          child: Text(Utils.getIngredientsFromProduct(product), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 11.0, fontFamily: 'LoraFont'),),
-                        ),
-                        Text('',),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5.0),
-                          child: Text('€ ' + product.price.toString(), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 14.0, fontFamily: 'LoraFont'),),
-                        ),
-                      ],
+              ),
+            ),
+          ),
+        ) : InkWell(
+          hoverColor: Colors.blueGrey,
+          splashColor: Colors.greenAccent,
+          highlightColor: Colors.blueGrey.withOpacity(0.5),
+          onTap: () {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return ModalAddItem(product: product, updateCountCallBack: updateCurrentMenuItemCount);
+                }
+            );
+          },
+          onLongPress: () {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return ModalAddItem(product: product, updateCountCallBack: updateCurrentMenuItemCount);
+                }
+            );
+          },
+          child: Padding(
+            padding: EdgeInsets.all(6.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      spreadRadius: 2.0,
+                      blurRadius: 5.0,
+                    ),
+                  ]
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0)),
+                    child: Image.asset(product.image, width: 90.0, height: 90.0, fit: BoxFit.cover,),
+                  ),
+                  SizedBox(
+                    width: 250.0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5.0, bottom: 5.0),
+                            child: Text(product.name, style: TextStyle(fontSize: 16.0, fontFamily: 'LoraFont'),),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5.0),
+                            child: Text(Utils.getIngredientsFromProduct(product), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 11.0, fontFamily: 'LoraFont'),),
+                          ),
+                          Text('',),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5.0),
+                            child: Text('€ ' + product.price.toString(), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 14.0, fontFamily: 'LoraFont'),),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
-      ),
       );
     });
     return items;
   }
 }
+
+
+
+

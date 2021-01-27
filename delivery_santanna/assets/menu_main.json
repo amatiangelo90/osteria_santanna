@@ -7,7 +7,8 @@
     "changes": [""],
     "discountApplied": 0,
     "price": 9.0,
-    "category": "main"
+    "category": "main",
+    "available": "true"
   },
   {
     "image": "images/main_course/spaghetti_ricci_pane.jpg",
@@ -17,7 +18,8 @@
     "changes": [""],
     "discountApplied": 0,
     "price": 8.0,
-    "category": "main"
+    "category": "main",
+    "available": "false"
   },
   {
     "image": "images/main_course/spaghetti_vongole.jpg",
@@ -27,6 +29,7 @@
     "changes": [""],
     "discountApplied": 0,
     "price": 12.0,
-    "category": "main"
+    "category": "main",
+    "available": "false"
   }
 ]

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:delivery_santanna/screens/home_page_screen.dart';
-import 'package:delivery_santanna/screens/marquee.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreenSantAnna extends StatefulWidget {
