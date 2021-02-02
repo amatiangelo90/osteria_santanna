@@ -4,6 +4,7 @@ import 'package:delivery_santanna/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
+import 'package:delivery_santanna/utils/costants.dart';
 
 class DeliveryScreen extends StatefulWidget {
 
@@ -119,26 +120,19 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                     children: [
                       Card(
                         elevation: 0.0,
-                        child: Center(child: Text('Dati Consegna', style: TextStyle(color: Colors.black, fontSize: 20.0, fontFamily: 'LoraFont'),),),
-                      ),
-                      Card(
-                        elevation: 0.0,
                         child: Column(
                           children: [
-
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('Totale € $_currentTotal', style: TextStyle(color: Colors.black, fontSize: 19.0, fontFamily: 'LoraFont'),),
-                                ],
-                              ),
+                            Text('Dettagli Consegna', style: TextStyle(color: Colors.black, fontSize: 15.0, fontFamily: 'LoraFont'),),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('Totale € $_currentTotal', style: TextStyle(color: Colors.black, fontSize: 19.0, fontFamily: 'LoraFont'),),
+                              ],
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text('(Spedizione ', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                Text('(Spedizione ', style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
                                 this.widget.total < 30.0
                                     ? Text('€ 3)', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),)
                                     : Text('€ 0)', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
@@ -178,7 +172,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 6.0),
+                        padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
                         child: Center(
                           child: Card(
                             borderOnForeground: true,
@@ -195,6 +189,8 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                     onChanged: onChangeDropdownItem,
                                   ),
                                 ),
+                                _selectedCity.cap == '' ?
+                                Text(''):
                                 Text("Cap: " + _selectedCity.cap, style: TextStyle(color: Colors.black, fontSize: 12.0, fontFamily: 'LoraFont'),),
                               ],
                             ),
@@ -223,13 +219,8 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                           ),
                         ],
                       ),
-
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(child: Text('Fascia Oraria', style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 6.0),
+                        padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
                         child: Center(
                           child: Card(
                             borderOnForeground: true,
@@ -251,28 +242,20 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                           ),
                         ),
                       ),
-                    ],
-                  ),
-
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    ),
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Card(
-                          shadowColor: Colors.black,
-                          elevation: 0.0,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
-                                children: [
-                                  IconButton(
-                                      icon: Image.asset('images/whatapp_icon.png'),
-                                      iconSize: 100.0, onPressed: (){
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                        child: Center(
+                          child: Card(
+                            borderOnForeground: true,
+                            elevation: 0.0,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Center(
+                                  child: IconButton(
+                                    icon: Image.asset('images/whatapp_icon_c.png'),
+                                    iconSize: 90.0, onPressed: (){
                                     if(_nameController.value.text == ''){
                                       showDialog(
                                         context: context,
@@ -321,28 +304,97 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                           );
                                         },
                                       );
-                                    }else{
-                                      HttpService.sendMessage("393454937047",
-                                        buildMessageFromCartDelivery(
-                                            this.widget.cartItems,
-                                            _nameController.value.text,
-                                            _selectedCity.name + ' (${_selectedCity.cap})',
-                                            _addressController.value.text,
-                                            getCurrentDateTime(),
-                                            _currentTotal.toString(),
-                                            _selectedTimeSlotDelivery.slot,
-                                            _selectedDateTime),
+                                    }else if(_selectedCity.cap == ''){
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                            content: Text('Selezionare la città', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                            actions: <Widget>[
+                                              FlatButton(
+                                                onPressed: () => Navigator.of(context).pop(false),
+                                                child: const Text("Indietro"),
+                                              ),
+                                            ],
+                                          );
+                                        },
                                       );
+                                    }else if(_selectedTimeSlotDelivery.slot == 'Seleziona Fascia Oraria Consegna'){
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                            content: Text('Selezionare la fascia oraria per la consegna', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                            actions: <Widget>[
+                                              FlatButton(
+                                                onPressed: () => Navigator.of(context).pop(false),
+                                                child: const Text("Indietro"),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    } else{
+                                      if(_selectedDateTime.day == DateTime.now().day){
+                                        if(DateTime.now().hour > 12){
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: const Text('Attenzione', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                                content: Text('Gli ordini effettuati dopo le 18 devono essere approvati blablabla', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                                actions: <Widget>[
+                                                  FlatButton(
+                                                      onPressed: (){
+                                                        HttpService.sendMessage(numberSantAnna,
+                                                          buildMessageFromCartDelivery(
+                                                              this.widget.cartItems,
+                                                              _nameController.value.text,
+                                                              _selectedCity.name + ' (${_selectedCity.cap})',
+                                                              _addressController.value.text,
+                                                              getCurrentDateTime(),
+                                                              _currentTotal.toString(),
+                                                              _selectedTimeSlotDelivery.slot,
+                                                              _selectedDateTime),
+                                                        );
+                                                        Navigator.of(context).pop(true);
+                                                      },
+                                                      child: const Text("Procedi")
+                                                  ),
+                                                  FlatButton(
+                                                    onPressed: () => Navigator.of(context).pop(false),
+                                                    child: const Text("Indietro"),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        }
+                                      }else {
+                                        HttpService.sendMessage(numberSantAnna,
+                                          buildMessageFromCartDelivery(
+                                              this.widget.cartItems,
+                                              _nameController.value.text,
+                                              _selectedCity.name + ' (${_selectedCity.cap})',
+                                              _addressController.value.text,
+                                              getCurrentDateTime(),
+                                              _currentTotal.toString(),
+                                              _selectedTimeSlotDelivery.slot,
+                                              _selectedDateTime),
+                                        );
+                                      }
                                     }
-                                  }),
-                                  Text('Invia', style: TextStyle(color: Colors.black, fontSize: 19.0, fontFamily: 'LoraFont'),),
-                                ],
-                              ),
-                            ],
+                                  },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),
@@ -366,24 +418,25 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
 
     cartItems.forEach((element) {
       itemList = itemList + "%0a" + element.numberOfItem.toString() + " x " + element.product.name;
+      if(element.changes.length != 0){
+        itemList = itemList + "%0a  " + element.changes.toString();
+      }
     });
 
+
     String message =
-        "ORDINE DELIVERY%0a" +
-            "%0a%0aOsteria Sant'Anna%0a" +
-            itemList + "%0a"
-            + "%0aTotale ordine : " + total + " € " +
-            "%0a-------------------------------------------------"
-                "%0aIndirizzo: $address"
-                "%0aCittà: $city"
-/*                "%0a%0aDa: $date"*/
-                "%0a%0aData Consegna: ${dateTime.day}/" + dateTime.month.toString() +"/" + dateTime.year.toString() +
-                "%0aOre Consegna: $slot "
+        "ORDINE DELIVERY%0a%0a" +
+                " Nome: $name" +
+                "%0a Indirizzo: $address"
+                "%0a Città: $city"
+                "%0a $slot "
+                "%0a " + Utils.getWeekDay(dateTime.weekday) +" ${dateTime.day} " + Utils.getMonthDay(dateTime.month) +
                 "%0a"
+                "%0a-------------------------------------------------"
                 "%0a"
-                "%0aOsteria Sant'Anna confermerà il vostro ordine nel minor tempo possibile"
-                "%0a"
-                "%0aOrdine Effettuato da: $name";
+                + itemList + "%0a"
+                + "%0aTot. " + total + " € ";
+
 
     message = message.replaceAll('&', '%26');
     return message;
@@ -400,8 +453,6 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
       _selectedDateTime = date;
     });
   }
-
-
 }
 
 class TimeSlotDelivery {
@@ -412,9 +463,10 @@ class TimeSlotDelivery {
 
   static List<TimeSlotDelivery> getDeliverySlots() {
     return <TimeSlotDelivery>[
-      TimeSlotDelivery(1, '19:30 - 20:30'),
-      TimeSlotDelivery(2, '20:30 - 21:30'),
-      TimeSlotDelivery(3, '21:30 - 22:30'),
+      TimeSlotDelivery(1, 'Seleziona Fascia Oraria Consegna'),
+      TimeSlotDelivery(2, '19:30 - 20:30'),
+      TimeSlotDelivery(3, '20:30 - 21:30'),
+      TimeSlotDelivery(4, '21:30 - 22:30'),
     ];
   }
 }
@@ -428,10 +480,10 @@ class City {
 
   static List<City> getCities() {
     return <City>[
-      City(1, 'Cisternino','72014'),
-      City(2, 'Martina Franca','74015'),
-      City(3, 'Locorotondo','70010'),
-      City(4, 'Casalini','72014'),
+      City(1, 'Seleziona Città',''),
+      City(2, 'Cisternino','72014'),
+      City(3, 'Martina Franca','74015'),
+      City(4, 'Locorotondo','70010'),
       City(5, 'Fasano/Pezze Di Greco','72015'),
     ];
   }

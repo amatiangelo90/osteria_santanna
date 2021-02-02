@@ -191,7 +191,7 @@ class _InputFormScreenState extends State<InputFormScreen> {
                                 child: Card(
                                   child: TextField(
                                     controller: _nameController,
-                                    autofocus: false,
+                                    autofocus: true,
                                     textAlign: TextAlign.center,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
@@ -289,7 +289,7 @@ class _InputFormScreenState extends State<InputFormScreen> {
                                     Column(
                                       children: [
                                         IconButton(
-                                            icon: Image.asset('images/whatapp_icon.png'),
+                                            icon: Image.asset('images/whatapp_icon_c.png'),
                                             iconSize: 100.0, onPressed: (){
                                           HttpService.sendMessage("393454937047",
                                             buildMessageFromCartDelivery(
@@ -411,7 +411,7 @@ class _InputFormScreenState extends State<InputFormScreen> {
                                     Column(
                                       children: [
                                         IconButton(
-                                            icon: Image.asset('images/whatapp_icon.png'),
+                                            icon: Image.asset('images/whatapp_icon_c.png'),
                                             iconSize: 100.0, onPressed: (){
                                           HttpService.sendMessage("393454937047",
                                             buildMessageFromCartPickUp(

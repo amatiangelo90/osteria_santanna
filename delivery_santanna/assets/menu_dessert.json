@@ -1,79 +1,24 @@
 [
   {
-    "image": "images/dessert/sbriciolata.jpeg",
-    "name": "Sbriciolata",
-    "ingredients": ["Cioccolato","Vaniglia","Nocciole","Antani"],
+    "image": "images/dessert/choco_tart.JPG",
+    "name": "Chocolate Tart",
+    "ingredients": ["Glassa croccante allo shortbread di cacao", "Cremoso di cioccolato Orelys", "Salsa cioccolato guanaya"],
     "allergens": ["Nocciole"],
-    "changes": ["-"],
-    "discountApplied": 0,
-    "price": 7.0,
-    "category": "dessert",
-    "available": "true"
-  },
-  {
-    "image": "images/dessert/mousse_santanna.jpg",
-    "name": "Mousse Sant'Anna",
-    "ingredients": ["Mousse Ricotta","Dacquoise Mandorle","Frutti di bosco", "Sorbetto Fragola"],
-    "allergens": ["-"],
-    "changes": [""],
+    "changes": [],
     "discountApplied": 0,
     "price": 5.0,
     "category": "dessert",
     "available": "true"
   },
   {
-    "image": "images/dessert/mimosa.jpg",
-    "name": "Mimosa",
-    "ingredients": ["Torta mimosa","Sorbetto Fragola"],
+    "image": "images/dessert/mousse.jpg",
+    "name": "Mousse Sant'Anna",
+    "ingredients": ["Mousse di ricotta", "Frutti rossi", "Daquoise di mandorle e olio evo", "Crumble di mandorle"],
     "allergens": ["-"],
-    "changes": [""],
+    "changes": [],
     "discountApplied": 0,
-    "price": 8.0,
+    "price": 5.0,
     "category": "dessert",
-    "available": "false"
-  },
-  {
-    "image": "images/dessert/mousse_cioccolato.jpg",
-    "name": "Mousse Cioccolato",
-    "ingredients": ["Cioccolato","Gelato Cioccolato Bianco", "Granella di qualcosa"],
-    "allergens": [""],
-    "changes": [""],
-    "discountApplied": 0,
-    "price": 9.0,
-    "category": "dessert",
-    "available": "false"
-  },
-  {
-    "image": "images/dessert/dessert_egg.jpg",
-    "name": "Uovo",
-    "ingredients": ["Sorbetto mango e cocco","Cioccolato Bianco", "Gelato Vaniglia"],
-    "allergens": ["-"],
-    "changes": [""],
-    "discountApplied": 10,
-    "price": 7.0,
-    "category": "dessert",
-    "available": "false"
-  },
-  {
-    "image": "images/dessert/green_apple.jpg",
-    "name": "Mela Verde",
-    "ingredients": ["Mela Verde","Sorbetto Mela"],
-    "allergens": ["-"],
-    "changes": [""],
-    "discountApplied": 0,
-    "price": 7.5,
-    "category": "dessert",
-    "available": "false"
-  },
-  {
-    "image": "images/dessert/creme_brule.jpg",
-    "name": "Creme Brule",
-    "ingredients": ["Sorbetto Mango","Meringhe" , "Awanaghana"],
-    "allergens": ["-"],
-    "changes": [""],
-    "discountApplied": 0,
-    "price": 7.5,
-    "category": "dessert",
-    "available": "false"
+    "available": "true"
   }
 ]

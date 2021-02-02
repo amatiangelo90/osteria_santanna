@@ -1,68 +1,195 @@
 [
+ {
+  "image": "images/sushi/amaebi_gamberi_roll.PNG",
+  "name": "Amaebi Gamberi Roll (8 pz)",
+  "ingredients": ["Uramaki con Gamberi rossi crudi","Cetriolo","Erba cipollina","Carpaccio di Tonno","Mayo giapponese","Uova di salmone"],
+  "allergens": ["Crostacei","Uova"],
+  "changes": ["No Cetriolo","No Erba Cipollina","No Mayo"],
+  "discountApplied": 0,
+  "price": 14.0,
+  "category": "sushi",
+  "available": "true"
+},{
+  "image": "images/sushi/tiger_roll.PNG",
+  "name": "Tiger Roll (8 pz)",
+  "ingredients": ["Uramaki con Gamberi in tempura","Salmone","Avocado","Salsa Unagi","Fiocchi di tempura tenkasu"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 12.0,
+  "category": "sushi",
+  "available": "true"
+},{
+  "image": "images/sushi/spicy_salmon.PNG",
+  "name": "Spicy Sake Roll (8 pz)",
+  "ingredients": ["Uramaki con Tartare di Salmone","Salsa Spicy","Crema di Avocado","Granella Pistacchio"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 12.0,
+  "category": "sushi",
+  "available": "true"
+},{
+  "image": "images/sushi/spicy_tuna.PNG",
+  "name": "Spicy Tuna Roll (8 pz)",
+  "ingredients": ["Uramaki con Tartare di Tonno","Salsa Spicy","Crema di Avocado","Granella Pistacchio"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 12.0,
+  "category": "sushi",
+  "available": "true"
+},{
+  "image": "images/sushi/parmigiana_roll.PNG",
+  "name": "Parmigiana Roll (8 pz)",
+  "ingredients": ["Uramaki con Gambero al Vapore","Basilico","Parmigiana di Melanzane"],
+  "allergens": ["-"],
+  "changes": [""],
+  "discountApplied": 0,
+  "price": 12.0,
+  "category": "sushi",
+  "available": "true"
+},{
+  "image": "images/sushi/unagi_rape.PNG",
+  "name": "Unagi Rape Roll (8 pz)",
+  "ingredients": ["Uramaki con Sgombro laccato e affumicato","Rape ripassate", "Emulsione di bottarga"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 12.0,
+  "category": "sushi",
+  "available": "true"
+}, {
+  "image": "images/sushi/gambero_rosso_roll.PNG",
+  "name": "Gambero Rosso Roll(8 pz)",
+  "ingredients": ["Uramaki Gamberi Rossi crudi","Stracciatella","Avocado"],
+  "allergens": ["-"],
+  "changes": [""],
+  "discountApplied": 0,
+  "price": 12.0,
+  "category": "sushi",
+  "available": "true"
+},
   {
-    "image": "images/sushi/poke_salmone_avocado.jpg",
-    "name": "Poke Salmone",
-    "ingredients": ["Salmone","Mais","Avocado","Fave Novelle", "Barbabietole"],
+  "image": "images/sushi/california_roll.PNG",
+  "name": "California roll (8 pz)",
+  "ingredients": ["Uramaki con Surimi","Avocado","Salmone","Philadelphia"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 10.0,
+  "category": "sushi",
+  "available": "true"
+},{
+  "image": "images/sushi/poke_salmone.PNG",
+  "name": "Poke Bowl Salmone",
+  "ingredients": ["Ciotola di riso sushi con Edamame","Salmone","Cavolo rosso","Cetrioli","Avocado","Pomodori","Salsa ponzu","Semi di sesamo","Alghe nori"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 11.0,
+  "category": "sushi",
+  "available": "true"
+},{
+  "image": "images/sushi/poke_tonno_rosso.PNG",
+  "name": "Poke Bowl Tonno",
+  "ingredients": ["Ciotola di riso sushi con Edamame","Tonno","Cavolo rosso","Cetrioli","Avocado","Pomodori","Salsa ponzu","Semi di sesamo","Alghe nori"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 11.0,
+  "category": "sushi",
+  "available": "true"
+},{
+  "image": "images/sushi/poke_gamberi.PNG",
+  "name": "Poke Bowl Gamberoni",
+  "ingredients": ["Ciotola di riso sushi con Edamame","Gamberoni","Cavolo rosso","Cetrioli","Avocado","Pomodori","Salsa ponzu","Semi di sesamo","Alghe nori"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 11.0,
+  "category": "sushi",
+  "available": "true"
+},
+  {
+    "image": "images/sushi/sashimi_misto.PNG",
+    "name": "Sashimi misto (12 pz)",
+    "ingredients": ["4 fette di Tonno", "4 fette di Salmone", "2 Gamberi Rossi", "2 Scampi"],
     "allergens": ["-"],
-    "changes": [""],
+    "changes": [],
     "discountApplied": 0,
-    "price": 10.0,
-    "category": "sushi",
-    "available": "false"
-  },
-  {
-    "image": "images/sushi/ramen.jpg",
-    "name": "Ramen",
-    "ingredients": ["Noodles","Carne Suina","Uova Sode"],
-    "allergens": ["Latticini"],
-    "changes": [""],
-    "discountApplied": 0,
-    "price": 9.0,
+    "price": 15.0,
     "category": "sushi",
     "available": "true"
-  },
-  {
-    "image": "images/sushi/sashimi.jpg",
-    "name": "Sashimi",
-    "ingredients": ["Gamberi Rossi","Scampi","Tonno Rosso","Salmone"],
-    "allergens": ["Farinacei"],
-    "changes": [""],
-    "discountApplied": 0,
-    "price": 16.0,
-    "category": "sushi",
-    "available": "true"
-  },
-  {
-    "image": "images/sushi/sushi_tonno.jpg",
-    "name": "Sushi Misto",
-    "ingredients": ["Tonno Rosso","Salmone","Riso","Alga Nori"],
-    "allergens": ["-"],
-    "changes": [""],
-    "discountApplied": 0,
-    "price": 20.0,
-    "category": "sushi",
-    "available": "false"
-  },
-  {
-    "image": "images/sushi/tacos.jpg",
-    "name": "Tacos",
-    "ingredients": ["Salmone"],
-    "allergens": ["-"],
-    "changes": [""],
-    "discountApplied": 0,
-    "price": 11.0,
-    "category": "sushi",
-    "available": "false"
-  },
-  {
-    "image": "images/sushi/parmigiana_sushi.jpg",
-    "name": "Parmigiana Sushi",
-    "ingredients": ["Melanzane","Riso","Salmone","Alga Nori"],
-    "allergens": ["-"],
-    "changes": [""],
-    "discountApplied": 0,
-    "price": 11.0,
-    "category": "sushi",
-    "available": "false"
-  }
+  },{
+  "image": "images/sushi/tartare_tonno.PNG",
+  "name": "Tartare di Tonno",
+  "ingredients": ["150 gr Tonno"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 10.0,
+  "category": "sushi",
+  "available": "true"
+},{
+  "image": "images/sushi/tartare_salmone.PNG",
+  "name": "Tartare di Salmone",
+  "ingredients": ["150 gr Salmone"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 10.0,
+  "category": "sushi",
+  "available": "true"
+},{
+  "image": "images/sushi/tartare_gamberi_cipolla.PNG",
+  "name": "Tartare di Gamberi",
+  "ingredients": ["150 gr Gamberi","Avocado","Cipolla Rossa"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 10.0,
+  "category": "sushi",
+  "available": "true"
+},{
+  "image": "images/sushi/tostadas.JPG",
+  "name": "Tostadas del Mar (3 pz)",
+  "ingredients": ["Tortillas croccanti","Tonno Rosso","Salmone","Gamberi","Stracciatella","Salsa spicy","Creme fraiche","Avocado","Salsa yogurt"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 11.0,
+  "category": "sushi",
+  "available": "true"
+},{
+  "image": "images/sushi/tempura_gamberi.JPG",
+  "name": "Tempura di Gamberi",
+  "ingredients": ["Gamberi fritti in tempura (circa 8/9)"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 9.0,
+  "category": "sushi",
+  "available": "true"
+},{
+  "image": "images/sushi/ramen_kit.PNG",
+  "name": "Shoyu Ramen",
+  "ingredients": ["Pasta Ramen","Uovo sodo marinato","Brasato di Maiale","Spinaci lessati","Cipollotto", "Brodo di gallina","Katsuobushi dashi"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 12.0,
+  "category": "sushi",
+  "available": "true"
+},{
+  "image": "images/sushi/crispy_roll.PNG",
+  "name": "Crispy Roll (8 pz)",
+  "ingredients": ["Uramaki in crosta di panko di mais","Salmone","Avocado","Philadelphia"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 10.0,
+  "category": "sushi",
+  "available": "true"
+}
 ]

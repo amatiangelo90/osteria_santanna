@@ -4,6 +4,7 @@ import 'package:delivery_santanna/services/http_service.dart';
 import 'package:delivery_santanna/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:delivery_santanna/utils/costants.dart';
 
 class PickupScreen extends StatefulWidget {
 
@@ -90,18 +91,15 @@ class _PickupScreenState extends State<PickupScreen> {
                       children: [
                         Card(
                           elevation: 0.0,
-                          child: Center(child: Text('Asporto', style: TextStyle(color: Colors.black, fontSize: 20.0, fontFamily: 'LoraFont'),),),
-                        ),
-                        Card(
-                          elevation: 0.0,
                           child: Column(
                             children: [
+                              Center(child: Text('Dettagli Asporto', style: TextStyle(color: Colors.black, fontSize: 15.0, fontFamily: 'LoraFont'),),),
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(1.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('Totale € ' + this.widget.total.toString() , style: TextStyle(color: Colors.black, fontSize: 19.0, fontFamily: 'LoraFont'),),
+                                    Text('Totale € ' + this.widget.total.toString() , style: TextStyle(color: Colors.black, fontSize: 20.0, fontFamily: 'LoraFont'),),
                                   ],
                                 ),
                               ),
@@ -125,24 +123,14 @@ class _PickupScreenState extends State<PickupScreen> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 15),
-                          child: Text('Indirizzo ritiro: ', style: TextStyle(color: Colors.black, fontSize: 15.0, fontFamily: 'LoraFont'),),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8),
+                          padding: const EdgeInsets.only(top: 5),
                           child: Card(
-                            elevation: 2.0,
+                            elevation: 0.0,
                             child: Column(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text('Viale Stazione 12', style: TextStyle(color: Colors.black, fontSize: 18.0, fontFamily: 'LoraFont'),),
-                                ),
-                                Text('Cisternino (BR)', style: TextStyle(color: Colors.black, fontSize: 18.0, fontFamily: 'LoraFont'),),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 12),
-                                  child: Text('Cap 72014', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                ),
+                                Text('Indirizzo Ritiro', style: TextStyle(color: Colors.black, fontSize: 13.0, fontFamily: 'LoraFont'),),
+                                Text('Viale Stazione 12', style: TextStyle(color: Colors.black, fontSize: 15.0, fontFamily: 'LoraFont'),),
+                                Text('Cisternino (BR) - Cap 72014', style: TextStyle(color: Colors.black, fontSize: 15.0, fontFamily: 'LoraFont'),),
                               ],
                             ),
                           ),
@@ -173,14 +161,8 @@ class _PickupScreenState extends State<PickupScreen> {
                             ],
                           ),
                         ),
-
                         Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Center(child: Text('Orario Ritiro', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),)),
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 6.0),
+                          padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 3.0),
                           child: Center(
                             child: Card(
                               borderOnForeground: true,
@@ -202,80 +184,70 @@ class _PickupScreenState extends State<PickupScreen> {
                             ),
                           ),
                         ),
-                      ],
-                    ),
-
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                      ),
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Card(
-                            shadowColor: Colors.black,
-                            elevation: 0.0,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Column(
-                                  children: [
-                                    IconButton(
-                                        icon: Image.asset('images/whatapp_icon.png'),
-                                        iconSize: 100.0, onPressed: (){
-                                      if(_nameController.value.text == ''){
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                              content: Text('Inserire il nome', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                              actions: <Widget>[
-                                                FlatButton(
-                                                  onPressed: () => Navigator.of(context).pop(false),
-                                                  child: const Text("Indietro"),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
-                                      }else if(_selectedDateTime == null){
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                              content: Text('Selezionare una data di ritiro valida', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                              actions: <Widget>[
-                                                FlatButton(
-                                                  onPressed: () => Navigator.of(context).pop(false),
-                                                  child: const Text("Indietro"),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
-                                      } else{
-                                        HttpService.sendMessage("393454937047",
-                                          buildMessageFromCartPickUp(
-                                              this.widget.cartItems,
-                                              _nameController.value.text,
-                                              this.widget.total.toString(),
-                                              getCurrentDateTime(),
-                                              _selectedTimeSlotPikup.slot,
-                                              _selectedDateTime),
-                                        );
-                                      }
-                                    }),
-                                    Text('Invia', style: TextStyle(color: Colors.black, fontSize: 19.0, fontFamily: 'LoraFont'),),
+                        IconButton(
+                            icon: Image.asset('images/whatapp_icon_c.png'),
+                            iconSize: 90.0, onPressed: (){
+                          if(_nameController.value.text == ''){
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                  content: Text('Inserire il nome', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      onPressed: () => Navigator.of(context).pop(false),
+                                      child: const Text("Indietro"),
+                                    ),
                                   ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                                );
+                              },
+                            );
+                          }else if(_selectedDateTime == null){
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                  content: Text('Selezionare una data di ritiro valida', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      onPressed: () => Navigator.of(context).pop(false),
+                                      child: const Text("Indietro"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else if(_selectedTimeSlotPikup.slot == 'Seleziona Orario Ritiro'){
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                  content: Text('Seleziona Orario Ritiro', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      onPressed: () => Navigator.of(context).pop(false),
+                                      child: const Text("Indietro"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }else{
+                            HttpService.sendMessage(numberSantAnna,
+                              buildMessageFromCartPickUp(
+                                  this.widget.cartItems,
+                                  _nameController.value.text,
+                                  this.widget.total.toString(),
+                                  getCurrentDateTime(),
+                                  _selectedTimeSlotPikup.slot,
+                                  _selectedDateTime),
+                            );
+                          }
+                        }),
+                      ],
                     ),
                   ],
                 ),
@@ -300,24 +272,25 @@ class _PickupScreenState extends State<PickupScreen> {
 
     cartItems.forEach((element) {
       itemList = itemList + "%0a" + element.numberOfItem.toString() + " x " + element.product.name;
+      if(element.changes.length != 0){
+        itemList = itemList + "%0a  " + element.changes.toString();
+      }
     });
 
     String message =
         "ORDINE ASPORTO%0a" +
-            "%0aOsteria Sant'Anna%0a"
+            "%0aOsteria Sant'Anna%0a"+
+            "%0aNome: $name" +
+            "%0aIndirizzo Ritiro: Viale Stazione 12" +
+            "%0aCittà: Cisternino (72014)" +
+            "%0aProvincia: BR" +
+            "%0aData Ritiro: " + Utils.getWeekDay(selectedDateTime.day) +" ${selectedDateTime.day} " + Utils.getMonthDay(selectedDateTime.month) +
+            "%0aOre Ritiro: $slot " +
+            "%0a%0a-------------------------------------------------%0a"
             + itemList + "%0a"
-            + "%0aTotale ordine : " + total + " € " +
-            "%0a-------------------------------------------------"
-                "%0aIndirizzo Ritiro: Viale Stazione 12"
-                "%0aCittà: Cisternino (72014)"
-                "%0aProvincia: BR"
-                "%0a%0aData Consegna: ${selectedDateTime.day}/" + selectedDateTime.month.toString() +"/" + selectedDateTime.year.toString() +
-                "%0aOre Ritiro: $slot "
-                "%0a"
-                "%0a"
-                "%0aOsteria Sant'Anna confermerà il vostro ordine nel minor tempo possibile"
-                "%0a"
-                "%0aOrdine Effettuato da: $name";
+            + "%0aTot. " + total + " € ";
+
+
 
     message = message.replaceAll('&', '%26');
     return message;
@@ -346,13 +319,14 @@ class TimeSlotPickup {
 
   static List<TimeSlotPickup> getPickupSlots() {
     return <TimeSlotPickup>[
-      TimeSlotPickup(1, '19:30'),
-      TimeSlotPickup(2, '20:00'),
-      TimeSlotPickup(3, '20:30'),
-      TimeSlotPickup(4, '21:00'),
-      TimeSlotPickup(5, '21:30'),
-      TimeSlotPickup(6, '22:00'),
-      TimeSlotPickup(7, '22:30'),
+      TimeSlotPickup(1, 'Seleziona Orario Ritiro'),
+      TimeSlotPickup(2, '19:30'),
+      TimeSlotPickup(3, '20:00'),
+      TimeSlotPickup(4, '20:30'),
+      TimeSlotPickup(5, '21:00'),
+      TimeSlotPickup(6, '21:30'),
+      TimeSlotPickup(7, '22:00'),
+      TimeSlotPickup(8, '22:30'),
     ];
   }
 }

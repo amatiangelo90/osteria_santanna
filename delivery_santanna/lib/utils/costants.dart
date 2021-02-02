@@ -1,8 +1,9 @@
-var bannerItems = ['Antipasti','Sushi','Primi','Secondi','Dolci','Vini'];
+var bannerItems = ['Sushi & Susci','Dalla Cucina','Dolci','Vini'];
 var bannerImages = [
-  'images/starters/melanzana_stracciatella.jpeg',
-  'images/sushi/sushi_tonno.jpg',
-  'images/main_course/laganari_cardoncelli_capocollo.jpg',
-  'images/second_main/tonno_scottato.jpg',
-  'images/dessert/dessert_egg.jpg',
+  'images/sushi/sfondo_sushi.jpg',
+  'images/from_kitchen/crocchette_fondenti.PNG',
+  'images/dessert/choco_tart.JPG',
   'images/wine.jpg'];
+
+var numberAngelo = '393454937047';
+var numberSantAnna = '390804447036';

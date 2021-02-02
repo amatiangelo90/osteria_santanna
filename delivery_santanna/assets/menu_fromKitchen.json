@@ -1,0 +1,123 @@
+[
+  {
+    "image": "images/from_kitchen/polpette.PNG",
+    "name": "Polpette",
+    "ingredients": ["Carne Suino e Bovino"],
+    "allergens": ["-"],
+    "changes": [],
+    "discountApplied": 0,
+    "price": 4.0,
+    "category": "from_kitchen",
+    "available": "true"
+  },{
+  "image": "images/from_kitchen/baccala_mantecato.PNG",
+  "name": "Baccalà Mantecato",
+  "ingredients": ["Baccalà mantecato", "Spuma di baccalà", "Cialda di ceci e cipolla rossa in agrodolce"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 7.0,
+  "category": "from_kitchen",
+  "available": "true"
+},{
+  "image": "images/from_kitchen/baccala_cime.PNG",
+  "name": "Baccalà in Crosta",
+  "ingredients": ["Baccalà","Crema di Cime di Rapa"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 12.0,
+  "category": "from_kitchen",
+  "available": "true"
+},{
+  "image": "images/from_kitchen/baccala_fritto_8_pz.PNG",
+  "name": "Baccalà Fritto (8 pz)",
+  "ingredients": [""],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 6.0,
+  "category": "from_kitchen",
+  "available": "true"
+},{
+  "image": "images/from_kitchen/fave_polpo.PNG",
+  "name": "Purè di fave & Polpo",
+  "ingredients": ["Purè di fave","Polpo grigliato caramellato"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 7.0,
+  "category": "from_kitchen",
+  "available": "true"
+},{
+  "image": "images/from_kitchen/carciofi_tempura.PNG",
+  "name": "Tempura Carciofi",
+  "ingredients": ["Carciofi in Tempura","Salsa aioli al prezzemolo"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 7.0,
+  "category": "from_kitchen",
+  "available": "true"
+},{
+  "image": "images/from_kitchen/crocchette_fondenti.PNG",
+  "name": "Crocchette",
+  "ingredients": ["Caciocavallo","Capocollo Santoro","Mayo al peperone crusco"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 6.0,
+  "category": "from_kitchen",
+  "available": "true"
+},{
+  "image": "images/from_kitchen/buns_vapore_maiale.PNG",
+  "name": "Buns al Vapore (2 pz)",
+  "ingredients": ["Pancetta di Maiale croccante","Cavolo Rosso","Cetrioli e maionese al kimchi"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 8.0,
+  "category": "from_kitchen",
+  "available": "true"
+},{
+  "image": "images/from_kitchen/guancetta_manzo.PNG",
+  "name": "Guancetta di Manzo",
+  "ingredients": ["Manzo brasato al Negroamaro","Purè di patate"],
+  "allergens": ["-"],
+  "changes": [""],
+  "discountApplied": 0,
+  "price": 10.0,
+  "category": "from_kitchen",
+  "available": "true"
+},{
+  "image": "images/from_kitchen/tacos_maiale.JPG",
+  "name": "Tacos (4 pz)",
+  "ingredients": ["Tortillas di Mais artigianali","Costine di maiale","Salsa pico de gallo","Queso fresco"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 10.0,
+  "category": "from_kitchen",
+  "available": "true"
+},{
+  "image": "images/from_kitchen/fajitas_pollo.PNG",
+  "name": "Fajitas di Pollo (4 pz)",
+  "ingredients": ["Tortillas di Mais artigianali","Straccetti di Pollo","Peperoni","Cipolla","Guacamole","Fagioli neri", "Creme fraiche"],
+  "allergens": ["-"],
+  "changes": [""],
+  "discountApplied": 0,
+  "price": 10.0,
+  "category": "from_kitchen",
+  "available": "true"
+},{
+  "image": "images/from_kitchen/fajitas_manzo.PNG",
+  "name": "Fajitas di Manzo (4 pz)",
+  "ingredients": ["Tortillas di Mais artigianali","Straccetti di Manzo","Peperoni","Cipolla","Guacamole","Fagioli neri", "Creme fraiche"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 10.0,
+  "category": "from_kitchen",
+  "available": "true"
+}
+]

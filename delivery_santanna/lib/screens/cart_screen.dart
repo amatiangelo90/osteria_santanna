@@ -44,32 +44,13 @@ class _CartScreenState extends State<CartScreen> {
     });
   }
 
-  _removeOneItemFromCart(Cart cartItem){
+  _emptyCart(List<Cart> cartItems){
     setState(() {
-      if(cartItem.numberOfItem > 1){
-        this.widget.cartItems.remove(cartItem);
-        cartItem.numberOfItem = cartItem.numberOfItem - 1;
-        this.widget.cartItems.add(cartItem);
-      }else{
-        this.widget.cartItems.remove(cartItem);
-      }
+      this.widget.cartItems.clear();
       _getTotal();
-      this.widget.function(cartItem.numberOfItem);
+      this.widget.function(null);
     });
   }
-
-  _addOneItemToCart(Cart cartItem){
-    setState(() {
-
-      this.widget.cartItems.remove(cartItem);
-      cartItem.numberOfItem = cartItem.numberOfItem + 1;
-      this.widget.cartItems.add(cartItem);
-
-      _getTotal();
-      this.widget.function(cartItem.numberOfItem);
-    });
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +63,38 @@ class _CartScreenState extends State<CartScreen> {
         ),
         title: Center(child: Text("Carrello", style: TextStyle(color: Colors.black, fontSize: 19.0, fontFamily: 'LoraFont'),)),
         elevation: 0.0,
+        actions: [
+          IconButton(
+            icon: Icon(
+              FontAwesomeIcons.trash,
+              color: Colors.black,
+            ),
+            onPressed: () async {
+              return await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text("Conferma", style: TextStyle(color: Colors.black, fontSize: 19.0, fontFamily: 'LoraFont'),),
+                    content: Text("Svuotare il carrello?", style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                    actions: <Widget>[
+                      FlatButton(
+                          onPressed: (){
+                            _emptyCart(this.widget.cartItems);
+                            Navigator.of(context).pop(true);
+                          },
+                          child: const Text("Svuota")
+                      ),
+                      FlatButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: const Text("Indietro"),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+        ],
       ),
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -228,107 +241,88 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   buildListFromCart(cartItem) {
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.all(6.0),
-        child: Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  spreadRadius: 2.0,
-                  blurRadius: 5.0,
+    return Padding(
+      padding: EdgeInsets.all(6.0),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                spreadRadius: 2.0,
+                blurRadius: 5.0,
+              ),
+            ]
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0)),
+                  child: Image.asset(cartItem.product.image, width: 90.0, height: 90.0, fit: BoxFit.fitHeight,),
                 ),
-              ]
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0)),
-                    child: Image.asset(cartItem.product.image, width: 90.0, height: 90.0, fit: BoxFit.cover,),
-                  ),
-                  Padding(
+                SizedBox(
+                  width: 210.0,
+                  child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 8.0, bottom: 5.0),
-                          child: Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.start,
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                  text: cartItem.product.name,
-                                  style: TextStyle(color: Colors.black, fontSize: 17.0, fontFamily: 'LoraFont'),
-                                  children: <TextSpan>[
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                          padding: const EdgeInsets.only(left: 5.0, bottom: 5.0),
+                          child: Text(cartItem.product.name, overflow: TextOverflow.ellipsis ,style: TextStyle(fontSize: 16.0, fontFamily: 'LoraFont'),),
+                        ),
+                        cartItem.changes.length == 0 ? SizedBox(height: 0.0,) : Padding(
+                          padding: const EdgeInsets.only(left: 5.0),
+                          child: Text(cartItem.changes.toString(), overflow: TextOverflow.visible , style: TextStyle(fontSize: 11.0, fontFamily: 'LoraFont'),),
                         ),
                         Text('',),
                         Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: RichText(
-                            text: TextSpan(
-                              text: cartItem.numberOfItem.toString() + ' x ',
-                              style: TextStyle(color: Colors.teal.shade800, fontSize: 17.0, fontFamily: 'LoraFont'),
-                              children: <TextSpan>[
-                                TextSpan(text: cartItem.product.price.toString() + ' €', style: TextStyle(color: Colors.teal.shade800, fontSize: 17.0, fontFamily: 'LoraFont'),),
-                              ],
-                            ),
-                          ),
+                          padding: const EdgeInsets.only(left: 5.0,),
+                          child: Text(cartItem.numberOfItem.toString() + ' x ' + cartItem.product.price.toString() + ' €', overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 16.0, fontFamily: 'LoraFont'),),
                         ),
-                        cartItem.product.discountApplied != 0 ?
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5.0, top: 5),
-                          child: Text('Sconto ' + cartItem.product.discountApplied.toString() + ' %', overflow: TextOverflow.ellipsis , style: TextStyle(color: Colors.green, fontSize: 13.0, fontFamily: 'LoraFont'),),
-                        ) : Text(''),
                       ],
                     ),
                   ),
-                ],
-              ),
-              IconButton(
-                icon: Icon(
-                  FontAwesomeIcons.trash,
-                  color: Colors.redAccent,
                 ),
-                onPressed: () async {
-                  return await showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text("Conferma"),
-                        content: Text("Eliminare  " + cartItem.numberOfItem.toString() +
-                            " x " + cartItem.product.name.toString() + " ?"),
-                        actions: <Widget>[
-                          FlatButton(
-                              onPressed: (){
-                                _removeItemFromCartList(cartItem);
-                                Navigator.of(context).pop(true);
-                              },
-                              child: const Text("Cancella")
-                          ),
-                          FlatButton(
-                            onPressed: () => Navigator.of(context).pop(false),
-                            child: const Text("Indietro"),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
+              ],
+            ),
+
+            IconButton(
+              icon: Icon(
+                FontAwesomeIcons.trash,
+                color: Colors.redAccent,
               ),
-            ],
-          ),
+              onPressed: () async {
+                return await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text("Conferma"),
+                      content: Text("Eliminare  " + cartItem.numberOfItem.toString() +
+                          " x " + cartItem.product.name.toString() + " ?"),
+                      actions: <Widget>[
+                        FlatButton(
+                            onPressed: (){
+                              _removeItemFromCartList(cartItem);
+                              Navigator.of(context).pop(true);
+                            },
+                            child: const Text("Cancella")
+                        ),
+                        FlatButton(
+                          onPressed: () => Navigator.of(context).pop(false),
+                          child: const Text("Indietro"),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+          ],
         ),
       ),
     );

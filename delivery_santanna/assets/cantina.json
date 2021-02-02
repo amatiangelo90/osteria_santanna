@@ -1,0 +1,176 @@
+[
+  {
+    "image": "images/wines/drumon_fiano_minutolo.jpg",
+    "name": "Drumon I.G.T.",
+    "ingredients": ["Fiano Minutolo"],
+    "allergens": ["Bianco"],
+    "changes": ["Cannito"],
+    "discountApplied": 0,
+    "price": 13.0,
+    "category": "wine",
+    "available": "true"
+  },
+  {
+    "image": "images/wines/askos_verdeca.jpg",
+    "name": "Askos I.G.T.",
+    "ingredients": ["Verdeca"],
+    "allergens": ["Bianco"],
+    "changes": ["Liveli"],
+    "discountApplied": 0,
+    "price": 20.0,
+    "category": "wine",
+    "available": "true"
+  },
+  {
+    "image": "images/wines/12eMezzoBianco.jpg",
+    "name": "Dodici e Mezzo I.G.P.",
+    "ingredients": ["Verdeca","Chardonnay","Malvasia Bianca"],
+    "allergens": ["Bianco"],
+    "changes": ["Varvaglione"],
+    "discountApplied": 0,
+    "price": 12.0,
+    "category": "wine",
+    "available": "true"
+  },
+  {
+    "image": "images/wines/teresa.jpg",
+    "name": "Teresa Manara",
+    "ingredients": ["Chardonnay Barrique"],
+    "allergens": ["Bianco"],
+    "changes": ["Cantele"],
+    "discountApplied": 0,
+    "price": 15.0,
+    "category": "wine",
+    "available": "true"
+  },{
+  "image": "images/wines/furfante_fos.jpg",
+  "name": "Fos",
+  "ingredients": ["Verdeca","Bianco d’Alessano","Minutolo"],
+  "allergens": ["Bianco Frizzante"],
+  "changes": ["Faniglione Pietro"],
+  "discountApplied": 0,
+  "price": 11.0,
+  "category": "wine",
+  "available": "true"
+},{
+  "image": "images/wines/negroamaro_rosato_igt.png",
+  "name": "Negroamaro I.G.T.",
+  "ingredients": ["Negroamaro"],
+  "allergens": ["Rosato"],
+  "changes": ["Masseria Masciullo"],
+  "discountApplied": 0,
+  "price": 15.0,
+  "category": "wine",
+  "available": "true"
+},{
+  "image": "images/wines/drumon_rosato.jpg",
+  "name": "Drumon I.G.T.",
+  "ingredients": ["Primitivo", "Montepulciano"],
+  "allergens": ["Rosato"],
+  "changes": ["Cannito"],
+  "discountApplied": 0,
+  "price": 13.0,
+  "category": "wine",
+  "available": "true"
+},{
+  "image": "images/wines/fos_rosato_frizzante.jpg",
+  "name": "Fos Frizzante",
+  "ingredients": ["Negramaro"],
+  "allergens": ["Rosato Frizzante"],
+  "changes": ["Faniglione Pietro"],
+  "discountApplied": 0,
+  "price": 11.0,
+  "category": "wine",
+  "available": "true"
+},{
+  "image": "images/wines/12eMezzoRosso.png",
+  "name": "Dodici e mezzo I.G.T",
+  "ingredients": ["Negramaro"],
+  "allergens": ["Rosso"],
+  "changes": ["Varvaglione"],
+  "discountApplied": 0,
+  "price": 12.0,
+  "category": "wine",
+  "available": "true"
+},{
+  "image": "images/wines/drumon_rosso.jpg",
+  "name": "Drumon D.O.C.",
+  "ingredients": ["Primitivo di Gioia"],
+  "allergens": ["Rosso"],
+  "changes": ["Cannito"],
+  "discountApplied": 0,
+  "price": 12.0,
+  "category": "wine",
+  "available": "true"
+},{
+  "image": "images/wines/salice_doc_riserva.jpg",
+  "name": "Salice Salentino D.O.C.",
+  "ingredients": ["Negroamaro", "Malvasia Nera"],
+  "allergens": ["Rosso"],
+  "changes": ["Cantele"],
+  "discountApplied": 0,
+  "price": 12.0,
+  "category": "wine",
+  "available": "true"
+},{
+  "image": "images/wines/rohesia.jpg",
+  "name": "Rohesia I.G.T.",
+  "ingredients": ["Susumaniello"],
+  "allergens": ["Rosso"],
+  "changes": ["Cantele"],
+  "discountApplied": 0,
+  "price": 12.0,
+  "category": "wine",
+  "available": "true"
+},{
+  "image": "images/wines/prosecco_oca.jpg",
+  "name": "Prosecco D.O.C.",
+  "ingredients": ["Glera Milessimato Extra Dry"],
+  "allergens": ["Bollicine"],
+  "changes": ["Val d’Oca"],
+  "discountApplied": 0,
+  "price": 12.0,
+  "category": "wine",
+  "available": "true"
+},{
+  "image": "images/wines/ca_del_bosco.png",
+  "name": "Ca’ del Bosco",
+  "ingredients": ["Chardonnay", "Pinot Bianco,Pinot Nero"],
+  "allergens": ["Bollicine"],
+  "changes": [""],
+  "discountApplied": 0,
+  "price": 40.0,
+  "category": "wine",
+  "available": "true"
+},{
+  "image": "images/wines/darapri_brut.jpg",
+  "name": "D’Araprì",
+  "ingredients": ["Bombino Bianco", "Pinot Nero"],
+  "allergens": ["Bollicine"],
+  "changes": ["Cantina D’Araprì"],
+  "discountApplied": 0,
+  "price": 24.0,
+  "category": "wine",
+  "available": "true"
+},{
+  "image": "images/wines/darapri_rose.jpg",
+  "name": "D’Araprì Rosè",
+  "ingredients": ["Montepulciano","Pinot Nero"],
+  "allergens": ["Bollicine"],
+  "changes": ["Cantina D’Araprì"],
+  "discountApplied": 0,
+  "price": 24.0,
+  "category": "wine",
+  "available": "true"
+},{
+  "image": "images/wines/apnea_pampanuto.png",
+  "name": "Apnea",
+  "ingredients": ["Pampanuto"],
+  "allergens": ["Bollicine"],
+  "changes": [""],
+  "discountApplied": 0,
+  "price": 14.0,
+  "category": "wine",
+  "available": "true"
+}
+]
