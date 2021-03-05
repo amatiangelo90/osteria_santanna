@@ -13,7 +13,7 @@
   {
     "image": "images/dessert/mousse.jpg",
     "name": "Mousse Sant'Anna",
-    "ingredients": ["Mousse di ricotta", "Frutti rossi", "Daquoise di mandorle e olio evo", "Crumble di mandorle"],
+    "ingredients": ["Mousse di ricotta", "Frutti rossi", "Biscotto morbido alle mandorle e olio evo", "Crumble di mandorle"],
     "allergens": ["-"],
     "changes": [],
     "discountApplied": 0,

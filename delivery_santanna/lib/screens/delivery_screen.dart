@@ -43,6 +43,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
 
   @override
   void initState() {
+    super.initState();
     _dropdownCitytems = buildDropdownCityMenu(_cities);
     _selectedCity = _dropdownCitytems[0].value;
 
@@ -55,7 +56,6 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
     }else{
       _currentTotal = this.widget.total;
     }
-    super.initState();
   }
 
   List<DropdownMenuItem<City>> buildDropdownCityMenu(List cities) {
@@ -87,6 +87,23 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
   onChangeDropdownItem(City currentSelectedCity) {
     setState(() {
       _selectedCity = currentSelectedCity;
+      if(currentSelectedCity.name == 'Carovigno'){
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Info', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+              content: Text('La consegna a Carovigno è disponibile con punto di incontro presso Corso Umberto n.1 (Rotonda con il delfino)', style: TextStyle(color: Colors.black, fontSize: 13.0, fontFamily: 'LoraFont'),),
+              actions: <Widget>[
+                FlatButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text("Ok"),
+                ),
+              ],
+            );
+          },
+        );
+      }
     });
   }
 
@@ -116,6 +133,15 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
               ),
               child: Column(
                 children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        child: Text('Indietro', style: TextStyle(color: Colors.black, fontSize: 17.0, fontFamily: 'LoraFont'),),
+                        onTap: () => Navigator.of(context).pop(false),
+                      ),
+                    ],
+                  ),
                   Column(
                     children: [
                       Card(
@@ -133,7 +159,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text('(Spedizione ', style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
-                                this.widget.total < 30.0
+                                this.widget.total < 50.0
                                     ? Text('€ 3)', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),)
                                     : Text('€ 0)', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
                               ],
@@ -156,21 +182,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                        child: Center(
-                          child: Card(
-                            child: TextField(
-                              controller: _addressController,
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'Indirizzo',
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+
                       Padding(
                         padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
                         child: Center(
@@ -197,6 +209,25 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                           ),
                         ),
                       ),
+                      _selectedCity.name == 'Carovigno' ? Card(
+                        elevation: 2.0,
+                        child: Text('Consegna prezzo Corso Umbero N°1', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                      ) :
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                        child: Center(
+                          child: Card(
+                            child: TextField(
+                              controller: _addressController,
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Indirizzo',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -206,7 +237,6 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                             dateTextStyle: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),
                             dayTextStyle: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),
                             monthTextStyle: TextStyle(color: Colors.black, fontSize: 12.0, fontFamily: 'LoraFont'),
-
                             selectionColor: Colors.teal,
                             deactivatedColor: Colors.grey,
                             selectedTextColor: Colors.white,
@@ -272,7 +302,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                           );
                                         },
                                       );
-                                    }else if (_addressController.value.text == ''){
+                                    }else if (_selectedCity.name != 'Carovigno' && _addressController.value.text == ''){
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
@@ -336,15 +366,13 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                           );
                                         },
                                       );
-                                    } else{
-                                      if(_selectedDateTime.day == DateTime.now().day){
-                                        if(DateTime.now().hour > 12){
+                                    } else if(_selectedDateTime.day == DateTime.now().day && DateTime.now().hour == 18){
                                           showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
                                               return AlertDialog(
                                                 title: const Text('Attenzione', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                                content: Text('Gli ordini effettuati dopo le 18 devono essere approvati blablabla', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                                content: Text('Per ordini delivery effettuati dopo le ore 18 non ci è possibile garantire la consegna, cercheremo ugualmente di soddisfarla se è nelle nostre possibilità. Inoltri la richiesta d\'ordine e le risponderemo al piu presto', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
                                                 actions: <Widget>[
                                                   FlatButton(
                                                       onPressed: (){
@@ -371,8 +399,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                               );
                                             },
                                           );
-                                        }
-                                      }else {
+                                        }else {
                                         HttpService.sendMessage(numberSantAnna,
                                           buildMessageFromCartDelivery(
                                               this.widget.cartItems,
@@ -385,8 +412,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                               _selectedDateTime),
                                         );
                                       }
-                                    }
-                                  },
+                                    },
                                   ),
                                 ),
                               ],
@@ -416,6 +442,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
 
     String itemList = '';
 
+
     cartItems.forEach((element) {
       itemList = itemList + "%0a" + element.numberOfItem.toString() + " x " + element.product.name;
       if(element.changes.length != 0){
@@ -423,19 +450,22 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
       }
     });
 
+    if(city == 'Carovigno (72015)'){
+      address = 'Corso Umbero N°1';
+    }
 
     String message =
         "ORDINE DELIVERY%0a%0a" +
-                " Nome: $name" +
-                "%0a Indirizzo: $address"
+            " Nome: $name" +
+            "%0a Indirizzo: $address"
                 "%0a Città: $city"
                 "%0a $slot "
                 "%0a " + Utils.getWeekDay(dateTime.weekday) +" ${dateTime.day} " + Utils.getMonthDay(dateTime.month) +
-                "%0a"
+            "%0a"
                 "%0a-------------------------------------------------"
                 "%0a"
-                + itemList + "%0a"
-                + "%0aTot. " + total + " € ";
+            + itemList + "%0a"
+            + "%0aTot. " + total + " € ";
 
 
     message = message.replaceAll('&', '%26');
@@ -466,7 +496,6 @@ class TimeSlotDelivery {
       TimeSlotDelivery(1, 'Seleziona Fascia Oraria Consegna'),
       TimeSlotDelivery(2, '19:30 - 20:30'),
       TimeSlotDelivery(3, '20:30 - 21:30'),
-      TimeSlotDelivery(4, '21:30 - 22:30'),
     ];
   }
 }
@@ -485,6 +514,9 @@ class City {
       City(3, 'Martina Franca','74015'),
       City(4, 'Locorotondo','70010'),
       City(5, 'Fasano/Pezze Di Greco','72015'),
+      City(6, 'Ostuni','72017'),
+      City(7, 'Ceglie','72013'),
+      City(8, 'Carovigno','72012'),
     ];
   }
 }

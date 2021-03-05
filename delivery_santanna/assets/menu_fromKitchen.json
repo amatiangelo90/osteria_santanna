@@ -12,7 +12,7 @@
   },{
   "image": "images/from_kitchen/baccala_mantecato.PNG",
   "name": "Baccalà Mantecato",
-  "ingredients": ["Baccalà mantecato", "Spuma di baccalà", "Cialda di ceci e cipolla rossa in agrodolce"],
+  "ingredients": ["Baccalà", "Spuma di baccalà", "Cialda di ceci e cipolla rossa in agrodolce"],
   "allergens": ["-"],
   "changes": [],
   "discountApplied": 0,
@@ -32,7 +32,7 @@
 },{
   "image": "images/from_kitchen/baccala_fritto_8_pz.PNG",
   "name": "Baccalà Fritto (8 pz)",
-  "ingredients": [""],
+  "ingredients": ["Baccalà"],
   "allergens": ["-"],
   "changes": [],
   "discountApplied": 0,
@@ -104,7 +104,7 @@
   "name": "Fajitas di Pollo (4 pz)",
   "ingredients": ["Tortillas di Mais artigianali","Straccetti di Pollo","Peperoni","Cipolla","Guacamole","Fagioli neri", "Creme fraiche"],
   "allergens": ["-"],
-  "changes": [""],
+  "changes": [],
   "discountApplied": 0,
   "price": 10.0,
   "category": "from_kitchen",

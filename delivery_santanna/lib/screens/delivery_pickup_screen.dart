@@ -4,7 +4,6 @@ import 'package:delivery_santanna/models/cart.dart';
 import 'package:delivery_santanna/screens/delivery_screen.dart';
 import 'package:delivery_santanna/screens/pickup_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DeliveryPickupScreen extends StatefulWidget {
 
@@ -25,9 +24,18 @@ class _DeliveryPickupScreenState extends State<DeliveryPickupScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+
           Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+            padding: EdgeInsets.fromLTRB(30.0, 20.0, 0.0, 0.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  child: Text('Indietro', style: TextStyle(color: Colors.black, fontSize: 17.0, fontFamily: 'LoraFont'),),
+                  onTap: () => Navigator.of(context).pop(false),
+                ),
+              ],
+            ),
           ),
           Flexible(
             flex: 6,
@@ -36,28 +44,44 @@ class _DeliveryPickupScreenState extends State<DeliveryPickupScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                      child: ReusableCard(
-                        color: Colors.white,
-                        cardChild: IconContent(label: 'ASPORTO', icon: Icons.shopping_bag_outlined,color: Colors.teal.shade800,description: '',),
-                        onPress: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return PickupScreen(cartItems: this.widget.cartItems, total: this.widget.total,);
-                              }
-                          );
-                        },
-                      )),
+                    child: ReusableCard(
+                      color: Colors.white,
+                      cardChild: IconContent(label: 'ASPORTO', icon: Icons.shopping_bag_outlined,color: Colors.teal.shade800,description: '',),
+                      onPress: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return PickupScreen(cartItems: this.widget.cartItems, total: this.widget.total,);
+                            }
+                        );
+                      },
+                    ),
+                  ),
                   Expanded(
                       child: ReusableCard(
                         color: Colors.white,
                         cardChild: IconContent(label: 'DELIVERY', icon: Icons.delivery_dining, color: Colors.teal.shade800, description: 'Costo spedizione €3. Per ordini superiori a 50 € la spedizione è gratuita',),
                         onPress: () {
+                          this.widget.total >= 30 ?
                           showDialog(
                               context: context,
                               builder: (context) {
                                 return DeliveryScreen(cartItems: this.widget.cartItems, total: this.widget.total, );
                               }
+                          ) : showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Attenzione', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                content: Text('Per il servizio delivery il minimo d\'ordine è di € 30', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    onPressed: () => Navigator.of(context).pop(false),
+                                    child: const Text("Indietro"),
+                                  ),
+                                ],
+                              );
+                            },
                           );
                         },
                       )),

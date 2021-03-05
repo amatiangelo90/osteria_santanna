@@ -1,7 +1,7 @@
 [
   {
     "image": "images/wines/drumon_fiano_minutolo.jpg",
-    "name": "Drumon I.G.T.",
+    "name": "Drumon Bianco",
     "ingredients": ["Fiano Minutolo"],
     "allergens": ["Bianco"],
     "changes": ["Cannito"],
@@ -23,7 +23,7 @@
   },
   {
     "image": "images/wines/12eMezzoBianco.jpg",
-    "name": "Dodici e Mezzo I.G.P.",
+    "name": "Dodici e Mezzo Bianco",
     "ingredients": ["Verdeca","Chardonnay","Malvasia Bianca"],
     "allergens": ["Bianco"],
     "changes": ["Varvaglione"],
@@ -44,7 +44,7 @@
     "available": "true"
   },{
   "image": "images/wines/furfante_fos.jpg",
-  "name": "Fos",
+  "name": "Fos Bianco",
   "ingredients": ["Verdeca","Bianco d’Alessano","Minutolo"],
   "allergens": ["Bianco Frizzante"],
   "changes": ["Faniglione Pietro"],
@@ -54,7 +54,7 @@
   "available": "true"
 },{
   "image": "images/wines/negroamaro_rosato_igt.png",
-  "name": "Negroamaro I.G.T.",
+  "name": "Negroamaro Masciullo",
   "ingredients": ["Negroamaro"],
   "allergens": ["Rosato"],
   "changes": ["Masseria Masciullo"],
@@ -64,7 +64,7 @@
   "available": "true"
 },{
   "image": "images/wines/drumon_rosato.jpg",
-  "name": "Drumon I.G.T.",
+  "name": "Drumon Rosato",
   "ingredients": ["Primitivo", "Montepulciano"],
   "allergens": ["Rosato"],
   "changes": ["Cannito"],
@@ -74,8 +74,8 @@
   "available": "true"
 },{
   "image": "images/wines/fos_rosato_frizzante.jpg",
-  "name": "Fos Frizzante",
-  "ingredients": ["Negramaro"],
+  "name": "Fos Rosato",
+  "ingredients": ["Negroamaro"],
   "allergens": ["Rosato Frizzante"],
   "changes": ["Faniglione Pietro"],
   "discountApplied": 0,
@@ -84,8 +84,8 @@
   "available": "true"
 },{
   "image": "images/wines/12eMezzoRosso.png",
-  "name": "Dodici e mezzo I.G.T",
-  "ingredients": ["Negramaro"],
+  "name": "Dodici e Mezzo Rosso",
+  "ingredients": ["Negroamaro"],
   "allergens": ["Rosso"],
   "changes": ["Varvaglione"],
   "discountApplied": 0,
@@ -94,12 +94,12 @@
   "available": "true"
 },{
   "image": "images/wines/drumon_rosso.jpg",
-  "name": "Drumon D.O.C.",
+  "name": "Drumon Rosso",
   "ingredients": ["Primitivo di Gioia"],
   "allergens": ["Rosso"],
   "changes": ["Cannito"],
   "discountApplied": 0,
-  "price": 12.0,
+  "price": 16.0,
   "category": "wine",
   "available": "true"
 },{

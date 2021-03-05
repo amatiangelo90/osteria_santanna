@@ -14,10 +14,9 @@ class _SplashScreenSantAnnaState extends State<SplashScreenSantAnna> {
     return SafeArea(
       child: Container(
         color: Colors.white,
-        child: Center(child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Image.asset('images/logo_santanna.png', height: 200,),
-        )),
+        child: Image.asset('images/donna.png',
+          fit: BoxFit.contain,
+        ),
       ),
     );
   }
@@ -25,7 +24,7 @@ class _SplashScreenSantAnnaState extends State<SplashScreenSantAnna> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(milliseconds: 3000), ()=> Navigator.pushNamed(context, OsteriaSantAnnaHomePage.id));
+    Timer(Duration(milliseconds: 3500), ()=> Navigator.pushNamed(context, OsteriaSantAnnaHomePage.id));
   }
 
 }

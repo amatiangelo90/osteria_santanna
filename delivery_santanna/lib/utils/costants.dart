@@ -1,4 +1,4 @@
-var bannerItems = ['Sushi & Susci','Dalla Cucina','Dolci','Vini'];
+var bannerItems = ['Sushi & Susci ','Dalla Cucina ','Dolci ','Vini '];
 var bannerImages = [
   'images/sushi/sfondo_sushi.jpg',
   'images/from_kitchen/crocchette_fondenti.PNG',

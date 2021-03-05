@@ -8,6 +8,7 @@ import 'package:delivery_santanna/utils/costants.dart';
 import 'package:delivery_santanna/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 const sushiMenuType = 'assets/menu_sushi.json';
 const fromKitchenMenuType = 'assets/menu_fromKitchen.json';
@@ -84,14 +85,59 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
     }
   }
 
+  ScrollController scrollViewColtroller = ScrollController();
+
+  @override
+  void initState() {
+    scrollViewColtroller = ScrollController();
+    scrollViewColtroller.addListener(_scrollListener);
+    super.initState();
+  }
+
+  _scrollListener() {
+    if (scrollViewColtroller.offset >=
+        scrollViewColtroller.position.maxScrollExtent &&
+        !scrollViewColtroller.position.outOfRange) {
+      setState(() {
+        _direction = true;
+      });
+    }
+    if (scrollViewColtroller.offset <=
+        scrollViewColtroller.position.minScrollExtent &&
+        !scrollViewColtroller.position.outOfRange) {
+      setState(() {
+        _direction = false;
+      });
+    }
+  }
+
+  bool _direction = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+    scrollViewColtroller.dispose();
+  }
+
+  _moveUp() {
+    scrollViewColtroller.animateTo(scrollViewColtroller.offset - 450,
+        curve: Curves.linear, duration: Duration(milliseconds: 200));
+  }
+
+  _moveDown() {
+    scrollViewColtroller.animateTo(scrollViewColtroller.offset + 450,
+        curve: Curves.linear, duration: Duration(milliseconds: 500));
+  }
+
   @override
   Widget build(BuildContext context) {
+
 
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
 
     PageController controller = PageController(
-        viewportFraction: 0.8,
+        viewportFraction: 0.7,
         initialPage: 0);
 
     List<Widget> banners = <Widget>[];
@@ -147,186 +193,148 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
       );
       banners.add(bannerView);
     }
-    return Scaffold(
 
+    return Scaffold(
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Visibility(
+            visible: _direction,
+            maintainSize: false,
+            child: FloatingActionButton(
+              backgroundColor: Colors.teal.shade800,
+              onPressed: () {
+                _moveUp();
+              },
+              child: RotatedBox(
+                  quarterTurns: 1, child: Icon(Icons.chevron_left)),
+            ),
+          ),
+          Visibility(
+            maintainSize: false,
+            visible: !_direction,
+            child: FloatingActionButton(
+              backgroundColor: Colors.teal.shade800,
+              onPressed: () {
+                _moveDown();
+              },
+              child: RotatedBox(
+                  quarterTurns: 3, child: Icon(Icons.chevron_left)),
+            ),
+          )
+        ],
+      ),
       key: scaffoldState,
-      body: Container(
-        width: screenWidth,
-        height: screenHeight,
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 5, 10, 2),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      IconButton(icon: Icon(Icons.info_outline ,size: 30.0, color: Colors.teal.shade800,), onPressed: (){
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                elevation: 2.0,
-                                title: Center(child: const Text('Informazioni', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),)),
-                                content: Container(
-                                  child: Column(
-                                    textDirection: TextDirection.ltr,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-                                        child: Row(
-                                          children: [
-                                            Text('Ordini per il Delivery fino alle ',
-                                              style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
-                                            Text('18.00',
-                                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14.0, fontFamily: 'LoraFont'),),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-                                        child: Row(
-                                          children: [
-                                            Text('Ordini per l\'Asporto fino alle ',
-                                              style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
-                                            Text('20.00',
-                                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14.0, fontFamily: 'LoraFont'),),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-                                        child: Row(
-                                          children: [
-                                            Text('Consegna dalle ',
-                                              overflow: TextOverflow.visible ,style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
-                                            Text('19.30',
-                                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14.0, fontFamily: 'LoraFont'),),
-                                            Text(' alle ',
-                                              overflow: TextOverflow.visible ,style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
-                                            Text('21.30',
-                                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14.0, fontFamily: 'LoraFont'),),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-                                        child: Row(
-                                          children: [
-                                            Text('Costo delivery: ',
-                                              overflow: TextOverflow.visible, style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
-                                            Text('3 €',
-                                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14.0, fontFamily: 'LoraFont'),),
-                                          ],
-                                        ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(' (Gratis per ordini superiori a 50 €)',
-                                            overflow: TextOverflow.visible, style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(''),
-                                      ),
-                                      const Text('Inviaci la richiesta d’ordine, ti risponderemo al più presto dopo aver verificato la disponibilità',
-                                        overflow: TextOverflow.visible, style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
-                                      Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
-                                            child: const Text('Grazie per averci scelto',
-                                              overflow: TextOverflow.visible, style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+      body: NotificationListener<ScrollUpdateNotification>(
+        onNotification: (ScrollNotification scrollInfo) {
+          if (scrollViewColtroller.position.userScrollDirection ==
+              ScrollDirection.reverse) {
+            setState(() {
+              _direction = true;
+            });
+          } else {
+            if (scrollViewColtroller.position.userScrollDirection ==
+                ScrollDirection.forward) {
+              setState(() {
+                _direction = false;
+              });
+            }
+          }
+          return true;
+        },
+        child: Container(
+          width: screenWidth,
+          height: screenHeight,
+          child: SafeArea(
+            child: SingleChildScrollView(
+              controller: scrollViewColtroller,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 2),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        IconButton(icon: Icon(Icons.info_outline ,size: 30.0, color: Colors.teal.shade800,), onPressed: (){
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Utils.buildAlertDialog(context);
+                              }
+                          );
+                        },
+                        ),
+                        Text('Osteria Sant\'Anna', style: TextStyle(fontSize: 19.0, fontFamily: 'LoraFont'),),
+                        Stack(
+                          children: <Widget>[
+                            IconButton(icon: Icon(Icons.shopping_cart_outlined), onPressed: (){
+                              Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => CartScreen(cartItems: cartProductList,
+                                  function: removeProductFromCart,),
                                 ),
-                                actions: <Widget>[
-                                  FlatButton(
-                                    onPressed: () => Navigator.of(context).pop(false),
-                                    child: const Text("Indietro"),
+                              );
+                            }),
+                            currentMenuItem == 0 ? Text('') :
+                            Positioned(
+                              top: 6.0,
+                              right: 10.0,
+                              child: Stack(
+                                children: <Widget>[
+                                  Icon(Icons.brightness_1, size: 15, color: Colors.redAccent,),
+                                  Positioned(
+                                    right: 5.0,
+                                    top: 2.0,
+                                    child: Center(child: Text(currentMenuItem.toString() , style: TextStyle(fontSize: 8.0, color: Colors.white, fontFamily: 'LoraFont'),
+                                    ),
+                                    ),
                                   ),
                                 ],
-                              );
-                            }
-                        );
-                      },
-                      ),
-                      Text('Osteria Sant\'Anna', style: TextStyle(fontSize: 19.0, fontFamily: 'LoraFont'),),
-                      Stack(
-                        children: <Widget>[
-                          IconButton(icon: Icon(Icons.shopping_cart_outlined), onPressed: (){
-                            Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => CartScreen(cartItems: cartProductList,
-                                function: removeProductFromCart,),
                               ),
-                            );
-                          }),
-                          currentMenuItem == 0 ? Text('') :
-                          Positioned(
-                            top: 6.0,
-                            right: 10.0,
-                            child: Stack(
-                              children: <Widget>[
-                                Icon(Icons.brightness_1, size: 15, color: Colors.redAccent,),
-                                Positioned(
-                                  right: 5.0,
-                                  top: 2.0,
-                                  child: Center(child: Text(currentMenuItem.toString() , style: TextStyle(fontSize: 8.0, color: Colors.white, fontFamily: 'LoraFont'),
-                                  ),
-                                  ),
-                                ),
-                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: screenWidth,
-                  height: screenHeight*9/40,
-                  child: GestureDetector(
-                    child: PageView(
-                      onPageChanged: (page)=>{
-                        setState((){
-                          updateMenuType(page);
-                        }),
-                      },
-                      controller: controller,
-                      scrollDirection: Axis.horizontal,
-                      children: banners,
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                Container(
-                    child: FutureBuilder(
-                      initialData: <Widget>[Text('')],
-                      future: createList(),
-                      builder: (context, snapshot){
-                        if(snapshot.hasData){
-                          return Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: ListView(
-                              primary: false,
-                              shrinkWrap: true,
-                              children: snapshot.data,
-                            ),
-                          );
-                        }else{
-                          return CircularProgressIndicator();
-                        }
-                      },
-                    )
-                ),
-              ],
+                  Container(
+                    width: screenWidth,
+                    height: screenHeight*9/40,
+                    child: GestureDetector(
+                      child: PageView(
+                        onPageChanged: (page)=>{
+                          setState((){
+                            updateMenuType(page);
+                          }),
+                        },
+                        controller: controller,
+                        scrollDirection: Axis.horizontal,
+                        children: banners,
+                      ),
+                    ),
+                  ),
+                  Container(
+                      child: FutureBuilder(
+                        initialData: <Widget>[Text('')],
+                        future: createList(),
+                        builder: (context, snapshot){
+                          if(snapshot.hasData){
+                            return Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: ListView(
+                                primary: false,
+                                shrinkWrap: true,
+                                children: snapshot.data,
+                              ),
+                            );
+                          }else{
+                            return CircularProgressIndicator();
+                          }
+                        },
+                      )
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -576,22 +584,16 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
 
   bool _twoListContainsSameElements(List<String> changes, List<String> changesFromModal) {
     bool output = true;
-    print('' + changes.toString() + ' XXXXX' + changesFromModal.toString());
-    print('' + changes.length.toString() + ' XXXXX' + changesFromModal.length.toString());
     if(changes.length != changesFromModal.length){
-      print('Dimension different');
       return false;
     }
     changes.forEach((elementChanges) {
-      print(changesFromModal.toString() + ' contains ' + elementChanges.toString() + '?');
       if(!changesFromModal.contains(elementChanges)){
         print('assign false');
         output = false;
-      }else{
-        print('true');
       }
-    }
-    );
+    });
+
     if(output){
       return true;
     }else{

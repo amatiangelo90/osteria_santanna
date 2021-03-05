@@ -1,5 +1,7 @@
 
 import 'package:delivery_santanna/models/product.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
 
 class Utils{
 
@@ -24,21 +26,15 @@ class Utils{
   }
 
   static List<DateTime> getAvailableData(){
-    return [DateTime.utc(2021,1 ,29 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,1 ,30 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,1 ,31 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,2 ,5 ,0 ,0 ,0 ,0 ,0),
+    return [
     DateTime.utc(2021,2 ,6 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,2 ,7 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,2 ,12 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,2 ,13 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,2 ,14 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,2 ,19 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,2 ,20 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,2 ,21 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,2 ,26 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,2 ,27 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,2 ,28 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,3 ,5 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,3 ,6 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,3 ,7 ,0 ,0 ,0 ,0 ,0),
@@ -63,6 +59,21 @@ class Utils{
     DateTime.utc(2021,4 ,23 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,4 ,24 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,4 ,25 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,4 ,30 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,1 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,2 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,7 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,8 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,9 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,14 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,15 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,16 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,21 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,22 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,23 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,28 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,29 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,30 ,0 ,0 ,0 ,0 ,0),
     ];
   }
 
@@ -114,5 +125,215 @@ class Utils{
         return "Dicembre";
     }
     return "";
+  }
+
+  static bool twoListContainsSameElements(List<String> changes, List<String> changesFromModal) {
+    bool output = true;
+    if(changes.length != changesFromModal.length){
+      return false;
+    }
+    changes.forEach((elementChanges) {
+      if(!changesFromModal.contains(elementChanges)){
+        print('assign false');
+        output = false;
+      }
+    });
+
+    if(output){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  static Widget buildInfoAlertDialog(context) {
+    return AlertDialog(
+      elevation: 2.0,
+      title: Center(child: const Text('Informazioni', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),)),
+      content: Container(
+        child: Column(
+          textDirection: TextDirection.ltr,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+              child: Row(
+                children: [
+                  Text('Ordini per il Delivery fino alle ',
+                    style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                  Text('18.00',
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+              child: Row(
+                children: [
+                  Text('Ordini per l\'Asporto fino alle ',
+                    style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                  Text('20.00',
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+              child: Row(
+                children: [
+                  Text('Consegna dalle ',
+                    overflow: TextOverflow.visible ,style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                  Text('19.30',
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                  Text(' alle ',
+                    overflow: TextOverflow.visible ,style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                  Text('21.30',
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+              child: Row(
+                children: [
+                  Text('Per delivery ordine minimo: ',
+                    overflow: TextOverflow.visible, style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                  Text('30 €',
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+              child: Row(
+                children: [
+                  Text('Costo delivery: ',
+                    overflow: TextOverflow.visible, style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                  Text('3 €',
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                ],
+              ),
+            ),
+            Row(
+              children: [
+                Text(' (Gratis per ordini superiori a 50 €)',
+                  overflow: TextOverflow.visible, style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(''),
+            ),
+            const Text('Inviaci la richiesta d’ordine, ti risponderemo al più presto dopo aver verificato la disponibilità',
+              overflow: TextOverflow.visible, style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
+                  child: const Text('Grazie per averci scelto',
+                    overflow: TextOverflow.visible, style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: const Text("Indietro"),
+        ),
+      ],
+    );
+  }
+
+  static Widget buildAlertDialog(BuildContext context) {
+    return AlertDialog(
+      elevation: 2.0,
+      title: Center(child: const Text('Informazioni', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),)),
+      content: Container(
+        child: Column(
+          textDirection: TextDirection.ltr,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+              child: Row(
+                children: [
+                  Text('Ordini per il Delivery fino alle ',
+                    style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                  Text('18.00',
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+              child: Row(
+                children: [
+                  Text('Ordini per l\'Asporto fino alle ',
+                    style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                  Text('20.00',
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+              child: Row(
+                children: [
+                  Text('Consegna dalle ',
+                    overflow: TextOverflow.visible ,style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                  Text('19.30',
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                  Text(' alle ',
+                    overflow: TextOverflow.visible ,style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                  Text('21.30',
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+              child: Row(
+                children: [
+                  Text('Costo delivery: ',
+                    overflow: TextOverflow.visible, style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                  Text('3 €',
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                ],
+              ),
+            ),
+            Row(
+              children: [
+                Text(' (Gratis per ordini superiori a 50 €)',
+                  overflow: TextOverflow.visible, style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(''),
+            ),
+            const Text('Inviaci la richiesta d’ordine, ti risponderemo al più presto dopo aver verificato la disponibilità',
+              overflow: TextOverflow.visible, style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
+                  child: const Text('Grazie per averci scelto',
+                    overflow: TextOverflow.visible, style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: const Text("Indietro"),
+        ),
+      ],
+    );
   }
 }

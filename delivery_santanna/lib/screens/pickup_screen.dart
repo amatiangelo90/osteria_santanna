@@ -93,6 +93,15 @@ class _PickupScreenState extends State<PickupScreen> {
                           elevation: 0.0,
                           child: Column(
                             children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  GestureDetector(
+                                    child: Text('Indietro', style: TextStyle(color: Colors.black, fontSize: 17.0, fontFamily: 'LoraFont'),),
+                                    onTap: () => Navigator.of(context).pop(false),
+                                  ),
+                                ],
+                              ),
                               Center(child: Text('Dettagli Asporto', style: TextStyle(color: Colors.black, fontSize: 15.0, fontFamily: 'LoraFont'),),),
                               Padding(
                                 padding: const EdgeInsets.all(1.0),
@@ -235,7 +244,43 @@ class _PickupScreenState extends State<PickupScreen> {
                                 );
                               },
                             );
-                          }else{
+                          } else if(_selectedDateTime.day == DateTime.now().day && DateTime.now().hour == 20) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Attenzione', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                  content: Text('Non ci è possibile garantire la preparazione degli ordini asporto se effettuati dopo le ore 20, cercheremo di soddisfarla se è nelle nostre possibilità. Inoltri la richiesta d\'ordine e le risponderemo al più presto', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                        onPressed: (){
+                                          HttpService.sendMessage(numberSantAnna,
+                                            buildMessageFromCartPickUp(
+                                                this.widget.cartItems,
+                                                _nameController.value.text,
+                                                this.widget.total.toString(),
+                                                getCurrentDateTime(),
+                                                _selectedTimeSlotPikup.slot,
+                                                _selectedDateTime),
+                                          );
+                                          Navigator.of(context).pop(true);
+                                        },
+                                        child: const Text("Procedi")
+                                    ),
+                                    FlatButton(
+                                      onPressed: () => Navigator.of(context).pop(false),
+                                      child: const Text("Indietro"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            print('DAU' + _selectedDateTime.day.toString());
+                            print('XX' + DateTime.now().day.toString());
+                            print('XXX' + DateTime.now().hour.toString());
+                            print('');
+
                             HttpService.sendMessage(numberSantAnna,
                               buildMessageFromCartPickUp(
                                   this.widget.cartItems,
@@ -246,7 +291,8 @@ class _PickupScreenState extends State<PickupScreen> {
                                   _selectedDateTime),
                             );
                           }
-                        }),
+                        }
+                        ),
                       ],
                     ),
                   ],
@@ -324,9 +370,6 @@ class TimeSlotPickup {
       TimeSlotPickup(3, '20:00'),
       TimeSlotPickup(4, '20:30'),
       TimeSlotPickup(5, '21:00'),
-      TimeSlotPickup(6, '21:30'),
-      TimeSlotPickup(7, '22:00'),
-      TimeSlotPickup(8, '22:30'),
     ];
   }
 }

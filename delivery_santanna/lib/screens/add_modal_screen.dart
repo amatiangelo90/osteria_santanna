@@ -21,7 +21,7 @@ class ModalAddItem extends StatefulWidget {
 }
 
 class _ModalAddItemState extends State<ModalAddItem> {
-  int _counter = 0;
+  int _counter = 1;
 
   List<Cart> cartProductList = <Cart>[];
   List<String> choicedChangesList = [];
@@ -34,8 +34,8 @@ class _ModalAddItemState extends State<ModalAddItem> {
     return Container(
       child: AlertDialog(
         content: Container(
-          height: MediaQuery.of(context).size.height - 200,
-          width: MediaQuery.of(context).size.width - 50,
+          height: screenHeight - 100,
+          width: screenWidth - 50,
           child: Scaffold(
             backgroundColor: Colors.white,
             body: ListView(
@@ -62,7 +62,7 @@ class _ModalAddItemState extends State<ModalAddItem> {
                                 icon: FontAwesomeIcons.minus,
                                 function: () {
                                   setState(() {
-                                    if(_counter > 0)
+                                    if(_counter > 1)
                                       _counter = _counter - 1;
                                   });
                                 },
@@ -143,7 +143,8 @@ class _ModalAddItemState extends State<ModalAddItem> {
                           padding: const EdgeInsets.all(4.0),
                           child: this.widget.product.category == 'wine' ?
                           Text(Utils.getAllergensFromProduct(this.widget.product), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 16.0, fontFamily: 'LoraFont'),)
-                              : Text('Allergeni: ' +  Utils.getAllergensFromProduct(this.widget.product), overflow: TextOverflow.visible , style: TextStyle(fontSize: 13.0, fontFamily: 'LoraFont'),),
+                              /*: Text('Allergeni: ' +  Utils.getAllergensFromProduct(this.widget.product), overflow: TextOverflow.visible , style: TextStyle(fontSize: 13.0, fontFamily: 'LoraFont'),),*/
+                          : SizedBox(height: 0.0,),
                         ),
                         ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(20.0)),
