@@ -1,15 +1,26 @@
 [
- {
-  "image": "images/sushi/amaebi_gamberi_roll.PNG",
-  "name": "Amaebi Gamberi Roll (8 pz)",
-  "ingredients": ["Uramaki con Gamberi rossi crudi","Cetriolo","Erba cipollina","Carpaccio di Tonno","Mayo giapponese","Uova di salmone"],
-  "allergens": ["Crostacei","Uova"],
-  "changes": [],
-  "discountApplied": 0,
-  "price": 14.0,
-  "category": "sushi",
-  "available": "false"
-},{
+  {
+    "image": "images/sushi/tokio_bangkok.jpeg",
+    "name": "Tokyo-Bangkok",
+    "ingredients": ["Uramaki con tartare di ricciola", "Erba cipollina", "Mango","Salsa al curry rosso e cocco","Alga nori e riso croccante","Sesamo"],
+    "allergens": ["-"],
+    "changes": [],
+    "discountApplied": 0,
+    "price": 15.0,
+    "category": "sushi",
+    "available": "new"
+  },
+  {
+    "image": "images/sushi/amaebi_gamberi_roll.PNG",
+    "name": "Amaebi Tuna Roll (8 pz)",
+    "ingredients": ["Uramaki con Tonno Rosso","Cetriolo","Erba cipollina","Carpaccio di Tonno","Mayo giapponese","Uova di salmone"],
+    "allergens": ["Crostacei","Uova"],
+    "changes": [],
+    "discountApplied": 0,
+    "price": 14.0,
+    "category": "sushi",
+    "available": "true"
+  },{
   "image": "images/sushi/tiger_roll.PNG",
   "name": "Tiger Roll (8 pz)",
   "ingredients": ["Uramaki con Gamberi in tempura","Salmone","Avocado","Salsa Unagi","Fiocchi di tempura tenkasu"],
@@ -58,7 +69,7 @@
   "discountApplied": 0,
   "price": 12.0,
   "category": "sushi",
-  "available": "false"
+  "available": "true"
 }, {
   "image": "images/sushi/gambero_rosso_roll.PNG",
   "name": "Gambero Rosso Roll(8 pz)",
@@ -71,16 +82,16 @@
   "available": "true"
 },
   {
-  "image": "images/sushi/california_roll.PNG",
-  "name": "California roll (8 pz)",
-  "ingredients": ["Uramaki con Surimi","Avocado","Salmone","Philadelphia"],
-  "allergens": ["-"],
-  "changes": ["No Philadelphia"],
-  "discountApplied": 0,
-  "price": 10.0,
-  "category": "sushi",
-  "available": "false"
-},{
+    "image": "images/sushi/california_roll.PNG",
+    "name": "California roll (8 pz)",
+    "ingredients": ["Uramaki con Surimi","Avocado","Salmone","Philadelphia"],
+    "allergens": ["-"],
+    "changes": ["No Philadelphia"],
+    "discountApplied": 0,
+    "price": 10.0,
+    "category": "sushi",
+    "available": "true"
+  },{
   "image": "images/sushi/poke_salmone.PNG",
   "name": "Poke Bowl Salmone",
   "ingredients": ["Ciotola di riso sushi con Edamame","Salmone","Cavolo rosso","Cetrioli","Avocado","Pomodori","Salsa ponzu","Semi di sesamo","Alghe nori"],
@@ -113,8 +124,8 @@
 },
   {
     "image": "images/sushi/sashimi_misto.PNG",
-    "name": "Sashimi misto (12 pz)",
-    "ingredients": ["4 fette di Tonno", "4 fette di Salmone", "2 Gamberi Rossi", "2 Scampi"],
+    "name": "Sashimi misto (13 pz)",
+    "ingredients": ["3 fette di Tonno", "3 fette di Ricciola", "3 fette di Salmone","2 Gamberi Rossi", "2 Scampi"],
     "allergens": ["-"],
     "changes": [],
     "discountApplied": 0,
@@ -180,7 +191,7 @@
   "discountApplied": 0,
   "price": 12.0,
   "category": "sushi",
-  "available": "true"
+  "available": "false"
 },{
   "image": "images/sushi/crispy_roll.PNG",
   "name": "Crispy Roll (8 pz)",

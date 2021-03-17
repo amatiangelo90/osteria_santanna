@@ -37,7 +37,6 @@ class Utils{
     DateTime.utc(2021,2 ,27 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,3 ,5 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,3 ,6 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,3 ,7 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,3 ,12 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,3 ,13 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,3 ,14 ,0 ,0 ,0 ,0 ,0),
