@@ -1,6 +1,7 @@
 import 'package:delivery_santanna/components/icon_content.dart';
 import 'package:delivery_santanna/components/reusable_card.dart';
 import 'package:delivery_santanna/models/cart.dart';
+import 'package:delivery_santanna/models/promoclass.dart';
 import 'package:delivery_santanna/screens/delivery_screen.dart';
 import 'package:delivery_santanna/screens/pickup_screen.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,13 @@ class DeliveryPickupScreen extends StatefulWidget {
 
   final List<Cart> cartItems;
   final double total;
+  final Promo promo;
 
-  DeliveryPickupScreen({@required this.cartItems, this.total});
+  DeliveryPickupScreen({
+    @required this.cartItems,
+    this.total,
+    this.promo}
+      );
 
   @override
   _DeliveryPickupScreenState createState() => _DeliveryPickupScreenState();
@@ -51,7 +57,10 @@ class _DeliveryPickupScreenState extends State<DeliveryPickupScreen> {
                         showDialog(
                             context: context,
                             builder: (context) {
-                              return PickupScreen(cartItems: this.widget.cartItems, total: this.widget.total,);
+                              return PickupScreen(
+                                cartItems: this.widget.cartItems,
+                                total: this.widget.total,
+                                promo: this.widget.promo,);
                             }
                         );
                       },
@@ -66,7 +75,10 @@ class _DeliveryPickupScreenState extends State<DeliveryPickupScreen> {
                           showDialog(
                               context: context,
                               builder: (context) {
-                                return DeliveryScreen(cartItems: this.widget.cartItems, total: this.widget.total, );
+                                return DeliveryScreen(
+                                  cartItems: this.widget.cartItems,
+                                  total: this.widget.total,
+                                  promo: this.widget.promo,);
                               }
                           ) : showDialog(
                             context: context,

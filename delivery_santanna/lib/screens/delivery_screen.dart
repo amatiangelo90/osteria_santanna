@@ -1,4 +1,5 @@
 import 'package:delivery_santanna/models/cart.dart';
+import 'package:delivery_santanna/models/promoclass.dart';
 import 'package:delivery_santanna/services/http_service.dart';
 import 'package:delivery_santanna/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +11,13 @@ class DeliveryScreen extends StatefulWidget {
 
   final List<Cart> cartItems;
   final double total;
+  final Promo promo;
 
-  DeliveryScreen({@required this.cartItems, this.total});
+  DeliveryScreen({
+    @required this.cartItems,
+    this.total,
+    this.promo,
+  });
 
   @override
   _DeliveryScreenState createState() => _DeliveryScreenState();
@@ -367,52 +373,54 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                         },
                                       );
                                     } else if(_selectedDateTime.day == DateTime.now().day && DateTime.now().hour == 18){
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                title: const Text('Attenzione', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                                content: Text('Per ordini delivery effettuati dopo le ore 18 non ci è possibile garantire la consegna, cercheremo ugualmente di soddisfarla se è nelle nostre possibilità. Inoltri la richiesta d\'ordine e le risponderemo al piu presto', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                                actions: <Widget>[
-                                                  FlatButton(
-                                                      onPressed: (){
-                                                        HttpService.sendMessage(numberSantAnna,
-                                                          buildMessageFromCartDelivery(
-                                                              this.widget.cartItems,
-                                                              _nameController.value.text,
-                                                              _selectedCity.name + ' (${_selectedCity.cap})',
-                                                              _addressController.value.text,
-                                                              getCurrentDateTime(),
-                                                              _currentTotal.toString(),
-                                                              _selectedTimeSlotDelivery.slot,
-                                                              _selectedDateTime),
-                                                        );
-                                                        Navigator.of(context).pop(true);
-                                                      },
-                                                      child: const Text("Procedi")
-                                                  ),
-                                                  FlatButton(
-                                                    onPressed: () => Navigator.of(context).pop(false),
-                                                    child: const Text("Indietro"),
-                                                  ),
-                                                ],
-                                              );
-                                            },
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('Attenzione', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                            content: Text('Per ordini delivery effettuati dopo le ore 18 non ci è possibile garantire la consegna, cercheremo ugualmente di soddisfarla se è nelle nostre possibilità. Inoltri la richiesta d\'ordine e le risponderemo al piu presto', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                            actions: <Widget>[
+                                              FlatButton(
+                                                  onPressed: (){
+                                                    HttpService.sendMessage(numberSantAnna,
+                                                      buildMessageFromCartDelivery(
+                                                          this.widget.cartItems,
+                                                          _nameController.value.text,
+                                                          _selectedCity.name + ' (${_selectedCity.cap})',
+                                                          _addressController.value.text,
+                                                          getCurrentDateTime(),
+                                                          _currentTotal.toString(),
+                                                          _selectedTimeSlotDelivery.slot,
+                                                          _selectedDateTime,
+                                                          this.widget.promo),
+                                                    );
+                                                    Navigator.of(context).pop(true);
+                                                  },
+                                                  child: const Text("Procedi")
+                                              ),
+                                              FlatButton(
+                                                onPressed: () => Navigator.of(context).pop(false),
+                                                child: const Text("Indietro"),
+                                              ),
+                                            ],
                                           );
-                                        }else {
-                                        HttpService.sendMessage(numberSantAnna,
-                                          buildMessageFromCartDelivery(
-                                              this.widget.cartItems,
-                                              _nameController.value.text,
-                                              _selectedCity.name + ' (${_selectedCity.cap})',
-                                              _addressController.value.text,
-                                              getCurrentDateTime(),
-                                              _currentTotal.toString(),
-                                              _selectedTimeSlotDelivery.slot,
-                                              _selectedDateTime),
-                                        );
-                                      }
-                                    },
+                                        },
+                                      );
+                                    }else {
+                                      HttpService.sendMessage(numberSantAnna,
+                                        buildMessageFromCartDelivery(
+                                            this.widget.cartItems,
+                                            _nameController.value.text,
+                                            _selectedCity.name + ' (${_selectedCity.cap})',
+                                            _addressController.value.text,
+                                            getCurrentDateTime(),
+                                            _currentTotal.toString(),
+                                            _selectedTimeSlotDelivery.slot,
+                                            _selectedDateTime,
+                                            this.widget.promo),
+                                      );
+                                    }
+                                  },
                                   ),
                                 ),
                               ],
@@ -438,7 +446,8 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
       String date,
       String total,
       String slot,
-      DateTime dateTime) {
+      DateTime dateTime,
+      Promo promo) {
 
     String itemList = '';
 
@@ -454,18 +463,37 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
       address = 'Corso Umbero N°1';
     }
 
-    String message =
-        "ORDINE DELIVERY%0a%0a" +
-            " Nome: $name" +
-            "%0a Indirizzo: $address"
-                "%0a Città: $city"
-                "%0a $slot "
-                "%0a " + Utils.getWeekDay(dateTime.weekday) +" ${dateTime.day} " + Utils.getMonthDay(dateTime.month) +
-            "%0a"
-                "%0a-------------------------------------------------"
-                "%0a"
-            + itemList + "%0a"
-            + "%0aTot. " + total + " € ";
+    String message;
+    if(promo.isPromoApplied){
+      message =
+          "ORDINE DELIVERY%0a%0a" +
+              " Nome: $name" +
+              "%0a Indirizzo: $address"
+                  "%0a Città: $city"
+                  "%0a $slot "
+                  "%0a " + Utils.getWeekDay(dateTime.weekday) +" ${dateTime.day} " + Utils.getMonthDay(dateTime.month) +
+              "%0a"
+                  "%0a-------------------------------------------------"
+                  "%0a"
+              + itemList + "%0a"
+              "%0a%0aCodice promo applicato [" + this.widget.promo.code + "]" +
+              /*"%0aSconto Applicato: " + this.widget.promo.discount.toString() + " " +*/
+              "%0a"
+              + "%0aTot. " + total + " € ";
+    }else{
+      message =
+          "ORDINE DELIVERY%0a%0a" +
+              " Nome: $name" +
+              "%0a Indirizzo: $address"
+                  "%0a Città: $city"
+                  "%0a $slot "
+                  "%0a " + Utils.getWeekDay(dateTime.weekday) +" ${dateTime.day} " + Utils.getMonthDay(dateTime.month) +
+              "%0a"
+                  "%0a-------------------------------------------------"
+                  "%0a"
+              + itemList + "%0a"
+              + "%0aTot. " + total + " € ";
+    }
 
 
     message = message.replaceAll('&', '%26');

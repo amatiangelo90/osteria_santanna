@@ -1,4 +1,5 @@
 import 'package:delivery_santanna/models/cart.dart';
+import 'package:delivery_santanna/models/promoclass.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -18,11 +19,19 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
 
+  final _discountController = TextEditingController();
+
+  static final String _codeDiscount = 'PAPA10';
+
   double _total;
+  double _totalWithoutDiscount;
+  bool _discountApplied = false;
   List<Widget> currentListItems = <Widget>[];
+  Promo promo;
 
   @override
   void initState() {
+    promo = Promo(false, null, null);
     super.initState();
     _getTotal();
   }
@@ -33,6 +42,15 @@ class _CartScreenState extends State<CartScreen> {
       setState(() {
         _total = _total + ((cartItem.product.price - ((cartItem.product.price/100)*cartItem.product.discountApplied)) * cartItem.numberOfItem);
       });
+    });
+  }
+
+  _applyDiscount() {
+    setState(() {
+      _totalWithoutDiscount = _total;
+      _total = _total - ((_total/100)*10);
+      _discountApplied = true;
+      promo = Promo(true, _codeDiscount, 10);
     });
   }
 
@@ -50,6 +68,12 @@ class _CartScreenState extends State<CartScreen> {
       _getTotal();
       this.widget.function(null);
     });
+  }
+
+  @override
+  void dispose() {
+    _discountController.dispose();
+    super.dispose();
   }
 
   @override
@@ -181,7 +205,7 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   ),
                   Flexible(
-                    flex: 1,
+                    flex: 2,
                     fit: FlexFit.tight,
                     child: Container(
                       decoration: BoxDecoration(
@@ -195,42 +219,142 @@ class _CartScreenState extends State<CartScreen> {
                             ),
                           ]
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(28.0),
-                            child: Text("Totale € " +  _total.toString() ,style: TextStyle(color: Colors.teal.shade800, fontSize: 20.0, fontFamily: 'LoraFont')),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: RaisedButton(
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                          children: [
+                            _discountApplied ? Padding(
+                              padding: const EdgeInsets.all(28.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("Totale € " , style: TextStyle(color: Colors.teal.shade800, fontSize: 20.0, fontFamily: 'LoraFont')),
+                                  Text(_totalWithoutDiscount.toString(), style: TextStyle(decoration: TextDecoration.lineThrough ,color: Colors.deepOrangeAccent, fontSize: 20.0, fontFamily: 'LoraFont')),
+                                  Text(" " + _total.toString(), style: TextStyle(color: Colors.teal.shade800, fontSize: 20.0, fontFamily: 'LoraFont')),
 
-                                child: Text('Conferma',style: TextStyle(color: Colors.white, fontSize: 20.0, fontFamily: 'LoraFont')),
-                                color: _total != 0.0 ? Colors.green : Colors.grey,
-                                elevation: 5.0,
-                                onPressed: (){
-                                  _total != 0.0 ? showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return DeliveryPickupScreen(cartItems: this.widget.cartItems, total: _total,);
-                                      }
-                                  ) : showDialog(
-                                      context: context,
-                                      builder: (context){
-                                        return AlertDialog(
-                                          title: Center(child: Text("Carrello Vuoto", style: TextStyle(color: Colors.black, fontSize: 20.0, fontFamily: 'LoraFont'))),
-                                          content: Text(''),
-                                        );
-                                      }
-                                  );
-                                }),
-                          ),
-                        ],
+                                ],
+                              ),
+                            ) :Padding(
+                              padding: const EdgeInsets.all(28.0),
+                              child: Text("Totale € " +  _total.toString() ,style: TextStyle(color: Colors.teal.shade800, fontSize: 20.0, fontFamily: 'LoraFont')),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                RaisedButton(
+                                  child: Text('Codice Promo',style: TextStyle(color: Colors.white, fontSize: 20.0, fontFamily: 'LoraFont')),
+                                  color: _total != 0.0 ? Colors.orangeAccent : Colors.grey,
+                                  elevation: 5.0,
+                                  onPressed: (){
+                                    _discountApplied ?
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(backgroundColor: Colors.deepOrange.shade800 ,
+                                        content: Text('Codice promo già applicato (' + _codeDiscount + ')  - 10%'))) :
+                                    _total > 59.9 ? showDialog(
+                                        context: context,
+                                        builder: (context){
+                                          return AlertDialog(
+                                            title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                            content: Column(
+                                              children: [
+                                                Text('Inserire il codice promo', style: TextStyle(color: Colors.black, fontSize: 17.0, fontFamily: 'LoraFont'),),
+                                                SizedBox(height: 40.0,),
+                                                Center(
+                                                  child: Card(
+                                                    child: TextField(
+                                                      controller: _discountController,
+                                                      textAlign: TextAlign.center,
+                                                      decoration: InputDecoration(
+                                                        border: OutlineInputBorder(),
+                                                        labelText: 'Codice Promo',
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 40.0,),
+                                                RaisedButton(
+                                                  child: Text('Convalida', style: TextStyle(color: Colors.white, fontSize: 20.0, fontFamily: 'LoraFont')),
+                                                  color: _total != 0.0 ? Colors.green : Colors.grey,
+                                                  elevation: 5.0,
+                                                  onPressed: (){
+                                                    if(_discountController.value.text == _codeDiscount){
+                                                      _applyDiscount();
+                                                      ScaffoldMessenger.of(context)
+                                                          .showSnackBar(SnackBar(
+                                                          backgroundColor: Colors.teal.shade800,
+                                                          content: Text('Codice valido. Sconto 10% applicato')));
+                                                      Navigator.of(context).pop(false);
+                                                    }else{
+                                                      ScaffoldMessenger.of(context)
+                                                          .showSnackBar(
+                                                          SnackBar(
+                                                              backgroundColor: Colors.red.shade800,
+                                                              content: Text('Codice promo non valido')
+                                                          ),
+                                                      );
+                                                      Navigator.of(context).pop(false);
+                                                    }
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                            actions: <Widget>[
+                                              FlatButton(
+                                                onPressed: () => Navigator.of(context).pop(false),
+                                                child: const Text("Indietro"),
+                                              ),
+                                            ],
+                                          );
+                                        }
+                                    ) : showDialog(
+                                        context: context,
+                                        builder: (context){
+                                          return AlertDialog(
+                                            title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                            content: Text('Attenzione! Sconto applicabile per importi superiori a 60 euro.', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                            actions: <Widget>[
+                                              FlatButton(
+                                                onPressed: () => Navigator.of(context).pop(false),
+                                                child: const Text("Indietro"),
+                                              ),
+                                            ],
+                                          );
+                                        }
+                                    );
+                                  },
+                                ),
+                                RaisedButton(
+                                  child: Text('Conferma',style: TextStyle(color: Colors.white, fontSize: 20.0, fontFamily: 'LoraFont')),
+                                  color: _total != 0.0 ? Colors.green : Colors.grey,
+                                  elevation: 5.0,
+                                  onPressed: (){
+                                    _total != 0.0 ? showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return DeliveryPickupScreen(
+                                            cartItems: this.widget.cartItems,
+                                            total: _total,
+                                            promo: promo,
+                                          );
+                                        }
+                                    ) : showDialog(
+                                        context: context,
+                                        builder: (context){
+                                          return AlertDialog(
+                                            title: Center(child: Text("Carrello Vuoto", style: TextStyle(color: Colors.black, fontSize: 20.0, fontFamily: 'LoraFont'))),
+                                            content: Text(''),
+                                          );
+                                        }
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),

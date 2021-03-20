@@ -1,5 +1,6 @@
 import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:delivery_santanna/models/cart.dart';
+import 'package:delivery_santanna/models/promoclass.dart';
 import 'package:delivery_santanna/services/http_service.dart';
 import 'package:delivery_santanna/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +11,9 @@ class PickupScreen extends StatefulWidget {
 
   final List<Cart> cartItems;
   final double total;
+  final Promo promo;
 
-  PickupScreen({@required this.cartItems, this.total});
+  PickupScreen({@required this.cartItems, this.total, this.promo});
 
   @override
   _PickupScreenState createState() => _PickupScreenState();
@@ -39,10 +41,8 @@ class _PickupScreenState extends State<PickupScreen> {
 
   @override
   void initState() {
-
     _dropdownTimeSlotPickup = buildDropdownSlotPickup(_slotsPicker);
     _selectedTimeSlotPikup = _dropdownTimeSlotPickup[0].value;
-
     super.initState();
   }
 
@@ -64,6 +64,7 @@ class _PickupScreenState extends State<PickupScreen> {
       _selectedTimeSlotPikup = currentPickupSlot;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -261,7 +262,8 @@ class _PickupScreenState extends State<PickupScreen> {
                                                 this.widget.total.toString(),
                                                 getCurrentDateTime(),
                                                 _selectedTimeSlotPikup.slot,
-                                                _selectedDateTime),
+                                                _selectedDateTime,
+                                                this.widget.promo),
                                           );
                                           Navigator.of(context).pop(true);
                                         },
@@ -278,8 +280,6 @@ class _PickupScreenState extends State<PickupScreen> {
                           } else {
                             print('DAU' + _selectedDateTime.day.toString());
                             print('XX' + DateTime.now().day.toString());
-                            print('XXX' + DateTime.now().hour.toString());
-                            print('');
 
                             HttpService.sendMessage(numberSantAnna,
                               buildMessageFromCartPickUp(
@@ -288,7 +288,8 @@ class _PickupScreenState extends State<PickupScreen> {
                                   this.widget.total.toString(),
                                   getCurrentDateTime(),
                                   _selectedTimeSlotPikup.slot,
-                                  _selectedDateTime),
+                                  _selectedDateTime,
+                                  this.widget.promo),
                             );
                           }
                         }
@@ -312,7 +313,8 @@ class _PickupScreenState extends State<PickupScreen> {
       String total,
       String date,
       String slot,
-      DateTime selectedDateTime) {
+      DateTime selectedDateTime,
+      Promo promo) {
 
     String itemList = '';
 
@@ -323,21 +325,38 @@ class _PickupScreenState extends State<PickupScreen> {
       }
     });
 
-    String message =
-        "ORDINE ASPORTO%0a" +
-            "%0aOsteria Sant'Anna%0a"+
-            "%0aNome: $name" +
-            "%0aIndirizzo Ritiro: Viale Stazione 12" +
-            "%0aCittà: Cisternino (72014)" +
-            "%0aProvincia: BR" +
-            "%0aData Ritiro: " + Utils.getWeekDay(selectedDateTime.day) +" ${selectedDateTime.day} " + Utils.getMonthDay(selectedDateTime.month) +
-            "%0aOre Ritiro: $slot " +
-            "%0a%0a-------------------------------------------------%0a"
-            + itemList + "%0a"
-            + "%0aTot. " + total + " € ";
+    String message;
+    if(promo.isPromoApplied){
+      message =
+          "ORDINE ASPORTO%0a" +
+              "%0aOsteria Sant'Anna%0a"+
+              "%0aNome: $name" +
+              "%0aIndirizzo Ritiro: Viale Stazione 12" +
+              "%0aCittà: Cisternino (72014)" +
+              "%0aProvincia: BR" +
+              "%0aData Ritiro: " + Utils.getWeekDay(selectedDateTime.day) +" ${selectedDateTime.day} " + Utils.getMonthDay(selectedDateTime.month) +
+              "%0aOre Ritiro: $slot " +
+              "%0a%0a-------------------------------------------------%0a" +
+              itemList + "%0a"
 
-
-
+              "%0a%0aCodice promo applicato [" + this.widget.promo.code + "]" +
+              /*"%0aSconto Applicato: " + this.widget.promo.discount.toString() + " " +*/
+              "%0a"
+              + "%0aTot. " + total + " € ";
+    }else{
+      message =
+          "ORDINE ASPORTO%0a" +
+              "%0aOsteria Sant'Anna%0a"+
+              "%0aNome: $name" +
+              "%0aIndirizzo Ritiro: Viale Stazione 12" +
+              "%0aCittà: Cisternino (72014)" +
+              "%0aProvincia: BR" +
+              "%0aData Ritiro: " + Utils.getWeekDay(selectedDateTime.day) +" ${selectedDateTime.day} " + Utils.getMonthDay(selectedDateTime.month) +
+              "%0aOre Ritiro: $slot " +
+              "%0a%0a-------------------------------------------------%0a"
+              + itemList + "%0a"
+              + "%0aTot. " + total + " € ";
+    }
     message = message.replaceAll('&', '%26');
     return message;
 
@@ -353,8 +372,24 @@ class _PickupScreenState extends State<PickupScreen> {
   void setSelectedDate(DateTime date) {
     setState(() {
       _selectedDateTime = date;
+      if(date.day == 20 || date.day == 21) {
+        _dropdownTimeSlotPickup = buildDropdownSlotPickup(TimeSlotPickup.getPickupSlotsWithLunchTime());
+        _selectedTimeSlotPikup = _dropdownTimeSlotPickup[0].value;
+      }else{
+        _dropdownTimeSlotPickup = buildDropdownSlotPickup(TimeSlotPickup.getPickupSlots());
+        _selectedTimeSlotPikup = _dropdownTimeSlotPickup[0].value;
+      }
     });
   }
+
+  /*void setSelectedDate(DateTime date) {
+    setState(() {
+      _selectedDateTime = date;
+
+
+    });
+  }*/
+
 }
 
 class TimeSlotPickup {
@@ -370,6 +405,19 @@ class TimeSlotPickup {
       TimeSlotPickup(3, '20:00'),
       TimeSlotPickup(4, '20:30'),
       TimeSlotPickup(5, '21:00'),
+    ];
+  }
+
+  static List<TimeSlotPickup> getPickupSlotsWithLunchTime() {
+    return <TimeSlotPickup>[
+      TimeSlotPickup(1, 'Seleziona Orario Ritiro'),
+      TimeSlotPickup(2, '12:30'),
+      TimeSlotPickup(3, '13:00'),
+      TimeSlotPickup(4, '13:30'),
+      TimeSlotPickup(5, '19:30'),
+      TimeSlotPickup(6, '20:00'),
+      TimeSlotPickup(7, '20:30'),
+      TimeSlotPickup(8, '21:00'),
     ];
   }
 }
