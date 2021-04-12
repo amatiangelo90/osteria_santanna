@@ -334,7 +334,7 @@ class _PickupScreenState extends State<PickupScreen> {
               "%0aIndirizzo Ritiro: Viale Stazione 12" +
               "%0aCittà: Cisternino (72014)" +
               "%0aProvincia: BR" +
-              "%0aData Ritiro: " + Utils.getWeekDay(selectedDateTime.day) +" ${selectedDateTime.day} " + Utils.getMonthDay(selectedDateTime.month) +
+              "%0aData Ritiro: " + Utils.getWeekDay(selectedDateTime.weekday) +" ${selectedDateTime.day} " + Utils.getMonthDay(selectedDateTime.month) +
               "%0aOre Ritiro: $slot " +
               "%0a%0a-------------------------------------------------%0a" +
               itemList + "%0a"
@@ -351,7 +351,7 @@ class _PickupScreenState extends State<PickupScreen> {
               "%0aIndirizzo Ritiro: Viale Stazione 12" +
               "%0aCittà: Cisternino (72014)" +
               "%0aProvincia: BR" +
-              "%0aData Ritiro: " + Utils.getWeekDay(selectedDateTime.day) +" ${selectedDateTime.day} " + Utils.getMonthDay(selectedDateTime.month) +
+              "%0aData Ritiro: " + Utils.getWeekDay(selectedDateTime.weekday) +" ${selectedDateTime.day} " + Utils.getMonthDay(selectedDateTime.month) +
               "%0aOre Ritiro: $slot " +
               "%0a%0a-------------------------------------------------%0a"
               + itemList + "%0a"
@@ -372,7 +372,7 @@ class _PickupScreenState extends State<PickupScreen> {
   void setSelectedDate(DateTime date) {
     setState(() {
       _selectedDateTime = date;
-      if(date.day == 20 || date.day == 21) {
+      if(date.day == 10) {
         _dropdownTimeSlotPickup = buildDropdownSlotPickup(TimeSlotPickup.getPickupSlotsWithLunchTime());
         _selectedTimeSlotPikup = _dropdownTimeSlotPickup[0].value;
       }else{
@@ -381,15 +381,6 @@ class _PickupScreenState extends State<PickupScreen> {
       }
     });
   }
-
-  /*void setSelectedDate(DateTime date) {
-    setState(() {
-      _selectedDateTime = date;
-
-
-    });
-  }*/
-
 }
 
 class TimeSlotPickup {

@@ -9,8 +9,7 @@
     "price": 5.0,
     "category": "dessert",
     "available": "true"
-  },
-  {
+  }, {
     "image": "images/dessert/mousse.jpg",
     "name": "Mousse Sant'Anna",
     "ingredients": ["Mousse di ricotta", "Frutti rossi", "Biscotto morbido alle mandorle e olio evo", "Crumble di mandorle"],

@@ -1,14 +1,35 @@
 [
   {
+    "image": "images/sushi/spicy_salmon_crispy.jpeg",
+    "name": "Salmon Crispy Rice (2 pz)",
+    "ingredients": ["Tegolino croccante di riso condito con miso e cipollotto", "Tartare di salmone speziata", "Mayo giapponese", "Salsa unagi"],
+    "allergens": ["-"],
+    "changes": [],
+    "discountApplied": 0,
+    "price": 6.0,
+    "category": "sushi",
+    "available": "new"
+  },{
+  "image": "images/sushi/spicy_tuna_crispy.jpeg",
+  "name": "Tuna Crispy Rice (2 pz)",
+  "ingredients": ["Tegolino croccante di riso condito con miso e cipollotto", "Tartare di tonno speziata", "Mayo giapponese", "Salsa unagi"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 6.0,
+  "category": "sushi",
+  "available": "new"
+},
+  {
     "image": "images/sushi/tokio_bangkok.jpeg",
-    "name": "Tokyo-Bangkok",
+    "name": "Tokyo-Bangkok (8 pz)",
     "ingredients": ["Uramaki con tartare di ricciola", "Erba cipollina", "Mango","Salsa al curry rosso e cocco","Alga nori e riso croccante","Sesamo"],
     "allergens": ["-"],
     "changes": [],
     "discountApplied": 0,
     "price": 15.0,
     "category": "sushi",
-    "available": "new"
+    "available": "true"
   },
   {
     "image": "images/sushi/amaebi_gamberi_roll.PNG",
@@ -54,16 +75,6 @@
   "image": "images/sushi/parmigiana_roll.PNG",
   "name": "Parmigiana Roll (8 pz)",
   "ingredients": ["Uramaki con Gambero al Vapore","Basilico","Parmigiana di Melanzane"],
-  "allergens": ["-"],
-  "changes": [],
-  "discountApplied": 0,
-  "price": 12.0,
-  "category": "sushi",
-  "available": "true"
-},{
-  "image": "images/sushi/unagi_rape.PNG",
-  "name": "Unagi Rape Roll (8 pz)",
-  "ingredients": ["Uramaki con Sgombro laccato e affumicato","Rape ripassate", "Emulsione di bottarga"],
   "allergens": ["-"],
   "changes": [],
   "discountApplied": 0,
@@ -182,16 +193,6 @@
   "price": 9.0,
   "category": "sushi",
   "available": "true"
-},{
-  "image": "images/sushi/ramen_kit.PNG",
-  "name": "Shoyu Ramen",
-  "ingredients": ["Pasta Ramen","Uovo sodo marinato","Brasato di Maiale","Spinaci lessati","Cipollotto", "Brodo di gallina","Katsuobushi dashi"],
-  "allergens": ["-"],
-  "changes": [],
-  "discountApplied": 0,
-  "price": 12.0,
-  "category": "sushi",
-  "available": "false"
 },{
   "image": "images/sushi/crispy_roll.PNG",
   "name": "Crispy Roll (8 pz)",

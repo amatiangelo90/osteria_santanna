@@ -1,4 +1,14 @@
-[
+[ {
+  "image": "images/from_kitchen/bao.jpeg",
+  "name": "Bao alla Genovese (1 pz)",
+  "ingredients": ["Panino al vapore","Ripieno di muscolo di vitello 'alla genovese' cotto lentamente con miso"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 5.0,
+  "category": "from_kitchen",
+  "available": "new"
+},
   {
     "image": "images/from_kitchen/polpette.PNG",
     "name": "Polpette",

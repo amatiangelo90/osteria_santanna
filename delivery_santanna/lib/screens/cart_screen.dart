@@ -242,11 +242,15 @@ class _CartScreenState extends State<CartScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 RaisedButton(
-                                  child: Text('Codice Promo',style: TextStyle(color: Colors.white, fontSize: 20.0, fontFamily: 'LoraFont')),
-                                  color: _total != 0.0 ? Colors.orangeAccent : Colors.grey,
-                                  elevation: 5.0,
-                                  onPressed: (){
-                                    _discountApplied ?
+                                    child: Text('Codice Promo',style: TextStyle(color: Colors.white, fontSize: 20.0, fontFamily: 'LoraFont')),
+                                    color: _total != 0.0 ? Colors.orangeAccent : Colors.grey,
+                                    elevation: 5.0,
+                                    onPressed: (){
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(backgroundColor: Colors.deepOrange.shade800 ,
+                                          content: Text('Promo non disponibile per la settimana in corso')));
+                                    }
+                                  /*_discountApplied ?
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(backgroundColor: Colors.deepOrange.shade800 ,
                                         content: Text('Codice promo già applicato (' + _codeDiscount + ')  - 10%'))) :
@@ -321,7 +325,8 @@ class _CartScreenState extends State<CartScreen> {
                                           );
                                         }
                                     );
-                                  },
+                                  },*/
+
                                 ),
                                 RaisedButton(
                                   child: Text('Conferma',style: TextStyle(color: Colors.white, fontSize: 20.0, fontFamily: 'LoraFont')),

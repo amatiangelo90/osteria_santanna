@@ -372,7 +372,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                           );
                                         },
                                       );
-                                    } else if(_selectedDateTime.day == DateTime.now().day && DateTime.now().hour == 18){
+                                    } else if(_selectedDateTime.day == DateTime.now().day && DateTime.now().hour > 17){
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
