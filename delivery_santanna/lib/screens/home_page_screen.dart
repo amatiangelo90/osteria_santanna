@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:delivery_santanna/models/cart.dart';
 import 'package:delivery_santanna/models/product.dart';
 import 'package:delivery_santanna/screens/add_modal_screen.dart';
@@ -9,11 +7,12 @@ import 'package:delivery_santanna/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:delivery_santanna/dao/crud_model.dart';
 
-const sushiMenuType = 'assets/menu_sushi.json';
-const fromKitchenMenuType = 'assets/menu_fromKitchen.json';
-const dessertMenuType = 'assets/menu_dessert.json';
-const wineMenuType = 'assets/cantina.json';
+const sushiMenuType = 'menu-sushi';
+const fromKitchenMenuType = 'menu-kitchen';
+const dessertMenuType = 'menu-dessert';
+const wineMenuType = 'menu-wine';
 
 class OsteriaSantAnnaHomePage extends StatefulWidget {
   static String id = '/';
@@ -23,6 +22,11 @@ class OsteriaSantAnnaHomePage extends StatefulWidget {
 }
 
 class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
+
+  List<Product> sushiProductList = <Product>[];
+  List<Product> kitchenProductList = <Product>[];
+  List<Product> dessertProductList = <Product>[];
+  List<Product> wineProductList = <Product>[];
 
   List<Cart> cartProductList = <Cart>[];
 
@@ -41,7 +45,7 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
 
       cartProductList.forEach((element) {
         if(element.product.name == cartItemToAdd[0].product.name
-        && _twoListContainsSameElements(element.changes, cartItemToAdd[0].changes)){
+            && _twoListContainsSameElements(element.changes, cartItemToAdd[0].changes)){
 
           print(element.changes.toString() + ' =================== ' + cartItemToAdd[0].changes.toString());
           element.numberOfItem = element.numberOfItem + cartItemToAdd[0].numberOfItem;
@@ -315,7 +319,7 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
                   ),
                   Container(
                       child: FutureBuilder(
-                        initialData: <Widget>[Text('')],
+                        initialData: <Widget>[Center(child: CircularProgressIndicator())],
                         future: createList(),
                         builder: (context, snapshot){
                           if(snapshot.hasData){
@@ -347,16 +351,7 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
 
     List<Widget> items = <Widget>[];
 
-    String dataString = await DefaultAssetBundle.of(context).loadString(currentMenuType);
-    List<dynamic> dataJson = jsonDecode(dataString);
-
-    List<Product> productList = <Product>[];
-
-    dataJson.forEach((json) {
-      productList.add(Product.fromJson(json));
-    });
-
-    print(productList);
+    List<Product> productList = await getCurrentProductList(currentMenuType);
 
     productList.forEach((product) {
       items.add(
@@ -578,7 +573,9 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
           ),
         ),
       );
-    });
+    }
+
+    );
     return items;
   }
 
@@ -589,7 +586,6 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
     }
     changes.forEach((elementChanges) {
       if(!changesFromModal.contains(elementChanges)){
-        print('assign false');
         output = false;
       }
     });
@@ -600,6 +596,51 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
       return false;
     }
   }
+
+  Future<List<Product>> getCurrentProductList(String currentMenuType) async {
+
+    switch(currentMenuType){
+
+      case sushiMenuType:
+        if(sushiProductList.isEmpty){
+          CRUDModel crudModel = CRUDModel(currentMenuType);
+          sushiProductList = await crudModel.fetchProducts();
+          return sushiProductList;
+        }else{
+          return sushiProductList;
+        }
+        break;
+      case fromKitchenMenuType:
+        if(kitchenProductList.isEmpty){
+          CRUDModel crudModel = CRUDModel(currentMenuType);
+          kitchenProductList = await crudModel.fetchProducts();
+          return kitchenProductList;
+        }else{
+          return kitchenProductList;
+
+        }
+        break;
+      case dessertMenuType:
+        if(dessertProductList.isEmpty){
+          CRUDModel crudModel = CRUDModel(currentMenuType);
+          dessertProductList = await crudModel.fetchProducts();
+          return dessertProductList;
+        }else{
+          return dessertProductList;
+        }
+        break;
+      case wineMenuType:
+        if(wineProductList.isEmpty){
+          CRUDModel crudModel = CRUDModel(currentMenuType);
+          wineProductList = await crudModel.fetchProducts();
+          return wineProductList;
+        }else{
+          return wineProductList;
+        }
+        break;
+    }
+  }
+
 }
 
 

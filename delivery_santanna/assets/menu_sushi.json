@@ -1,5 +1,26 @@
 [
   {
+    "image": "images/sushi/nigiri_salmon.jpeg",
+    "name": "Salmon Nigiri (2 pz)",
+    "ingredients": ["filetto di salmone", "salsa ponzu", "ikura"],
+    "allergens": ["-"],
+    "changes": [],
+    "discountApplied": 0,
+    "price": 4.0,
+    "category": "sushi",
+    "available": "new"
+  },{
+  "image": "images/sushi/nigiri_tuna.jpeg",
+  "name": "Tuna Nigiri (2 pz)",
+  "ingredients": ["Filetto di tonno","salsa ponzu", "nori"],
+  "allergens": ["-"],
+  "changes": [],
+  "discountApplied": 0,
+  "price": 4.0,
+  "category": "sushi",
+  "available": "new"
+},
+  {
     "image": "images/sushi/spicy_salmon_crispy.jpeg",
     "name": "Salmon Crispy Rice (2 pz)",
     "ingredients": ["Tegolino croccante di riso condito con miso e cipollotto", "Tartare di salmone speziata", "Mayo giapponese", "Salsa unagi"],

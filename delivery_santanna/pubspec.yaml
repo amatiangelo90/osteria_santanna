@@ -23,11 +23,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  sticky_headers: ^0.1.8
   font_awesome_flutter: ^8.4.0
-  path_provider: ^1.5.0
+  path_provider: ^2.0.1
   toast: ^0.1.5
-  flutter_svg: ^0.19.1
   http: ^0.12.2
   url_launcher: ^5.2.5
   intl: ^0.16.1
@@ -35,12 +33,10 @@ dependencies:
   flutter_staggered_grid_view: ^0.3.3
   flutter_sparkline: ^0.1.0
   cupertino_icons: ^1.0.2
-  photo_view: ^0.10.3
-  full_screen_image: ^1.0.2
   chips_choice: ^2.0.1
-  dio: ^3.0.10
-  video_player: ^1.0.1
-  animated_text_kit: ^3.1.0
+  firebase_core: ^1.0.3
+  cloud_firestore:
+  provider:
 
 dev_dependencies:
   flutter_test:

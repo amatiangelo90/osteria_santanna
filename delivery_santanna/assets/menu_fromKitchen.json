@@ -30,16 +30,6 @@
   "category": "from_kitchen",
   "available": "true"
 },{
-  "image": "images/from_kitchen/baccala_cime.PNG",
-  "name": "Baccalà in Crosta",
-  "ingredients": ["Baccalà","Crema di Cime di Rapa"],
-  "allergens": ["-"],
-  "changes": [],
-  "discountApplied": 0,
-  "price": 12.0,
-  "category": "from_kitchen",
-  "available": "true"
-},{
   "image": "images/from_kitchen/baccala_fritto_8_pz.PNG",
   "name": "Baccalà Fritto (8 pz)",
   "ingredients": ["Baccalà"],

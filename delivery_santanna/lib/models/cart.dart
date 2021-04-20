@@ -13,7 +13,7 @@ class Cart{
 
   @override
   String toString() {
-    return 'Cart : ' + this.product.toString() + ' x ' + this.numberOfItem.toString() + ' - Changes: ' + this.changes.toString();
+    return 'Cart : ' + this.product.toString() + ' x ' + this.numberOfItem.toString();
   }
 
 }

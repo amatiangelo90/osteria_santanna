@@ -382,7 +382,8 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                             actions: <Widget>[
                                               FlatButton(
                                                   onPressed: (){
-                                                    HttpService.sendMessage(numberSantAnna,
+                                                    HttpService.sendMessage(
+                                                      numberSantAnna,
                                                       buildMessageFromCartDelivery(
                                                           this.widget.cartItems,
                                                           _nameController.value.text,
@@ -393,6 +394,10 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                                           _selectedTimeSlotDelivery.slot,
                                                           _selectedDateTime,
                                                           this.widget.promo),
+                                                      _nameController.value.text,
+                                                      _currentTotal.toString(),
+                                                      getCurrentDateTime(),
+                                                      this.widget.cartItems.toString(),
                                                     );
                                                     Navigator.of(context).pop(true);
                                                   },
@@ -418,6 +423,10 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                             _selectedTimeSlotDelivery.slot,
                                             _selectedDateTime,
                                             this.widget.promo),
+                                        _nameController.value.text,
+                                        _currentTotal.toString(),
+                                        getCurrentDateTime(),
+                                        this.widget.cartItems.toString(),
                                       );
                                     }
                                   },

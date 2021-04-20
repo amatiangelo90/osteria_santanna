@@ -264,6 +264,10 @@ class _PickupScreenState extends State<PickupScreen> {
                                                 _selectedTimeSlotPikup.slot,
                                                 _selectedDateTime,
                                                 this.widget.promo),
+                                            _nameController.value.text,
+                                            this.widget.total.toString(),
+                                            getCurrentDateTime(),
+                                            this.widget.cartItems.toString(),
                                           );
                                           Navigator.of(context).pop(true);
                                         },
@@ -290,6 +294,10 @@ class _PickupScreenState extends State<PickupScreen> {
                                   _selectedTimeSlotPikup.slot,
                                   _selectedDateTime,
                                   this.widget.promo),
+                              _nameController.value.text,
+                              this.widget.total.toString(),
+                              getCurrentDateTime(),
+                              this.widget.cartItems.toString(),
                             );
                           }
                         }
@@ -372,7 +380,7 @@ class _PickupScreenState extends State<PickupScreen> {
   void setSelectedDate(DateTime date) {
     setState(() {
       _selectedDateTime = date;
-      if(date.day == 10) {
+      if(date.day == 17) {
         _dropdownTimeSlotPickup = buildDropdownSlotPickup(TimeSlotPickup.getPickupSlotsWithLunchTime());
         _selectedTimeSlotPikup = _dropdownTimeSlotPickup[0].value;
       }else{

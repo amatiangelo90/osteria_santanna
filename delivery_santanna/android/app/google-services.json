@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "31182191050",
+    "firebase_url": "https://app-santanna-web-delivery-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "app-santanna-web-delivery",
+    "storage_bucket": "app-santanna-web-delivery.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:31182191050:android:0886e5d3d96f230f78f733",
+        "android_client_info": {
+          "package_name": "com.example.delivery_santanna"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "31182191050-gougb2lvc2n4708mq3cai4dnht4nfnt9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbsT2fcbHxVHBEMI03GcC3nJViP6oqStE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "31182191050-gougb2lvc2n4708mq3cai4dnht4nfnt9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
