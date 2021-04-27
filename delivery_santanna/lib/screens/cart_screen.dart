@@ -9,9 +9,12 @@ class CartScreen extends StatefulWidget {
 
   final List<Cart> cartItems;
   final Function function;
+  final String uniqueId;
 
   CartScreen({@required this.cartItems,
-    @required this.function});
+    @required this.function,
+    @required this.uniqueId
+  });
 
   @override
   _CartScreenState createState() => _CartScreenState();
@@ -21,7 +24,7 @@ class _CartScreenState extends State<CartScreen> {
 
   final _discountController = TextEditingController();
 
-  static final String _codeDiscount = 'PAPA10';
+  static final String _codeDiscount = 'SANNA10';
 
   double _total;
   double _totalWithoutDiscount;
@@ -151,7 +154,7 @@ class _CartScreenState extends State<CartScreen> {
                                 builder: (BuildContext context) {
                                   return AlertDialog(
                                     title: const Text("Conferma"),
-                                    content: Text("Eliminare  "+this.widget.cartItems[index].numberOfItem.toString() +
+                                    content: Text("Eliminare  " + this.widget.cartItems[index].numberOfItem.toString() +
                                         " x " + this.widget.cartItems[index].product.name.toString() + " ?"),
                                     actions: <Widget>[
                                       FlatButton(
@@ -246,86 +249,87 @@ class _CartScreenState extends State<CartScreen> {
                                     color: _total != 0.0 ? Colors.orangeAccent : Colors.grey,
                                     elevation: 5.0,
                                     onPressed: (){
+                                      _discountApplied ?
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(backgroundColor: Colors.deepOrange.shade800 ,
-                                          content: Text('Promo non disponibile per la settimana in corso')));
-                                    }
-                                  /*_discountApplied ?
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(backgroundColor: Colors.deepOrange.shade800 ,
-                                        content: Text('Codice promo già applicato (' + _codeDiscount + ')  - 10%'))) :
-                                    _total > 59.9 ? showDialog(
-                                        context: context,
-                                        builder: (context){
-                                          return AlertDialog(
-                                            title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                            content: Column(
-                                              children: [
-                                                Text('Inserire il codice promo', style: TextStyle(color: Colors.black, fontSize: 17.0, fontFamily: 'LoraFont'),),
-                                                SizedBox(height: 40.0,),
-                                                Center(
-                                                  child: Card(
-                                                    child: TextField(
-                                                      controller: _discountController,
-                                                      textAlign: TextAlign.center,
-                                                      decoration: InputDecoration(
-                                                        border: OutlineInputBorder(),
-                                                        labelText: 'Codice Promo',
+                                          content: Text('Codice promo già applicato (' + _codeDiscount + ')  - 10%'))) :
+                                      _total > 59.9 ? showDialog(
+                                          context: context,
+                                          builder: (context){
+                                            return AlertDialog(
+                                              title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                              content: Column(
+                                                children: [
+                                                  Text('Inserire il codice promo', style: TextStyle(color: Colors.black, fontSize: 17.0, fontFamily: 'LoraFont'),),
+                                                  SizedBox(height: 40.0,),
+                                                  Center(
+                                                    child: Card(
+                                                      child: TextField(
+                                                        controller: _discountController,
+                                                        textAlign: TextAlign.center,
+                                                        decoration: InputDecoration(
+                                                          border: OutlineInputBorder(),
+                                                          labelText: 'Codice Promo',
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                                SizedBox(height: 40.0,),
-                                                RaisedButton(
-                                                  child: Text('Convalida', style: TextStyle(color: Colors.white, fontSize: 20.0, fontFamily: 'LoraFont')),
-                                                  color: _total != 0.0 ? Colors.green : Colors.grey,
-                                                  elevation: 5.0,
-                                                  onPressed: (){
-                                                    if(_discountController.value.text == _codeDiscount){
-                                                      _applyDiscount();
-                                                      ScaffoldMessenger.of(context)
-                                                          .showSnackBar(SnackBar(
-                                                          backgroundColor: Colors.teal.shade800,
-                                                          content: Text('Codice valido. Sconto 10% applicato')));
-                                                      Navigator.of(context).pop(false);
-                                                    }else{
-                                                      ScaffoldMessenger.of(context)
-                                                          .showSnackBar(
+                                                  SizedBox(height: 40.0,),
+                                                  RaisedButton(
+                                                    child: Text('Convalida', style: TextStyle(color: Colors.white, fontSize: 20.0, fontFamily: 'LoraFont')),
+                                                    color: _total != 0.0 ? Colors.green : Colors.grey,
+                                                    elevation: 5.0,
+                                                    onPressed: (){
+                                                      if(_discountController.value.text == _codeDiscount){
+                                                        _applyDiscount();
+                                                        ScaffoldMessenger.of(context)
+                                                            .showSnackBar(SnackBar(
+                                                            backgroundColor: Colors.teal.shade800,
+                                                            content: Text('Codice valido. Sconto 10% applicato')));
+                                                        Navigator.of(context).pop(false);
+                                                      }else{
+                                                        ScaffoldMessenger.of(context)
+                                                            .showSnackBar(
                                                           SnackBar(
                                                               backgroundColor: Colors.red.shade800,
                                                               content: Text('Codice promo non valido')
                                                           ),
-                                                      );
-                                                      Navigator.of(context).pop(false);
-                                                    }
-                                                  },
+                                                        );
+                                                        Navigator.of(context).pop(false);
+                                                      }
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  onPressed: () => Navigator.of(context).pop(false),
+                                                  child: const Text("Indietro"),
                                                 ),
                                               ],
-                                            ),
-                                            actions: <Widget>[
-                                              FlatButton(
-                                                onPressed: () => Navigator.of(context).pop(false),
-                                                child: const Text("Indietro"),
-                                              ),
-                                            ],
-                                          );
-                                        }
-                                    ) : showDialog(
-                                        context: context,
-                                        builder: (context){
-                                          return AlertDialog(
-                                            title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                            content: Text('Attenzione! Sconto applicabile per importi superiori a 60 euro.', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                            actions: <Widget>[
-                                              FlatButton(
-                                                onPressed: () => Navigator.of(context).pop(false),
-                                                child: const Text("Indietro"),
-                                              ),
-                                            ],
-                                          );
-                                        }
-                                    );
-                                  },*/
+                                            );
+                                          }
+                                      ) : showDialog(
+                                          context: context,
+                                          builder: (context){
+                                            return AlertDialog(
+                                              title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                              content: Text('Attenzione! Sconto applicabile per importi superiori a 60 euro.', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  onPressed: () => Navigator.of(context).pop(false),
+                                                  child: const Text("Indietro"),
+                                                ),
+                                              ],
+                                            );
+                                          }
+                                      );
+                                      /*ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(backgroundColor: Colors.deepOrange.shade800 ,
+                                          content: Text('Promo non disponibile per la settimana in corso')));*/
+                                    }
+
+
 
                                 ),
                                 RaisedButton(
@@ -340,6 +344,7 @@ class _CartScreenState extends State<CartScreen> {
                                             cartItems: this.widget.cartItems,
                                             total: _total,
                                             promo: promo,
+                                            uniqueId: this.widget.uniqueId,
                                           );
                                         }
                                     ) : showDialog(

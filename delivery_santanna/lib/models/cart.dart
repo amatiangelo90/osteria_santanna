@@ -7,13 +7,24 @@ class Cart{
   int numberOfItem;
   List<String> changes;
 
-  Cart({@required this.product,
-    @required this.numberOfItem,
-    this.changes});
+  Cart({
+    this.product,
+    this.numberOfItem,
+    this.changes}
+    );
 
-  @override
-  String toString() {
-    return 'Cart : ' + this.product.toString() + ' x ' + this.numberOfItem.toString();
+  Map<String, dynamic> toJson() => {
+    'product': product,
+    'numberOfItem': numberOfItem,
+    'changes': changes
+  };
+
+  factory Cart.fromMap(Map cartMap){
+    return Cart(
+        product: cartMap['product'],
+        numberOfItem: cartMap['numberOfItem'],
+        changes: cartMap['changes']
+    );
   }
 
 }

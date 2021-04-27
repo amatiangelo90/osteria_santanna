@@ -1,15 +1,15 @@
 class Product {
 
-  final String id;
-  final String image;
-  final String name;
-  final List<dynamic> listIngredients;
-  final List<dynamic> listAllergens;
-  final List<dynamic> changes;
-  final double price;
-  final int discountApplied;
-  final String category;
-  final String available;
+  String id;
+  String image;
+  String name;
+  List<dynamic> listIngredients;
+  List<dynamic> listAllergens;
+  List<dynamic> changes;
+  double price;
+  int discountApplied;
+  String category;
+  String available;
 
   Product(
       this.id,
@@ -38,14 +38,28 @@ class Product {
     );
   }
 
-  factory Product.fromMap(Map snapshot,String id){
+  factory Product.fromMap(
+      Map snapshot,
+      String id){
+
+    double price = 0.0;
+
+    if(snapshot['price'].runtimeType == double){
+      price = snapshot['price'];
+    }else if(snapshot['price'].runtimeType == int){
+      int intPrice = snapshot['price'];
+      price = intPrice.toDouble();
+    }else{
+      print('Errore parsing object');
+    }
+
     return Product(
       id,
       snapshot['name'] as String,
       snapshot['image'] as String,
       snapshot['ingredients'] as List,
       snapshot['allergens'] as List,
-      snapshot['price'] as double,
+      price,
       snapshot['discountApplied'] as int,
       snapshot['changes'] as List,
       snapshot['category'] as String,

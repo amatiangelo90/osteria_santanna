@@ -1,4 +1,5 @@
 import 'package:date_picker_timeline/date_picker_widget.dart';
+import 'package:delivery_santanna/dao/crud_model.dart';
 import 'package:delivery_santanna/models/cart.dart';
 import 'package:delivery_santanna/models/promoclass.dart';
 import 'package:delivery_santanna/services/http_service.dart';
@@ -12,8 +13,9 @@ class PickupScreen extends StatefulWidget {
   final List<Cart> cartItems;
   final double total;
   final Promo promo;
+  final String uniqueId;
 
-  PickupScreen({@required this.cartItems, this.total, this.promo});
+  PickupScreen({@required this.cartItems, this.total, this.promo,@required this.uniqueId});
 
   @override
   _PickupScreenState createState() => _PickupScreenState();
@@ -196,109 +198,126 @@ class _PickupScreenState extends State<PickupScreen> {
                         ),
                         IconButton(
                             icon: Image.asset('images/whatapp_icon_c.png'),
-                            iconSize: 90.0, onPressed: (){
-                          if(_nameController.value.text == ''){
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                  content: Text('Inserire il nome', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                  actions: <Widget>[
-                                    FlatButton(
-                                      onPressed: () => Navigator.of(context).pop(false),
-                                      child: const Text("Indietro"),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          }else if(_selectedDateTime == null){
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                  content: Text('Selezionare una data di ritiro valida', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                  actions: <Widget>[
-                                    FlatButton(
-                                      onPressed: () => Navigator.of(context).pop(false),
-                                      child: const Text("Indietro"),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          } else if(_selectedTimeSlotPikup.slot == 'Seleziona Orario Ritiro'){
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                  content: Text('Seleziona Orario Ritiro', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                  actions: <Widget>[
-                                    FlatButton(
-                                      onPressed: () => Navigator.of(context).pop(false),
-                                      child: const Text("Indietro"),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          } else if(_selectedDateTime.day == DateTime.now().day && DateTime.now().hour == 20) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('Attenzione', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                  content: Text('Non ci è possibile garantire la preparazione degli ordini asporto se effettuati dopo le ore 20, cercheremo di soddisfarla se è nelle nostre possibilità. Inoltri la richiesta d\'ordine e le risponderemo al più presto', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                  actions: <Widget>[
-                                    FlatButton(
-                                        onPressed: (){
-                                          HttpService.sendMessage(numberSantAnna,
-                                            buildMessageFromCartPickUp(
-                                                this.widget.cartItems,
+                            iconSize: 90.0, onPressed: () async {
+                          try{
+                            if(_nameController.value.text == ''){
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                    content: Text('Inserire il nome', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        onPressed: () => Navigator.of(context).pop(false),
+                                        child: const Text("Indietro"),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }else if(_selectedDateTime == null){
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                    content: Text('Selezionare una data di ritiro valida', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        onPressed: () => Navigator.of(context).pop(false),
+                                        child: const Text("Indietro"),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else if(_selectedTimeSlotPikup.slot == 'Seleziona Orario Ritiro'){
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                    content: Text('Seleziona Orario Ritiro', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        onPressed: () => Navigator.of(context).pop(false),
+                                        child: const Text("Indietro"),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else if(_selectedDateTime.day == DateTime.now().day && DateTime.now().hour == 20) {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Attenzione', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                    content: Text('Non ci è possibile garantire la preparazione degli ordini asporto se effettuati dopo le ore 20, cercheremo di soddisfarla se è nelle nostre possibilità. Inoltri la richiesta d\'ordine e le risponderemo al più presto', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                          onPressed: (){
+                                            HttpService.sendMessage(numberSantAnna,
+                                                buildMessageFromCartPickUp(
+                                                    this.widget.cartItems,
+                                                    _nameController.value.text,
+                                                    this.widget.total.toString(),
+                                                    getCurrentDateTime(),
+                                                    _selectedTimeSlotPikup.slot,
+                                                    _selectedDateTime,
+                                                    this.widget.promo),
                                                 _nameController.value.text,
                                                 this.widget.total.toString(),
                                                 getCurrentDateTime(),
+                                                this.widget.cartItems,
+                                                this.widget.uniqueId,
+                                                PICKUP_TYPE,
+                                                Utils.getWeekDay(_selectedDateTime.weekday) +" ${_selectedDateTime.day} " + Utils.getMonthDay(_selectedDateTime.month),
                                                 _selectedTimeSlotPikup.slot,
-                                                _selectedDateTime,
-                                                this.widget.promo),
-                                            _nameController.value.text,
-                                            this.widget.total.toString(),
-                                            getCurrentDateTime(),
-                                            this.widget.cartItems.toString(),
-                                          );
-                                          Navigator.of(context).pop(true);
-                                        },
-                                        child: const Text("Procedi")
-                                    ),
-                                    FlatButton(
-                                      onPressed: () => Navigator.of(context).pop(false),
-                                      child: const Text("Indietro"),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          } else {
-                            print('DAU' + _selectedDateTime.day.toString());
-                            print('XX' + DateTime.now().day.toString());
-
-                            HttpService.sendMessage(numberSantAnna,
-                              buildMessageFromCartPickUp(
-                                  this.widget.cartItems,
+                                                EMPTY_STRING,
+                                                EMPTY_STRING
+                                            );
+                                            Navigator.of(context).pop(true);
+                                          },
+                                          child: const Text("Procedi")
+                                      ),
+                                      FlatButton(
+                                        onPressed: () => Navigator.of(context).pop(false),
+                                        child: const Text("Indietro"),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else {
+                              HttpService.sendMessage(numberSantAnna,
+                                  buildMessageFromCartPickUp(
+                                      this.widget.cartItems,
+                                      _nameController.value.text,
+                                      this.widget.total.toString(),
+                                      getCurrentDateTime(),
+                                      _selectedTimeSlotPikup.slot,
+                                      _selectedDateTime,
+                                      this.widget.promo),
                                   _nameController.value.text,
                                   this.widget.total.toString(),
                                   getCurrentDateTime(),
+                                  this.widget.cartItems,
+                                  this.widget.uniqueId,
+                                  PICKUP_TYPE,
+                                  Utils.getWeekDay(_selectedDateTime.weekday) +" ${_selectedDateTime.day} " + Utils.getMonthDay(_selectedDateTime.month),
                                   _selectedTimeSlotPikup.slot,
-                                  _selectedDateTime,
-                                  this.widget.promo),
-                              _nameController.value.text,
-                              this.widget.total.toString(),
-                              getCurrentDateTime(),
-                              this.widget.cartItems.toString(),
-                            );
+                                  EMPTY_STRING,
+                                  EMPTY_STRING
+                              );
+                            }
+                          }catch(e){
+                            CRUDModel crudModel = CRUDModel('errors-report');
+                            await crudModel.addException(
+                                'Error report',
+                                e.toString(),
+                                DateTime.now().toString());
                           }
                         }
                         ),
@@ -380,7 +399,7 @@ class _PickupScreenState extends State<PickupScreen> {
   void setSelectedDate(DateTime date) {
     setState(() {
       _selectedDateTime = date;
-      if(date.day == 17) {
+      if(date.day == 24) {
         _dropdownTimeSlotPickup = buildDropdownSlotPickup(TimeSlotPickup.getPickupSlotsWithLunchTime());
         _selectedTimeSlotPikup = _dropdownTimeSlotPickup[0].value;
       }else{

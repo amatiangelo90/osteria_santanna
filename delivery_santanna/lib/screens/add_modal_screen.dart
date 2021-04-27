@@ -6,6 +6,7 @@ import 'package:delivery_santanna/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:toast/toast.dart';
+import 'package:delivery_santanna/utils/costants.dart';
 
 class ModalAddItem extends StatefulWidget {
   final Product product;
@@ -82,7 +83,7 @@ class _ModalAddItemState extends State<ModalAddItem> {
                             ],
                           ),
                         ),
-                        this.widget.product.category == 'wine' ? SizedBox(height: 1.0,) :
+                        listTypeWine.contains(this.widget.product.category) ? SizedBox(height: 1.0,) :
                         this.widget.product.changes.isNotEmpty ? SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Content(
@@ -135,13 +136,13 @@ class _ModalAddItemState extends State<ModalAddItem> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: this.widget.product.category == 'wine' ?
+                          child: listTypeWine.contains(this.widget.product.category) ?
                           Text('Cantina: ' +  this.widget.product.changes[0], overflow: TextOverflow.visible , style: TextStyle(fontSize: 15.0, fontFamily: 'LoraFont'),)
                               : SizedBox(height: 0.0,),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: this.widget.product.category == 'wine' ?
+                          child: listTypeWine.contains(this.widget.product.category) ?
                           Text(Utils.getAllergensFromProduct(this.widget.product), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 16.0, fontFamily: 'LoraFont'),)
                               /*: Text('Allergeni: ' +  Utils.getAllergensFromProduct(this.widget.product), overflow: TextOverflow.visible , style: TextStyle(fontSize: 13.0, fontFamily: 'LoraFont'),),*/
                           : SizedBox(height: 0.0,),

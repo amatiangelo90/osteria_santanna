@@ -1,3 +1,4 @@
+import 'package:delivery_santanna/dao/crud_model.dart';
 import 'package:delivery_santanna/models/cart.dart';
 import 'package:delivery_santanna/models/promoclass.dart';
 import 'package:delivery_santanna/services/http_service.dart';
@@ -12,11 +13,14 @@ class DeliveryScreen extends StatefulWidget {
   final List<Cart> cartItems;
   final double total;
   final Promo promo;
+  final String uniqueId;
+
 
   DeliveryScreen({
     @required this.cartItems,
     this.total,
     this.promo,
+    this.uniqueId,
   });
 
   @override
@@ -291,143 +295,164 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                                 Center(
                                   child: IconButton(
                                     icon: Image.asset('images/whatapp_icon_c.png'),
-                                    iconSize: 90.0, onPressed: (){
-                                    if(_nameController.value.text == ''){
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                            content: Text('Inserire il nome', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                            actions: <Widget>[
-                                              FlatButton(
-                                                onPressed: () => Navigator.of(context).pop(false),
-                                                child: const Text("Indietro"),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    }else if (_selectedCity.name != 'Carovigno' && _addressController.value.text == ''){
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                            content: Text('Inserire un indirizzo valido', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                            actions: <Widget>[
-                                              FlatButton(
-                                                onPressed: () => Navigator.of(context).pop(false),
-                                                child: const Text("Indietro"),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    }else if(_selectedDateTime == null){
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                            content: Text('Selezionare una data di consegna valida', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                            actions: <Widget>[
-                                              FlatButton(
-                                                onPressed: () => Navigator.of(context).pop(false),
-                                                child: const Text("Indietro"),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    }else if(_selectedCity.cap == ''){
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                            content: Text('Selezionare la città', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                            actions: <Widget>[
-                                              FlatButton(
-                                                onPressed: () => Navigator.of(context).pop(false),
-                                                child: const Text("Indietro"),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    }else if(_selectedTimeSlotDelivery.slot == 'Seleziona Fascia Oraria Consegna'){
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                            content: Text('Selezionare la fascia oraria per la consegna', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                            actions: <Widget>[
-                                              FlatButton(
-                                                onPressed: () => Navigator.of(context).pop(false),
-                                                child: const Text("Indietro"),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    } else if(_selectedDateTime.day == DateTime.now().day && DateTime.now().hour > 17){
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text('Attenzione', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                            content: Text('Per ordini delivery effettuati dopo le ore 18 non ci è possibile garantire la consegna, cercheremo ugualmente di soddisfarla se è nelle nostre possibilità. Inoltri la richiesta d\'ordine e le risponderemo al piu presto', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                            actions: <Widget>[
-                                              FlatButton(
-                                                  onPressed: (){
-                                                    HttpService.sendMessage(
-                                                      numberSantAnna,
-                                                      buildMessageFromCartDelivery(
-                                                          this.widget.cartItems,
+                                    iconSize: 90.0, onPressed: () async {
+                                    try{
+                                      if(_nameController.value.text == ''){
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                              content: Text('Inserire il nome', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  onPressed: () => Navigator.of(context).pop(false),
+                                                  child: const Text("Indietro"),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      }else if (_selectedCity.name != 'Carovigno' && _addressController.value.text == ''){
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                              content: Text('Inserire un indirizzo valido', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  onPressed: () => Navigator.of(context).pop(false),
+                                                  child: const Text("Indietro"),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      }else if(_selectedDateTime == null){
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                              content: Text('Selezionare una data di consegna valida', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  onPressed: () => Navigator.of(context).pop(false),
+                                                  child: const Text("Indietro"),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      }else if(_selectedCity.cap == ''){
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                              content: Text('Selezionare la città', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  onPressed: () => Navigator.of(context).pop(false),
+                                                  child: const Text("Indietro"),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      }else if(_selectedTimeSlotDelivery.slot == 'Seleziona Fascia Oraria Consegna'){
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                              content: Text('Selezionare la fascia oraria per la consegna', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  onPressed: () => Navigator.of(context).pop(false),
+                                                  child: const Text("Indietro"),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      } else if(_selectedDateTime.day == DateTime.now().day && DateTime.now().hour > 17){
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text('Attenzione', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                              content: Text('Per ordini delivery effettuati dopo le ore 18 non ci è possibile garantire la consegna, cercheremo ugualmente di soddisfarla se è nelle nostre possibilità. Inoltri la richiesta d\'ordine e le risponderemo al piu presto', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                    onPressed: (){
+                                                      HttpService.sendMessage(
+                                                          numberSantAnna,
+                                                          buildMessageFromCartDelivery(
+                                                              this.widget.cartItems,
+                                                              _nameController.value.text,
+                                                              _selectedCity.name + ' (${_selectedCity.cap})',
+                                                              _addressController.value.text,
+                                                              getCurrentDateTime(),
+                                                              _currentTotal.toString(),
+                                                              _selectedTimeSlotDelivery.slot,
+                                                              _selectedDateTime,
+                                                              this.widget.promo),
                                                           _nameController.value.text,
-                                                          _selectedCity.name + ' (${_selectedCity.cap})',
-                                                          _addressController.value.text,
-                                                          getCurrentDateTime(),
                                                           _currentTotal.toString(),
+                                                          getCurrentDateTime(),
+                                                          this.widget.cartItems,
+                                                          this.widget.uniqueId,
+                                                          DELIVERY_TYPE,
+                                                          Utils.getWeekDay(_selectedDateTime.weekday) +" ${_selectedDateTime.day} " + Utils.getMonthDay(_selectedDateTime.month),
                                                           _selectedTimeSlotDelivery.slot,
-                                                          _selectedDateTime,
-                                                          this.widget.promo),
-                                                      _nameController.value.text,
-                                                      _currentTotal.toString(),
-                                                      getCurrentDateTime(),
-                                                      this.widget.cartItems.toString(),
-                                                    );
-                                                    Navigator.of(context).pop(true);
-                                                  },
-                                                  child: const Text("Procedi")
-                                              ),
-                                              FlatButton(
-                                                onPressed: () => Navigator.of(context).pop(false),
-                                                child: const Text("Indietro"),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    }else {
-                                      HttpService.sendMessage(numberSantAnna,
-                                        buildMessageFromCartDelivery(
-                                            this.widget.cartItems,
+                                                          _selectedCity.name,
+                                                          _addressController.value.text
+                                                      );
+                                                      Navigator.of(context).pop(true);
+                                                    },
+                                                    child: const Text("Procedi")
+                                                ),
+                                                FlatButton(
+                                                  onPressed: () => Navigator.of(context).pop(false),
+                                                  child: const Text("Indietro"),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      }else {
+                                        HttpService.sendMessage(numberSantAnna,
+                                            buildMessageFromCartDelivery(
+                                                this.widget.cartItems,
+                                                _nameController.value.text,
+                                                _selectedCity.name + ' (${_selectedCity.cap})',
+                                                _addressController.value.text,
+                                                getCurrentDateTime(),
+                                                _currentTotal.toString(),
+                                                _selectedTimeSlotDelivery.slot,
+                                                _selectedDateTime,
+                                                this.widget.promo),
                                             _nameController.value.text,
-                                            _selectedCity.name + ' (${_selectedCity.cap})',
-                                            _addressController.value.text,
-                                            getCurrentDateTime(),
                                             _currentTotal.toString(),
+                                            getCurrentDateTime(),
+                                            this.widget.cartItems,
+                                            this.widget.uniqueId,
+                                            DELIVERY_TYPE,
+                                            Utils.getWeekDay(_selectedDateTime.weekday) +" ${_selectedDateTime.day} " + Utils.getMonthDay(_selectedDateTime.month),
                                             _selectedTimeSlotDelivery.slot,
-                                            _selectedDateTime,
-                                            this.widget.promo),
-                                        _nameController.value.text,
-                                        _currentTotal.toString(),
-                                        getCurrentDateTime(),
-                                        this.widget.cartItems.toString(),
-                                      );
+                                            _selectedCity.name,
+                                            _addressController.value.text
+                                        );
+                                      }
+                                    }catch(e){
+                                      CRUDModel crudModel = CRUDModel('click-report');
+
+                                      await crudModel.addException(
+                                          'Errore click',
+                                          'CheckError',
+                                          DateTime.now().toString());
                                     }
                                   },
                                   ),

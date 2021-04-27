@@ -10,7 +10,11 @@ class Dao{
   }
 
   Future<QuerySnapshot> getDataCollection(){
-    return _collectionReference.get();
+    return _collectionReference.orderBy('category').get();
+  }
+
+  Future<QuerySnapshot> getOrdersStoreCollection() {
+    return _collectionReference.orderBy('date',descending: false).get();
   }
 
   Stream<QuerySnapshot> streamDataCollection(){
@@ -25,9 +29,12 @@ class Dao{
     return _collectionReference.doc(id).delete();
   }
   Future<DocumentReference> addDocument(Map data) {
+
     return _collectionReference.add(data);
   }
   Future<void> updateDocument(Map data , String id) {
     return _collectionReference.doc(id).update(data) ;
   }
+
+
 }

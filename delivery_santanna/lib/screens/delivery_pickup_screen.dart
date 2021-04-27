@@ -11,11 +11,13 @@ class DeliveryPickupScreen extends StatefulWidget {
   final List<Cart> cartItems;
   final double total;
   final Promo promo;
+  final String uniqueId;
 
   DeliveryPickupScreen({
     @required this.cartItems,
     this.total,
-    this.promo}
+    this.promo,
+    this.uniqueId}
       );
 
   @override
@@ -46,7 +48,7 @@ class _DeliveryPickupScreenState extends State<DeliveryPickupScreen> {
           Flexible(
             flex: 6,
             child: Center(
-              child: Row(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
@@ -60,7 +62,9 @@ class _DeliveryPickupScreenState extends State<DeliveryPickupScreen> {
                               return PickupScreen(
                                 cartItems: this.widget.cartItems,
                                 total: this.widget.total,
-                                promo: this.widget.promo,);
+                                promo: this.widget.promo,
+                                uniqueId: this.widget.uniqueId,
+                              );
                             }
                         );
                       },
@@ -78,7 +82,9 @@ class _DeliveryPickupScreenState extends State<DeliveryPickupScreen> {
                                 return DeliveryScreen(
                                   cartItems: this.widget.cartItems,
                                   total: this.widget.total,
-                                  promo: this.widget.promo,);
+                                  promo: this.widget.promo,
+                                  uniqueId: this.widget.uniqueId,
+                                );
                               }
                           ) : showDialog(
                             context: context,

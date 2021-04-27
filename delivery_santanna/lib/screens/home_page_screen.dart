@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:delivery_santanna/models/cart.dart';
 import 'package:delivery_santanna/models/product.dart';
 import 'package:delivery_santanna/screens/add_modal_screen.dart';
@@ -7,12 +9,14 @@ import 'package:delivery_santanna/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:delivery_santanna/screens/admin_console_screen.dart';
 import 'package:delivery_santanna/dao/crud_model.dart';
+import 'package:passcode_screen/circle.dart';
+import 'package:passcode_screen/keyboard.dart';
+import 'package:passcode_screen/passcode_screen.dart';
+import 'package:uuid/uuid.dart';
 
-const sushiMenuType = 'menu-sushi';
-const fromKitchenMenuType = 'menu-kitchen';
-const dessertMenuType = 'menu-dessert';
-const wineMenuType = 'menu-wine';
+const String storedPasscode = '260700';
 
 class OsteriaSantAnnaHomePage extends StatefulWidget {
   static String id = '/';
@@ -22,6 +26,12 @@ class OsteriaSantAnnaHomePage extends StatefulWidget {
 }
 
 class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
+
+  final StreamController<bool> _verificationNotifier =
+  StreamController<bool>.broadcast();
+
+  bool isAuthenticated = false;
+  var uuid;
 
   List<Product> sushiProductList = <Product>[];
   List<Product> kitchenProductList = <Product>[];
@@ -33,6 +43,9 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
   final scaffoldState = GlobalKey<ScaffoldState>();
   String currentMenuType = sushiMenuType;
   int currentMenuItem = 0;
+
+  PageController controller = PageController(
+      initialPage: 0);
 
   void updateCurrentMenuItemCount(List<Cart> cartItemToAdd){
 
@@ -57,7 +70,6 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
       if(!_present){
         cartProductList.addAll(cartItemToAdd);
       }
-
     });
   }
 
@@ -76,15 +88,19 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
     switch(menuType){
       case 0:
         currentMenuType = sushiMenuType;
+        controller.jumpToPage(0);
         break;
       case 1:
         currentMenuType = fromKitchenMenuType;
+        controller.jumpToPage(1);
         break;
       case 2:
         currentMenuType = dessertMenuType;
+        controller.jumpToPage(2);
         break;
       case 3:
         currentMenuType = wineMenuType;
+        controller.jumpToPage(3);
         break;
     }
   }
@@ -93,6 +109,7 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
 
   @override
   void initState() {
+    uuid = Uuid().v1();
     scrollViewColtroller = ScrollController();
     scrollViewColtroller.addListener(_scrollListener);
     super.initState();
@@ -139,64 +156,6 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
 
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-
-    PageController controller = PageController(
-        viewportFraction: 0.7,
-        initialPage: 0);
-
-    List<Widget> banners = <Widget>[];
-
-    for(int i = 0; i < bannerItems.length; i++){
-      var bannerView = Padding(
-        padding: EdgeInsets.all(10.0),
-        child: Container(
-          child: Stack(
-            fit: StackFit.expand,
-            children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black38,
-                        offset: Offset(2.0, 3.0),
-                        blurRadius: 5.0,
-                        spreadRadius: 1.0,
-                      )
-                    ]
-                ),
-              ),
-              ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                child: Image.asset(
-                  bannerImages[i],
-                  fit: BoxFit.cover,),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.transparent, Colors.black54]),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(bannerItems[i], style: TextStyle(fontSize: 25.0, fontFamily: 'LoraFont', color: Colors.white),),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-      banners.add(bannerView);
-    }
 
     return Scaffold(
       floatingActionButton: Column(
@@ -249,93 +208,311 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
         child: Container(
           width: screenWidth,
           height: screenHeight,
-          child: SafeArea(
-            child: SingleChildScrollView(
-              controller: scrollViewColtroller,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 2),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Scaffold(
+            appBar: AppBar(
+
+              iconTheme: IconThemeData(color: Colors.black),
+              backgroundColor: Colors.white,
+              elevation: 0.0,
+              title: Text('Osteria Sant\'Anna', style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
+              ),
+              centerTitle: true,
+              actions: [
+                IconButton(icon: Icon(Icons.info_outline ,size: 30.0, color: Colors.teal.shade800,), onPressed: (){
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Utils.buildAlertDialog(context);
+                      }
+                  );
+                },
+                ),
+                Column(
+                  children: [
+                    SizedBox(height: 4.0,),
+                    Stack(
                       children: <Widget>[
-                        IconButton(icon: Icon(Icons.info_outline ,size: 30.0, color: Colors.teal.shade800,), onPressed: (){
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return Utils.buildAlertDialog(context);
-                              }
-                          );
-                        },
+                        IconButton(icon: Icon(
+                          Icons.shopping_cart_outlined,
+                          color: Colors.black,
                         ),
-                        Text('Osteria Sant\'Anna', style: TextStyle(fontSize: 19.0, fontFamily: 'LoraFont'),),
-                        Stack(
-                          children: <Widget>[
-                            IconButton(icon: Icon(Icons.shopping_cart_outlined), onPressed: (){
+                            onPressed: (){
                               Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => CartScreen(cartItems: cartProductList,
-                                  function: removeProductFromCart,),
+                                MaterialPageRoute(builder: (context) => CartScreen(
+                                  cartItems: cartProductList,
+                                  function: removeProductFromCart,
+                                  uniqueId: uuid,
+                                ),
                                 ),
                               );
                             }),
-                            currentMenuItem == 0 ? Text('') :
-                            Positioned(
-                              top: 6.0,
-                              right: 10.0,
-                              child: Stack(
-                                children: <Widget>[
-                                  Icon(Icons.brightness_1, size: 15, color: Colors.redAccent,),
-                                  Positioned(
-                                    right: 5.0,
-                                    top: 2.0,
-                                    child: Center(child: Text(currentMenuItem.toString() , style: TextStyle(fontSize: 8.0, color: Colors.white, fontFamily: 'LoraFont'),
-                                    ),
-                                    ),
-                                  ),
-                                ],
+                        currentMenuItem == 0 ? Text('') :
+                        Positioned(
+                          top: 6.0,
+                          right: 10.0,
+                          child: Stack(
+                            children: <Widget>[
+                              Icon(Icons.brightness_1, size: 15, color: Colors.redAccent,),
+                              Positioned(
+                                right: 5.0,
+                                top: 2.0,
+                                child: Center(child: Text(currentMenuItem.toString() , style: TextStyle(fontSize: 8.0, color: Colors.white, fontFamily: 'LoraFont'),
+                                ),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            drawer: Drawer(
+              elevation: 3.0,
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: <Widget>[
+                  SizedBox(height: 50.0,),
+                  DrawerHeader(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("images/logo_santanna.png"),
+                          fit: BoxFit.cover),
+                      color: Colors.white,
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      ListTile(
+                        title: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('Sushi & Susci',
+                            style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
+                          ),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            updateMenuType(0);
+                          });
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        title: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('Dalla Cucina',
+                            style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
+                          ),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            updateMenuType(1);
+                          });
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        title: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('Dolci',
+                            style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
+                          ),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            updateMenuType(2);
+                          });
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        title: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('Vini e Bollicine',
+                            style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
+                          ),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            updateMenuType(3);
+                          });
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 180.0),
+                  ListTile(
+                    title: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Admin Console',
+                        style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
+                      ),
+                    ),
+                    onTap: () {
+                      _showLockScreen(
+                        context,
+                        opaque: false,
+                        cancelButton: Text(
+                          'Cancel',
+                          style: const TextStyle(fontSize: 16, color: Colors.white),
+                          semanticsLabel: 'Cancel',
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+            body: SafeArea(
+              child: PageView(
+                controller: controller,
+                scrollDirection: Axis.horizontal,
+                children: [
+                  SingleChildScrollView(
+                    controller: scrollViewColtroller,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                            child: FutureBuilder(
+                              initialData: <Widget>[Column(
+                                children: [
+                                  Center(child: CircularProgressIndicator()),
+                                  SizedBox(),
+                                  Center(child: Text('Caricamento menù..',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontFamily: 'LoraFont'),
+                                  ),),
+                                ],
+                              )],
+                              future: createList(sushiMenuType),
+                              builder: (context, snapshot){
+                                if(snapshot.hasData){
+                                  return Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: ListView(
+                                      primary: false,
+                                      shrinkWrap: true,
+                                      children: snapshot.data,
+                                    ),
+                                  );
+                                }else{
+                                  return CircularProgressIndicator();
+                                }
+                              },
+                            )
+                        ),
+                      ],
+                    ),
+                  ),SingleChildScrollView(
+                    controller: scrollViewColtroller,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                            child: FutureBuilder(
+                              initialData: <Widget>[Column(
+                                children: [
+                                  Center(child: CircularProgressIndicator()),
+                                  SizedBox(),
+                                  Center(child: Text('Caricamento menù..',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontFamily: 'LoraFont'),
+                                  ),),
+                                ],
+                              )],
+                              future: createList(fromKitchenMenuType),
+                              builder: (context, snapshot){
+                                if(snapshot.hasData){
+                                  return Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: ListView(
+                                      primary: false,
+                                      shrinkWrap: true,
+                                      children: snapshot.data,
+                                    ),
+                                  );
+                                }else{
+                                  return CircularProgressIndicator();
+                                }
+                              },
+                            )
                         ),
                       ],
                     ),
                   ),
-                  Container(
-                    width: screenWidth,
-                    height: screenHeight*9/40,
-                    child: GestureDetector(
-                      child: PageView(
-                        onPageChanged: (page)=>{
-                          setState((){
-                            updateMenuType(page);
-                          }),
-                        },
-                        controller: controller,
-                        scrollDirection: Axis.horizontal,
-                        children: banners,
-                      ),
+                  SingleChildScrollView(
+                    controller: scrollViewColtroller,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                            child: FutureBuilder(
+                              initialData: <Widget>[Column(
+                                children: [
+                                  Center(child: CircularProgressIndicator()),
+                                  SizedBox(),
+                                  Center(child: Text('Caricamento menù..',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontFamily: 'LoraFont'),
+                                  ),),
+                                ],
+                              )],
+                              future: createList(dessertMenuType),
+                              builder: (context, snapshot){
+                                if(snapshot.hasData){
+                                  return Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: ListView(
+                                      primary: false,
+                                      shrinkWrap: true,
+                                      children: snapshot.data,
+                                    ),
+                                  );
+                                }else{
+                                  return CircularProgressIndicator();
+                                }
+                              },
+                            )
+                        ),
+                      ],
                     ),
                   ),
-                  Container(
-                      child: FutureBuilder(
-                        initialData: <Widget>[Center(child: CircularProgressIndicator())],
-                        future: createList(),
-                        builder: (context, snapshot){
-                          if(snapshot.hasData){
-                            return Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: ListView(
-                                primary: false,
-                                shrinkWrap: true,
-                                children: snapshot.data,
-                              ),
-                            );
-                          }else{
-                            return CircularProgressIndicator();
-                          }
-                        },
-                      )
+                  SingleChildScrollView(
+                    controller: scrollViewColtroller,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                            child: FutureBuilder(
+                              initialData: <Widget>[Column(
+                                children: [
+                                  Center(child: CircularProgressIndicator()),
+                                  SizedBox(),
+                                  Center(child: Text('Caricamento menù..',
+                                    style: TextStyle(fontSize: 16.0, color: Colors.black, fontFamily: 'LoraFont'),
+                                  ),),
+                                ],
+                              )],
+                              future: createList(wineMenuType),
+                              builder: (context, snapshot){
+                                if(snapshot.hasData){
+                                  return Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: ListView(
+                                      primary: false,
+                                      shrinkWrap: true,
+                                      children: snapshot.data,
+                                    ),
+                                  );
+                                }else{
+                                  return CircularProgressIndicator();
+                                }
+                              },
+                            )
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -347,234 +524,370 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
   }
 
 
-  Future<List<Widget>> createList() async{
+  Future<List<Widget>> createList(String currentMenuType) async{
 
-    List<Widget> items = <Widget>[];
+    String menuType = '';
+    int previousMenu;
+    int nextMenu;
+
+    switch(currentMenuType){
+      case sushiMenuType:
+        menuType = 'Sushi & Susci';
+        nextMenu = 1;
+        break;
+      case fromKitchenMenuType:
+        menuType = 'Dalla Cucina';
+        previousMenu = 0;
+        nextMenu = 2;
+        break;
+      case dessertMenuType:
+        menuType = 'Dolci';
+        previousMenu = 1;
+        nextMenu = 3;
+        break;
+      case wineMenuType:
+        menuType = 'Vini';
+        previousMenu = 2;
+        break;
+    }
+
+    List<Widget> items = <Widget>[
+      Card(
+        color: Colors.white,
+        elevation: 3.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            currentMenuType == sushiMenuType ? Text('') :
+            GestureDetector(
+              child: Icon(Icons.chevron_left,
+                color: Colors.black,),
+              onTap: (){
+                setState(() {
+                  updateMenuType(previousMenu);
+                });
+              },
+            ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(menuType, style: TextStyle(fontSize: 18.0, color: Colors.black, fontFamily: 'LoraFont')),
+              ),
+            ),
+            currentMenuType == wineMenuType ? Text('') :
+            GestureDetector(
+              child: Icon(
+                Icons.chevron_right,
+                color: Colors.black,
+              ),
+              onTap: (){
+                setState(() {
+                  updateMenuType(nextMenu);
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    ];
 
     List<Product> productList = await getCurrentProductList(currentMenuType);
 
     productList.forEach((product) {
-      items.add(
-        product.available == 'false' ?
-        InkWell(
-          hoverColor: Colors.blueGrey,
-          splashColor: Colors.greenAccent,
-          highlightColor: Colors.blueGrey.withOpacity(0.5),
-          onTap: () {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                    content: Text(product.name + ' Esaurito', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                    actions: <Widget>[
-                      FlatButton(
-                        onPressed: () => Navigator.of(context).pop(false),
-                        child: const Text("Indietro"),
+      if(listTypeWine.contains(product.category)){
+        items.add(
+          InkWell(
+            hoverColor: Colors.blueGrey,
+            splashColor: Colors.greenAccent,
+            highlightColor: Colors.blueGrey.withOpacity(0.5),
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return ModalAddItem(product: product, updateCountCallBack: updateCurrentMenuItemCount);
+                  }
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.all(6.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        spreadRadius: 2.0,
+                        blurRadius: 5.0,
                       ),
-                    ],
-                  );
-                }
-            );
-          },
-          child: Padding(
-            padding: EdgeInsets.all(6.0),
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      spreadRadius: 2.0,
-                      blurRadius: 5.0,
-                    ),
-                  ]
-              ),
-              child: ClipRect(
-                child: Banner(
-                  message: 'Esaurito',
-                  location: BannerLocation.topEnd,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      ClipRRect(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0)),
-                        child: Image.asset(product.image, width: 90.0, height: 90.0, fit: BoxFit.cover,),
-                      ),
-                      SizedBox(
-                        width: 250.0,
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5.0, bottom: 5.0),
-                                child: Text(product.name, style: TextStyle(fontSize: 16.0, fontFamily: 'LoraFont'),),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5.0),
-                                child: Text(Utils.getIngredientsFromProduct(product), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 11.0, fontFamily: 'LoraFont'),),
-                              ),
-                              Text('',),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5.0),
-                                child: Text('€ ' + product.price.toString(), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 14.0, fontFamily: 'LoraFont'),),
-                              ),
-                            ],
+                    ]
+                ),
+                child: ClipRect(
+                  child: Banner(
+                    message: getNameByType(product.category),
+                    color: getColorByType(product.category),
+                    location: BannerLocation.topEnd,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        ClipRRect(
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0)),
+                          child: Image.asset(product.image, width: 90.0, height: 90.0, fit: BoxFit.contain,),
+                        ),
+                        SizedBox(
+                          width: 250.0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5.0, bottom: 5.0),
+                                  child: Text(product.name, style: TextStyle(fontSize: 16.0,color: Colors.black, fontFamily: 'LoraFont'),),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5.0),
+                                  child: Text(Utils.getIngredientsFromProduct(product), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 11.0, color: Colors.black, fontFamily: 'LoraFont'),),
+                                ),
+                                Text('',),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5.0),
+                                  child: Text('€ ' + product.price.toString(), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 14.0, color: Colors.black, fontFamily: 'LoraFont'),),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ) : product.available == 'new' ?
-        InkWell(
-          hoverColor: Colors.blueGrey,
-          splashColor: Colors.greenAccent,
-          highlightColor: Colors.blueGrey.withOpacity(0.5),
-          onTap: () {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return ModalAddItem(product: product, updateCountCallBack: updateCurrentMenuItemCount);
-                }
-            );
-          },
-          child: Padding(
-            padding: EdgeInsets.all(6.0),
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      spreadRadius: 2.0,
-                      blurRadius: 5.0,
-                    ),
-                  ]
-              ),
-              child: ClipRect(
-                child: Banner(
-                  message: 'Novità',
-                  color: Colors.green,
-                  location: BannerLocation.topEnd,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      ClipRRect(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0)),
-                        child: Image.asset(product.image, width: 90.0, height: 90.0, fit: BoxFit.cover,),
+        );
+      } else{
+        items.add(
+          product.available == 'false' ?
+          InkWell(
+            hoverColor: Colors.blueGrey,
+            splashColor: Colors.greenAccent,
+            highlightColor: Colors.blueGrey.withOpacity(0.5),
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                      content: Text(product.name + ' Esaurito', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                      actions: <Widget>[
+                        FlatButton(
+                          onPressed: () => Navigator.of(context).pop(false),
+                          child: const Text("Indietro"),
+                        ),
+                      ],
+                    );
+                  }
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.all(6.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        spreadRadius: 2.0,
+                        blurRadius: 5.0,
                       ),
-                      SizedBox(
-                        width: 250.0,
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5.0, bottom: 5.0),
-                                child: Text(product.name, style: TextStyle(fontSize: 16.0, fontFamily: 'LoraFont'),),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5.0),
-                                child: Text(Utils.getIngredientsFromProduct(product), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 11.0, fontFamily: 'LoraFont'),),
-                              ),
-                              Text('',),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5.0),
-                                child: Text('€ ' + product.price.toString(), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 14.0, fontFamily: 'LoraFont'),),
-                              ),
-                            ],
+                    ]
+                ),
+                child: ClipRect(
+                  child: Banner(
+                    message: 'Esaurito',
+                    location: BannerLocation.topEnd,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        ClipRRect(
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0)),
+                          child: Image.asset(product.image, width: 90.0, height: 90.0, fit: BoxFit.cover,),
+                        ),
+                        SizedBox(
+                          width: 250.0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5.0, bottom: 5.0),
+                                  child: Text(product.name, style: TextStyle(fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5.0),
+                                  child: Text(Utils.getIngredientsFromProduct(product), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 11.0, fontFamily: 'LoraFont'),),
+                                ),
+                                Text('',),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5.0),
+                                  child: Text('€ ' + product.price.toString(), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 14.0, fontFamily: 'LoraFont'),),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        )
-            : InkWell(
-          hoverColor: Colors.blueGrey,
-          splashColor: Colors.greenAccent,
-          highlightColor: Colors.blueGrey.withOpacity(0.5),
-          onTap: () {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return ModalAddItem(product: product, updateCountCallBack: updateCurrentMenuItemCount);
-                }
-            );
-          },
-          onLongPress: () {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return ModalAddItem(product: product, updateCountCallBack: updateCurrentMenuItemCount);
-                }
-            );
-          },
-          child: Padding(
-            padding: EdgeInsets.all(6.0),
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      spreadRadius: 2.0,
-                      blurRadius: 5.0,
+          ) : product.available == 'new' ?
+          InkWell(
+            hoverColor: Colors.blueGrey,
+            splashColor: Colors.greenAccent,
+            highlightColor: Colors.blueGrey.withOpacity(0.5),
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return ModalAddItem(product: product, updateCountCallBack: updateCurrentMenuItemCount);
+                  }
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.all(6.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        spreadRadius: 2.0,
+                        blurRadius: 5.0,
+                      ),
+                    ]
+                ),
+                child: ClipRect(
+                  child: Banner(
+                    message: 'Novità',
+                    color: Colors.green,
+                    location: BannerLocation.topEnd,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        ClipRRect(
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0)),
+                          child: Image.asset(product.image, width: 90.0, height: 90.0, fit: BoxFit.cover,),
+                        ),
+                        SizedBox(
+                          width: 250.0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5.0, bottom: 5.0),
+                                  child: Text(product.name, style: TextStyle(fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5.0),
+                                  child: Text(Utils.getIngredientsFromProduct(product), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 11.0, fontFamily: 'LoraFont'),),
+                                ),
+                                Text('',),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5.0),
+                                  child: Text('€ ' + product.price.toString(), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 14.0, fontFamily: 'LoraFont'),),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ]
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  ClipRRect(
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0)),
-                    child: Image.asset(product.image, width: 90.0, height: 90.0, fit: BoxFit.fitHeight,),
                   ),
-                  SizedBox(
-                    width: 250.0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5.0, bottom: 5.0),
-                            child: Text(product.name, style: TextStyle(fontSize: 16.0, fontFamily: 'LoraFont'),),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5.0),
-                            child: Text(Utils.getIngredientsFromProduct(product), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 11.0, fontFamily: 'LoraFont'),),
-                          ),
-                          Text('',),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5.0),
-                            child: Text('€ ' + product.price.toString(), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 14.0, fontFamily: 'LoraFont'),),
-                          ),
-                        ],
+                ),
+              ),
+            ),
+          )
+              : InkWell(
+            hoverColor: Colors.blueGrey,
+            splashColor: Colors.greenAccent,
+            highlightColor: Colors.blueGrey.withOpacity(0.5),
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return ModalAddItem(product: product, updateCountCallBack: updateCurrentMenuItemCount);
+                  }
+              );
+            },
+            onLongPress: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return ModalAddItem(product: product, updateCountCallBack: updateCurrentMenuItemCount);
+                  }
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.all(6.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        spreadRadius: 2.0,
+                        blurRadius: 5.0,
+                      ),
+                    ]
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0)),
+                      child: Image.asset(product.image, width: 90.0, height: 90.0, fit: BoxFit.fitHeight,),
+                    ),
+                    SizedBox(
+                      width: 250.0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 5.0, bottom: 5.0),
+                              child: Text(product.name, style: TextStyle(fontSize: 16.0, fontFamily: 'LoraFont'),),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 5.0),
+                              child: Text(Utils.getIngredientsFromProduct(product), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 11.0, fontFamily: 'LoraFont'),),
+                            ),
+                            Text('',),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 5.0),
+                              child: Text('€ ' + product.price.toString(), overflow: TextOverflow.ellipsis , style: TextStyle(fontSize: 14.0, fontFamily: 'LoraFont'),),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      );
+        );
+      }
     }
-
     );
     return items;
   }
@@ -607,6 +920,8 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
           sushiProductList = await crudModel.fetchProducts();
           return sushiProductList;
         }else{
+          /*CRUDModel crudModel = CRUDModel(currentMenuType);
+          sushiProductList = await crudModel.fetchProducts();*/
           return sushiProductList;
         }
         break;
@@ -616,6 +931,8 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
           kitchenProductList = await crudModel.fetchProducts();
           return kitchenProductList;
         }else{
+          /*CRUDModel crudModel = CRUDModel(currentMenuType);
+          kitchenProductList = await crudModel.fetchProducts();*/
           return kitchenProductList;
 
         }
@@ -626,6 +943,8 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
           dessertProductList = await crudModel.fetchProducts();
           return dessertProductList;
         }else{
+          /*CRUDModel crudModel = CRUDModel(currentMenuType);
+          dessertProductList = await crudModel.fetchProducts();*/
           return dessertProductList;
         }
         break;
@@ -635,12 +954,99 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
           wineProductList = await crudModel.fetchProducts();
           return wineProductList;
         }else{
+          /*CRUDModel crudModel = CRUDModel(currentMenuType);
+          wineProductList = await crudModel.fetchProducts();*/
           return wineProductList;
         }
         break;
     }
   }
+  getNameByType(String type) {
 
+    switch(type){
+      case 'whitewine':
+        return 'Bianco';
+      case 'redwine':
+        return 'Rosso';
+      case 'bollicine':
+        return 'Bollicine';
+      case 'Champagne':
+        return 'Champagne';
+      case 'rosewine':
+        return 'Rosato';
+    }
+    return '';
+  }
+
+  getColorByType(String type) {
+    switch(type){
+      case 'whitewine':
+        return Colors.yellow.shade600;
+      case 'bollicine':
+        return Colors.blue.shade400;
+      case 'redwine':
+        return Colors.red.shade900;
+      case 'Champagne':
+        return Color.fromRGBO(130, 97, 60, 1.0);
+      case 'rosewine':
+        return Colors.pinkAccent.shade100;
+    }
+    return Colors.black;
+  }
+
+  _showLockScreen(
+      BuildContext context, {
+        @required bool opaque,
+        CircleUIConfig circleUIConfig,
+        KeyboardUIConfig keyboardUIConfig,
+        @required Widget cancelButton,
+        List<String> digits,
+      }) {
+    Navigator.push(
+        context,
+        PageRouteBuilder(
+          opaque: opaque,
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              Container(
+                child: PasscodeScreen(
+                  title: Text(
+                    'Password',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white, fontSize: 28),
+                  ),
+                  circleUIConfig: circleUIConfig,
+                  keyboardUIConfig: keyboardUIConfig,
+                  passwordEnteredCallback: _onPasscodeEntered,
+                  cancelButton: cancelButton,
+                  deleteButton: Text(
+                    'Delete',
+                    style: const TextStyle(fontSize: 16, color: Colors.white),
+                    semanticsLabel: 'Delete',
+                  ),
+                  shouldTriggerVerification: _verificationNotifier.stream,
+                  backgroundColor: Colors.black.withOpacity(0.8),
+                  cancelCallback: _onPasscodeCancelled,
+                  digits: digits,
+                  passwordDigits: 6,
+                ),
+              ),
+        ));
+  }
+
+  _onPasscodeEntered(String enteredPasscode) {
+    bool isValid = storedPasscode == enteredPasscode;
+    _verificationNotifier.add(isValid);
+    if (isValid) {
+      setState(() {
+        this.isAuthenticated = isValid;
+      });
+      Navigator.pushNamed(context, AdminConsoleScreen.id);
+    }
+  }
+
+  _onPasscodeCancelled() {
+    Navigator.maybePop(context);
+  }
 }
 
 
