@@ -27,4 +27,10 @@ class Cart{
     );
   }
 
+  @override
+  String toString() {
+    return "Name :" + product.name;
+  }
+
+
 }

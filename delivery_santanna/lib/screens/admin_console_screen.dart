@@ -10,6 +10,7 @@ import 'package:expansion_card/expansion_card.dart';
 import 'package:flutter/material.dart';
 import 'package:delivery_santanna/utils/costants.dart';
 import 'package:delivery_santanna/screens/add_new_product.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AdminConsoleScreen extends StatefulWidget {
   static String id = 'admin_console';
@@ -402,7 +403,7 @@ class _AdminConsoleScreenState extends State<AdminConsoleScreen> {
                 selectionColor: Colors.pinkAccent,
                 deactivatedColor: Colors.grey,
                 selectedTextColor: Colors.white,
-                daysCount: 25,
+                daysCount: 30,
                 locale: 'it',
                 controller: _datePikerController,
                 onDateChange: (date) {
@@ -451,9 +452,8 @@ class _AdminConsoleScreenState extends State<AdminConsoleScreen> {
 
     List<OrderStore> ordersList = await crudModel.fetchCustomersOrder();
     List<Widget> items = <Widget>[];
-    ordersList.forEach((orderItem) {
 
-    });
+    items.add(buildTableRecap(ordersList, selectedDatePickupDelivery));
 
     ordersList.forEach((orderItem) {
       orderItem.datePickupDelivery == selectedDatePickupDelivery ?
@@ -478,6 +478,7 @@ class _AdminConsoleScreenState extends State<AdminConsoleScreen> {
                       ]
                   ),
                   child: ExpansionCard(
+
                       borderRadius: 20,
                       title: Container(
                         child: Column(
@@ -513,13 +514,55 @@ class _AdminConsoleScreenState extends State<AdminConsoleScreen> {
                         ),
                       ),
                       children: [
-                        Table(
-                          border: TableBorder(horizontalInside: BorderSide(width: 1, color: orderItem.typeOrder == DELIVERY_TYPE ? Colors.orangeAccent : Colors.blue.shade800, style: BorderStyle.solid)),
-                          children: buildListWidgetFromCart(orderItem.cartItemsList),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Table(
+                            border: TableBorder(horizontalInside: BorderSide(width: 1, color: orderItem.typeOrder == DELIVERY_TYPE ? Colors.orangeAccent : Colors.blue.shade800, style: BorderStyle.solid)),
+                            children: buildListWidgetFromCart(orderItem.cartItemsList),
+                          ),
                         ),
                         SizedBox(height: 30,),
                         orderItem.typeOrder == DELIVERY_TYPE ?
-                            Text('Consegna : ') : SizedBox(height: 0,),
+                        Column(
+                          children: [
+                            Text(orderItem.address),
+                            Text(orderItem.city),
+                            Text('Ora Consegna: ' + orderItem.hourPickupDelivery),
+                          ],
+                        ) : Text('Ora Asporto: ' + orderItem.hourPickupDelivery),
+                        SizedBox(height: 30,),
+
+                        IconButton(
+                          icon: Icon(
+                            FontAwesomeIcons.trash,
+                            color: Colors.redAccent,
+                          ),
+                          onPressed: () async {
+                            return await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("Conferma"),
+                                  content: Text("Eliminare l'ordine di " + orderItem.name +"?"),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                        onPressed: () async {
+                                          await crudModel.removeProduct(orderItem.docId);
+                                          setState(() {});
+                                          Navigator.of(context).pop(true);
+                                        },
+                                        child: const Text("Cancella")
+                                    ),
+                                    FlatButton(
+                                      onPressed: () => Navigator.of(context).pop(false),
+                                      child: const Text("Indietro"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
                       ]
                   ),
                 ),
@@ -528,7 +571,7 @@ class _AdminConsoleScreenState extends State<AdminConsoleScreen> {
           )
       ) : print('');
     });
-    if(items.isEmpty){
+    if(items.length == 1){
       items.add(
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -547,10 +590,16 @@ class _AdminConsoleScreenState extends State<AdminConsoleScreen> {
       TableRow(
           children: [
             Column(children:[
-              Text('Prodotto')
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Prodotto'),
+              )
             ]),
             Column(children:[
-              Text('Quantità')
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Quantità'),
+              )
             ]),
           ]),
     );
@@ -559,10 +608,16 @@ class _AdminConsoleScreenState extends State<AdminConsoleScreen> {
         TableRow(
             children: [
               Column(children:[
-                Text(element.product.name)
+                Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Text(element.product.name),
+                )
               ]),
               Column(children:[
-                Text(element.numberOfItem.toString())
+                Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Text(element.numberOfItem.toString()),
+                )
               ]),
             ]),
       );
@@ -575,6 +630,161 @@ class _AdminConsoleScreenState extends State<AdminConsoleScreen> {
     setState(() {
       _selectedDateTime = date;
     });
+  }
 
+  Widget buildTableRecap(List<OrderStore> ordersList,
+      String selectedDatePickupDelivery){
+
+
+    double total = calculateTotal(ordersList, selectedDatePickupDelivery);
+    Map mapForRecapTable = buildMapForRecapTable(ordersList, selectedDatePickupDelivery);
+
+    return ClipRRect(
+      child: Padding(
+        padding: EdgeInsets.all(6.0),
+        child: Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  spreadRadius: 2.0,
+                  blurRadius: 5.0,
+                ),
+              ]
+          ),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Text(
+                    'Resoconto Giornaliero',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+              ExpansionCard(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Totale ',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.teal,
+                        ),
+                      ),
+                      Text(
+                        total.toString() + " €",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.teal,
+                        ),
+                      ),
+                    ],
+                  ),
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Table(
+                        border: TableBorder(horizontalInside: BorderSide(width: 1, color: Colors.teal.shade700, style: BorderStyle.solid)),
+                        children: buildTableFromMapForRecapTable(mapForRecapTable),
+                      ),
+                    ),
+                  ]
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  double calculateTotal(List<OrderStore> ordersList, String selectedDatePickupDelivery) {
+
+    try{
+      double total = 0.0;
+      ordersList.forEach((order) {
+        if(order.datePickupDelivery == selectedDatePickupDelivery){
+          total = total + double.parse(order.total.replaceAll(" €", ""));
+        }
+      });
+
+      return total;
+    }catch(e){
+      print('Exception : ' + e);
+      return 0.0;
+    }
+  }
+
+  Map buildMapForRecapTable(List<OrderStore> ordersList, String selectedDatePickupDelivery) {
+
+
+    Map<String, int> recapMap = {
+    };
+
+
+    ordersList.forEach((order) {
+      if(order.datePickupDelivery == selectedDatePickupDelivery){
+        order.cartItemsList.forEach((cartElement) {
+          print(cartElement.product.name + ' - n° ' + cartElement.numberOfItem.toString());
+          if(recapMap.containsKey(cartElement.product.name)){
+            recapMap.update(cartElement.product.name, (value) => value + cartElement.numberOfItem);
+          }else{
+            recapMap[cartElement.product.name] = cartElement.numberOfItem;
+          }
+        });
+      }
+    });
+    return recapMap;
+  }
+
+
+  buildTableFromMapForRecapTable(Map<String, int> mapForRecapTable) {
+    List<TableRow> rowTable = <TableRow>[];
+    rowTable.add(
+      TableRow(
+          children: [
+            Column(children:[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Prodotto'),
+              )
+            ]),
+            Column(children:[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Quantità'),
+              )
+            ]),
+          ]),
+    );
+    mapForRecapTable.forEach((key, value) {
+      rowTable.add(
+        TableRow(
+            children: [
+              Column(children:[
+                Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Text(key),
+                )
+              ]),
+              Column(children:[
+                Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Text(value.toString()),
+                )
+              ]),
+            ]),
+      );
+    });
+
+
+    return rowTable;
   }
 }

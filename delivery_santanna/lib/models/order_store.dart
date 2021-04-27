@@ -5,7 +5,7 @@ class OrderStore {
   final String docId;
   final String id;
   final String name;
-  final List<dynamic> cartItemsList;
+  final List<Cart> cartItemsList;
   final String date;
   final String total;
   bool confirmed;
