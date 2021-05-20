@@ -27,9 +27,7 @@ class _PickupScreenState extends State<PickupScreen> {
   final _datePikerController = DatePickerController();
 
   List<TimeSlotPickup> _slotsPicker = TimeSlotPickup.getPickupSlots();
-
   List<DropdownMenuItem<TimeSlotPickup>> _dropdownTimeSlotPickup;
-
   TimeSlotPickup _selectedTimeSlotPikup;
 
 
@@ -399,9 +397,13 @@ class _PickupScreenState extends State<PickupScreen> {
   void setSelectedDate(DateTime date) {
     setState(() {
       _selectedDateTime = date;
-      if(date.day == 24) {
+      if(date.day == 15) {
         _dropdownTimeSlotPickup = buildDropdownSlotPickup(TimeSlotPickup.getPickupSlotsWithLunchTime());
         _selectedTimeSlotPikup = _dropdownTimeSlotPickup[0].value;
+      }else if(date.day == 2){
+        _dropdownTimeSlotPickup = buildDropdownSlotPickup(TimeSlotPickup.getPickupSlotsJustLunchTime());
+        _selectedTimeSlotPikup = _dropdownTimeSlotPickup[0].value;
+
       }else{
         _dropdownTimeSlotPickup = buildDropdownSlotPickup(TimeSlotPickup.getPickupSlots());
         _selectedTimeSlotPikup = _dropdownTimeSlotPickup[0].value;
@@ -423,6 +425,15 @@ class TimeSlotPickup {
       TimeSlotPickup(3, '20:00'),
       TimeSlotPickup(4, '20:30'),
       TimeSlotPickup(5, '21:00'),
+    ];
+  }
+
+  static List<TimeSlotPickup> getPickupSlotsJustLunchTime() {
+    return <TimeSlotPickup>[
+      TimeSlotPickup(1, 'Seleziona Orario Ritiro'),
+      TimeSlotPickup(2, '12:30'),
+      TimeSlotPickup(3, '13:00'),
+      TimeSlotPickup(4, '13:30'),
     ];
   }
 

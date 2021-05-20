@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:delivery_santanna/models/cart.dart';
 import 'package:delivery_santanna/models/product.dart';
-import 'package:delivery_santanna/screens/add_modal_screen.dart';
-import 'package:delivery_santanna/screens/cart_screen.dart';
+import 'package:delivery_santanna/screens/delivery/add_modal_screen.dart';
+import 'package:delivery_santanna/screens/delivery/cart_screen.dart';
 import 'package:delivery_santanna/utils/costants.dart';
 import 'package:delivery_santanna/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:delivery_santanna/screens/admin_console_screen.dart';
+import 'package:delivery_santanna/screens/dash_delivery//admin_console_screen.dart';
 import 'package:delivery_santanna/dao/crud_model.dart';
 import 'package:passcode_screen/circle.dart';
 import 'package:passcode_screen/keyboard.dart';

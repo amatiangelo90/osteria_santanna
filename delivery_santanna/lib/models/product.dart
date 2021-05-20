@@ -87,7 +87,7 @@ class Product {
 
   @override
   String toString() {
-    return this.name.toString();
+    return this.name.toString() + ' - ' + this.available.toString();
   }
 
 }

@@ -3,14 +3,15 @@ import 'package:delivery_santanna/dao/crud_model.dart';
 import 'package:delivery_santanna/models/cart.dart';
 import 'package:delivery_santanna/models/order_store.dart';
 import 'package:delivery_santanna/models/product.dart';
-import 'package:delivery_santanna/screens/home_page_screen.dart';
-import 'package:delivery_santanna/screens/manage_item_page.dart';
+import 'package:delivery_santanna/screens/delivery/home_page_screen.dart';
+import 'package:delivery_santanna/screens/dash_delivery/manage_item_page.dart';
 import 'package:delivery_santanna/utils/utils.dart';
 import 'package:expansion_card/expansion_card.dart';
 import 'package:flutter/material.dart';
 import 'package:delivery_santanna/utils/costants.dart';
-import 'package:delivery_santanna/screens/add_new_product.dart';
+import 'package:delivery_santanna/screens/dash_delivery/add_new_product.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class AdminConsoleScreen extends StatefulWidget {
   static String id = 'admin_console';
@@ -58,7 +59,7 @@ class _AdminConsoleScreenState extends State<AdminConsoleScreen> {
             ),
           ],
         ),
-        floatingActionButton: _selectedIndex != 4 ? FloatingActionButton(
+        floatingActionButton: _selectedIndex < 4 ? FloatingActionButton(
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => AddNewProductScreen())
@@ -67,8 +68,7 @@ class _AdminConsoleScreenState extends State<AdminConsoleScreen> {
           child: const Icon(Icons.add),
           backgroundColor: Colors.green,
         ) : SizedBox(height: 0,),
-        body: _selectedIndex != 4 ? getWorkingWidgetByItem(_selectedIndex)
-            : buildOrdersManagePage(),
+        body: buildPage(_selectedIndex),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
@@ -88,8 +88,12 @@ class _AdminConsoleScreenState extends State<AdminConsoleScreen> {
               label: 'Wine',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.menu_book),
+              icon: Icon(Icons.book_online),
               label: 'Orders',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Settings',
             ),
           ],
           currentIndex: _selectedIndex,
@@ -384,74 +388,16 @@ class _AdminConsoleScreenState extends State<AdminConsoleScreen> {
       ),
     );
   }
+  Future<List<Widget>> createOrdersListByDateTime(DateTime date) async{
 
-  buildOrdersManagePage() {
-    return SingleChildScrollView(
-      controller: scrollViewController,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              DatePicker(
-                DateTime.now(),
-                activeDates: Utils.getAvailableData(),
-                dateTextStyle: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),
-                dayTextStyle: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),
-                monthTextStyle: TextStyle(color: Colors.black, fontSize: 12.0, fontFamily: 'LoraFont'),
-                selectionColor: Colors.pinkAccent,
-                deactivatedColor: Colors.grey,
-                selectedTextColor: Colors.white,
-                daysCount: 30,
-                locale: 'it',
-                controller: _datePikerController,
-                onDateChange: (date) {
-                  setSelectedDate(date);
-                },
-              ),
-            ],
-          ),
-          Container(
-              child: FutureBuilder(
-                initialData: <Widget>[Column(
-                  children: [
-                    Center(child: CircularProgressIndicator()),
-                    SizedBox(),
-                    Center(child: Text('Caricamento ordini..',
-                      style: TextStyle(fontSize: 16.0, color: Colors.black),
-                    ),),
-                  ],
-                )],
-                future: createOrdersListByDateTime(_selectedDateTime),
-                builder: (context, snapshot){
-                  if(snapshot.hasData){
-                    return Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: ListView(
-                        primary: false,
-                        shrinkWrap: true,
-                        children: snapshot.data,
-                      ),
-                    );
-                  }else{
-                    return CircularProgressIndicator();
-                  }
-                },
-              )
-          ),
-        ],
-      ),
-    );
-  }
+    List<Widget> items = <Widget>[];
 
-  Future<List<Widget>> createOrdersListByDateTime (DateTime date) async{
+    print(date);
 
     String selectedDatePickupDelivery = Utils.getWeekDay(date.weekday) +" ${date.day} " + Utils.getMonthDay(date.month);
     CRUDModel crudModel = CRUDModel(ORDERS_TRACKER);
 
     List<OrderStore> ordersList = await crudModel.fetchCustomersOrder();
-    List<Widget> items = <Widget>[];
 
     items.add(buildTableRecap(ordersList, selectedDatePickupDelivery));
 
@@ -478,7 +424,6 @@ class _AdminConsoleScreenState extends State<AdminConsoleScreen> {
                       ]
                   ),
                   child: ExpansionCard(
-
                       borderRadius: 20,
                       title: Container(
                         child: Column(
@@ -498,7 +443,7 @@ class _AdminConsoleScreenState extends State<AdminConsoleScreen> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      orderItem.date,
+                                      orderItem.address,
                                       style: TextStyle(fontSize: 15, color: Colors.black),
                                     ),
                                     Text(
@@ -582,6 +527,80 @@ class _AdminConsoleScreenState extends State<AdminConsoleScreen> {
       );
     }
     return items;
+  }
+
+  Future<List<Widget>> createSettingsListItem(DateTime date) async{
+    List<Widget> items = <Widget>[];
+    print(date);
+    if(!Utils.getAvailableData().contains(date)){
+      items.add(
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Column(
+                  children: [
+                    Text('Nessuna apertura in programma per il giorno corrente', style: TextStyle(color: Colors.black, fontSize: 13.0)),
+                    SizedBox(height: 20.0,),
+                  ],
+                ),
+              ),
+            ),
+            ClipRRect(
+              child: Padding(
+                padding: EdgeInsets.all(6.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          spreadRadius: 2.0,
+                          blurRadius: 5.0,
+                        ),
+                      ]
+                  ),
+                  child: ExpansionCard(
+                      initiallyExpanded: true,
+                      borderRadius: 20,
+                      title: Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            SizedBox(height: 5.0,),
+                            Column(
+                              children: [
+                                SizedBox(height: 10,),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      children: [
+                        SizedBox(height: 30,),
+                        RaisedButton(
+                            child: Text('Apri', style: TextStyle(color: Colors.white, fontSize: 20.0)),
+                            color: Colors.green,
+                            elevation: 5.0,
+                            onPressed: (){
+                            }
+                        ),
+                      ]
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+      return items;
+
+    }else{
+
+      return items;
+    }
   }
 
   buildListWidgetFromCart(List<Cart> cartItemsList) {
@@ -725,9 +744,7 @@ class _AdminConsoleScreenState extends State<AdminConsoleScreen> {
   Map buildMapForRecapTable(List<OrderStore> ordersList, String selectedDatePickupDelivery) {
 
 
-    Map<String, int> recapMap = {
-    };
-
+    Map<String, int> recapMap = {};
 
     ordersList.forEach((order) {
       if(order.datePickupDelivery == selectedDatePickupDelivery){
@@ -787,4 +804,96 @@ class _AdminConsoleScreenState extends State<AdminConsoleScreen> {
 
     return rowTable;
   }
+
+  buildPage(int _selectedIndex) {
+    switch(_selectedIndex){
+      case 0:
+        return getWorkingWidgetByItem(_selectedIndex);
+      case 1:
+        return getWorkingWidgetByItem(_selectedIndex);
+      case 2:
+        return getWorkingWidgetByItem(_selectedIndex);
+      case 3:
+        return getWorkingWidgetByItem(_selectedIndex);
+      case 4:
+        return buildOrdersManagePage();
+      case 5:
+        return buildSettingsManagePage();
+    }
+  }
+
+  buildOrdersManagePage() {
+    return SingleChildScrollView(
+      controller: scrollViewController,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              DatePicker(
+                DateTime.now(),
+                activeDates: Utils.getAvailableData(),
+                dateTextStyle: TextStyle(color: Colors.green, fontSize: 16.0),
+                dayTextStyle: TextStyle(color: Colors.green, fontSize: 14.0),
+                monthTextStyle: TextStyle(color: Colors.green, fontSize: 12.0),
+                selectionColor: Colors.pinkAccent,
+                deactivatedColor: Colors.grey,
+                selectedTextColor: Colors.white,
+                daysCount: 30,
+                locale: 'it',
+                controller: _datePikerController,
+                onDateChange: (date) {
+                  setSelectedDate(date);
+                },
+              ),
+            ],
+          ),
+          Container(
+              child: FutureBuilder(
+                initialData: <Widget>[Column(
+                  children: [
+                    Center(child: CircularProgressIndicator()),
+                    SizedBox(),
+                    Center(child: Text('Caricamento ordini..',
+                      style: TextStyle(fontSize: 16.0, color: Colors.black),
+                    ),),
+                  ],
+                )],
+                future: createOrdersListByDateTime(DateTime.utc(_selectedDateTime.year ,_selectedDateTime.month, _selectedDateTime.day ,0 ,0 ,0 ,0 ,0)),
+                builder: (context, snapshot){
+                  if(snapshot.hasData){
+                    return Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: ListView(
+                        primary: false,
+                        shrinkWrap: true,
+                        children: snapshot.data,
+                      ),
+                    );
+                  }else{
+                    return CircularProgressIndicator();
+                  }
+                },
+              )
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Settings page
+
+  buildSettingsManagePage() {
+    return SingleChildScrollView(
+      controller: scrollViewController,
+      child: TableCalendar(
+        firstDay: DateTime.utc(2010, 10, 16),
+        lastDay: DateTime.utc(2030, 3, 14),
+        focusedDay: DateTime.now(),
+        availableGestures: AvailableGestures.all,
+      ),
+    );
+  }
+  
 }

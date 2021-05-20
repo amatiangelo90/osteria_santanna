@@ -73,9 +73,6 @@ class OrderStore {
     List<String> orderDeserialized = <String>[];
 
     cartItemsList.forEach((element) {
-      print('AUAUSADUASDUASUDASDU');
-      print(element.toJson());
-      print('AUAUSADUASDUASUDASDU');
       orderDeserialized.add(element.toJson().toString());
     });
     return orderDeserialized;

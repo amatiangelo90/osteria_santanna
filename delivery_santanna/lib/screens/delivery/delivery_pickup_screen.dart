@@ -2,8 +2,8 @@ import 'package:delivery_santanna/components/icon_content.dart';
 import 'package:delivery_santanna/components/reusable_card.dart';
 import 'package:delivery_santanna/models/cart.dart';
 import 'package:delivery_santanna/models/promoclass.dart';
-import 'package:delivery_santanna/screens/delivery_screen.dart';
-import 'package:delivery_santanna/screens/pickup_screen.dart';
+import 'package:delivery_santanna/screens/delivery/delivery_screen.dart';
+import 'package:delivery_santanna/screens/delivery/pickup_screen.dart';
 import 'package:flutter/material.dart';
 
 class DeliveryPickupScreen extends StatefulWidget {
@@ -75,32 +75,50 @@ class _DeliveryPickupScreenState extends State<DeliveryPickupScreen> {
                         color: Colors.white,
                         cardChild: IconContent(label: 'DELIVERY', icon: Icons.delivery_dining, color: Colors.teal.shade800, description: 'Costo spedizione €3. Per ordini superiori a 50 € la spedizione è gratuita',),
                         onPress: () {
-                          this.widget.total >= 30 ?
-                          showDialog(
+                          if(DateTime.now().day == 2){
+                            showDialog(
                               context: context,
-                              builder: (context) {
-                                return DeliveryScreen(
-                                  cartItems: this.widget.cartItems,
-                                  total: this.widget.total,
-                                  promo: this.widget.promo,
-                                  uniqueId: this.widget.uniqueId,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Attenzione', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                  content: Text('Servizio delivery non attivo per il giorno corrente', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      onPressed: () => Navigator.of(context).pop(false),
+                                      child: const Text("Indietro"),
+                                    ),
+                                  ],
                                 );
-                              }
-                          ) : showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Attenzione', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                content: Text('Per il servizio delivery il minimo d\'ordine è di € 30', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                actions: <Widget>[
-                                  FlatButton(
-                                    onPressed: () => Navigator.of(context).pop(false),
-                                    child: const Text("Indietro"),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
+                              },
+                            );
+                          }else{
+                            this.widget.total >= 30 ?
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return DeliveryScreen(
+                                    cartItems: this.widget.cartItems,
+                                    total: this.widget.total,
+                                    promo: this.widget.promo,
+                                    uniqueId: this.widget.uniqueId,
+                                  );
+                                }
+                            ) : showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Attenzione', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                  content: Text('Per il servizio delivery il minimo d\'ordine è di € 30', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      onPressed: () => Navigator.of(context).pop(false),
+                                      child: const Text("Indietro"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
                         },
                       )),
                 ],

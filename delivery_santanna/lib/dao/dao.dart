@@ -14,7 +14,7 @@ class Dao{
   }
 
   Future<QuerySnapshot> getOrdersStoreCollection() {
-    return _collectionReference.orderBy('date',descending: false).get();
+    return _collectionReference.orderBy('address',descending: false).orderBy('hourPickupDelivery', descending: false).get();
   }
 
   Stream<QuerySnapshot> streamDataCollection(){
@@ -35,6 +35,4 @@ class Dao{
   Future<void> updateDocument(Map data , String id) {
     return _collectionReference.doc(id).update(data) ;
   }
-
-
 }

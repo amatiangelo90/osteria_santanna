@@ -27,7 +27,6 @@ class CRUDModel{
     products = result.docs
         .map((doc) => Product.fromMap(doc.data(), doc.id))
         .toList();
-
     return products;
   }
 

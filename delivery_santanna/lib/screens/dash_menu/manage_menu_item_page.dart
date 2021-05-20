@@ -1,26 +1,30 @@
 import 'package:delivery_santanna/dao/crud_model.dart';
 import 'package:delivery_santanna/models/product.dart';
-import 'package:delivery_santanna/screens/admin_console_screen.dart';
 import 'package:delivery_santanna/utils/costants.dart';
+import 'package:delivery_santanna/utils/round_icon_botton.dart';
+import 'package:delivery_santanna/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'admin_console_screen_menu.dart';
 
 
-class ManageItemPage extends StatefulWidget {
+class ManageMenuItemPage extends StatefulWidget {
 
-  static String id = 'manage_page';
+  static String id = 'manage_menu_page';
 
   final Product product;
   final String menuType;
 
-  ManageItemPage({@required this.product, @required this.menuType});
+  ManageMenuItemPage({@required this.product, @required this.menuType});
 
   @override
-  _ManageItemPageState createState() => _ManageItemPageState();
+  _ManageMenuItemPageState createState() => _ManageMenuItemPageState();
 }
 
-class _ManageItemPageState extends State<ManageItemPage> {
-
+class _ManageMenuItemPageState extends State<ManageMenuItemPage> {
+  double _price;
   Product productBase;
 
   List<Category> _categoryPicker;
@@ -28,21 +32,24 @@ class _ManageItemPageState extends State<ManageItemPage> {
   Category _selectedCategory;
 
   TextEditingController _nameController;
-  TextEditingController _priceController;
+  TextEditingController _ingredientsController;
 
   @override
   void initState() {
     super.initState();
     productBase = this.widget.product;
     _nameController = TextEditingController(text: productBase.name);
-    _priceController = TextEditingController(text: productBase.price.toString());
+    _ingredientsController = TextEditingController(text: Utils.getIngredientsFromProductALaCarte(productBase));
+    _categoryPicker = Category.getCategoryList(this.widget.menuType);
+    _price = productBase.price;
+
     _categoryPicker = Category.getCategoryList(this.widget.menuType);
     _dropdownCategory = buildDropdownSlotPickup(_categoryPicker);
-
     _selectedCategory = _dropdownCategory[getIndexByCategory(productBase.category, this.widget.menuType)].value;
   }
 
-  onChangeDropTimeSlotPickup(Category currentCategory) {
+
+  onChangeDropCategory(Category currentCategory) {
     setState(() {
       _selectedCategory = currentCategory;
     });
@@ -64,9 +71,12 @@ class _ManageItemPageState extends State<ManageItemPage> {
   @override
   Widget build(BuildContext context) {
 
-
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          title: Text(productBase.name,  style: TextStyle(fontSize: 20.0, color: Colors.white),),
+        ),
         body: Container(
           color: Colors.white,
           child: ListView(
@@ -77,17 +87,6 @@ class _ManageItemPageState extends State<ManageItemPage> {
                     padding: const EdgeInsets.fromLTRB(5.0, 30.0, 5.0, 0.0),
                     child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            child: Column(
-                              children: [
-                                Text('Codice prodotto'),
-                                Text('[' + productBase.id + ']'),
-                              ],
-                            ),
-                          ),
-                        ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
                           child: Center(
@@ -108,19 +107,18 @@ class _ManageItemPageState extends State<ManageItemPage> {
                           child: Center(
                             child: Card(
                               child: TextField(
-                                /*inputFormatters: [
-                                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                                ],*/
-                                controller: _priceController,
+                                controller: _ingredientsController,
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(),
-                                  labelText: 'Prezzo',
+                                  labelText: 'Ingredienti',
                                 ),
+                                maxLines: 4,
                               ),
                             ),
                           ),
                         ),
+                        Text('*Ricorda di dividere la lista ingredienti con la virgola (,)', style: TextStyle(fontSize: 10),),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 3.0),
                           child: Center(
@@ -136,7 +134,7 @@ class _ManageItemPageState extends State<ManageItemPage> {
                                       isExpanded: true,
                                       value: _selectedCategory,
                                       items: _dropdownCategory,
-                                      onChanged: onChangeDropTimeSlotPickup,
+                                      onChanged: onChangeDropCategory,
                                     ),
                                   ),
                                 ],
@@ -144,31 +142,67 @@ class _ManageItemPageState extends State<ManageItemPage> {
                             ),
                           ),
                         ),
-                        RaisedButton(
-                            child: Text('Disponibile',style: TextStyle(color: Colors.white, fontSize: 20.0,)),
-                            color: productBase.available == 'true' ? Colors.blueAccent : Colors.grey,
-                            elevation: 5.0,
-                            onPressed: () async {
-                              updateProductBase('true');
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              RoundIconButton(
+                                icon: FontAwesomeIcons.minus,
+                                function: () {
+                                  setState(() {
+                                    if(_price > 1)
+                                      _price = _price - 0.5;
+                                  });
+                                },
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(_price.toString() + ' €', style: TextStyle(fontSize: 20.0,),),
+                              ),
+                              RoundIconButton(
+                                icon: FontAwesomeIcons.plus,
+                                function: () {
+                                  setState(() {
+                                    _price = _price + 0.5;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        ButtonBar(
+                          alignment: MainAxisAlignment.center,
+                          children: [
+                            RaisedButton(
+                                child: Text('Disponibile',style: TextStyle(color: Colors.white, fontSize: 20.0,)),
+                                color: productBase.available == 'true' ? Colors.blueAccent : Colors.grey,
+                                elevation: 5.0,
+                                onPressed: () async {
+                                  updateProductBase('true');
 
-                            }
+                                }
+                            ),
+                            RaisedButton(
+                                child: Text('Esaurito',style: TextStyle(color: Colors.white, fontSize: 20.0,)),
+                                color: productBase.available == 'false' ? Colors.red : Colors.grey,
+                                elevation: 5.0,
+                                onPressed: () async {
+                                  updateProductBase('false');
+                                }
+                            ),
+                            RaisedButton(
+                                child: Text('Novità',style: TextStyle(color: Colors.white, fontSize: 20.0,)),
+                                color: productBase.available == 'new' ? Colors.green : Colors.grey,
+                                elevation: 5.0,
+                                onPressed: () async {
+                                  updateProductBase('new');
+                                }
+                            ),
+                          ],
                         ),
-                        RaisedButton(
-                            child: Text('Esaurito',style: TextStyle(color: Colors.white, fontSize: 20.0,)),
-                            color: productBase.available == 'false' ? Colors.red : Colors.grey,
-                            elevation: 5.0,
-                            onPressed: () async {
-                              updateProductBase('false');
-                            }
-                        ),
-                        RaisedButton(
-                            child: Text('Novità',style: TextStyle(color: Colors.white, fontSize: 20.0,)),
-                            color: productBase.available == 'new' ? Colors.green : Colors.grey,
-                            elevation: 5.0,
-                            onPressed: () async {
-                              updateProductBase('new');
-                            }
-                        ),
+
                         Padding(
                           padding: const EdgeInsets.all(23.0),
                           child: Row(
@@ -180,12 +214,14 @@ class _ManageItemPageState extends State<ManageItemPage> {
                                 color: Colors.green,
                                 elevation: 5.0,
                                 onPressed: () async {
+                                  print('Update menu [' + this.widget.menuType + ']');
+                                  print('Update menu [' + productBase.category + ']');
                                   CRUDModel crudModel = CRUDModel(this.widget.menuType);
-                                  productBase.price = double.parse(_priceController.value.text);
+                                  productBase.price = _price;
                                   productBase.name = _nameController.value.text;
-                                  productBase.category = _selectedCategory.cat;
+                                  productBase.listIngredients = _ingredientsController.value.text.split(",");
                                   await crudModel.updateProduct(productBase, productBase.id);
-                                  Navigator.pushNamed(context, AdminConsoleScreen.id);
+                                  Navigator.pushNamed(context, AdminConsoleMenuScreen.id);
                                 },
                               ),
                               RaisedButton(
@@ -198,13 +234,14 @@ class _ManageItemPageState extends State<ManageItemPage> {
                                     builder: (BuildContext context) {
                                       return AlertDialog(
                                         title: const Text("Conferma"),
-                                        content: Text("Eliminare  " + productBase.name + " ?"),
+                                        content: Text("Eliminare " + productBase.name + " ?"),
                                         actions: <Widget>[
                                           FlatButton(
                                               onPressed: () async {
+                                                print('Product base id : ' + productBase.id);
                                                 CRUDModel crudModel = CRUDModel(this.widget.menuType);
                                                 await crudModel.removeProduct(productBase.id);
-                                                Navigator.pushNamed(context, AdminConsoleScreen.id);
+                                                Navigator.pushNamed(context, AdminConsoleMenuScreen.id);
                                               },
                                               child: const Text("Cancella")
                                           ),
@@ -219,6 +256,17 @@ class _ManageItemPageState extends State<ManageItemPage> {
                                 },
                               ),
                             ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Card(
+                            child: Column(
+                              children: [
+                                Text('Codice prodotto'),
+                                Text('[' + productBase.id + ']'),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -303,7 +351,7 @@ class Category {
   Category(this.id, this.cat);
 
   static List<Category> getCategoryList(String menuType) {
-
+    print(menuType);
     switch(menuType){
       case sushiMenuType:
         return <Category>[
@@ -337,9 +385,11 @@ class Category {
           Category(5, categoryRoseWine),
         ];
         break;
+      default:
+        return <Category>[
+          Category(1, 'Scegli Categoria'),
+          Category(2, categoryWhiteWine),
+        ];
     }
-
-
-
   }
 }

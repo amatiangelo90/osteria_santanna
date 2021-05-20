@@ -35,16 +35,15 @@ dependencies:
   cupertino_icons: ^1.0.2
   chips_choice: ^2.0.1
   firebase_core:
-  cloud_firestore:
+  cloud_firestore: ^1.0.7
   provider:
   passcode_screen: ^2.0.0
   uuid: ^2.2.2
   expansion_card:
+  table_calendar:
 
 dev_dependencies:
   flutter_test:
-    sdk: flutter
-  integration_test:
     sdk: flutter
 
 # For information on the generic Dart part of this file, see the
@@ -70,4 +69,4 @@ flutter:
   fonts:
      - family: LoraFont
        fonts:
-         - asset: fonts/Lora-Italic-VariableFont_wght.ttf
+         - asset: fonts/NanumGothic-Regular.ttf

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 var bannerItems = ['Sushi & Susci ','Dalla Cucina ','Dolci ','Vini '];
 var bannerImages = [
   'images/sushi/sfondo_sushi.jpg',
@@ -14,6 +16,10 @@ const sushiMenuType = 'menu-sushi';
 const fromKitchenMenuType = 'menu-kitchen';
 const dessertMenuType = 'menu-dessert';
 const wineMenuType = 'menu-wine';
+const startersMenuType = 'menu-starters';
+const mainDishMenuType = 'menu-main';
+const secondMainDishMenuType = 'menu-second-main';
+const drinkMenuType = 'menu-drink';
 
 const categoryTartare = 'tartare';
 const categoryNigiri = 'nigiri';
@@ -35,3 +41,5 @@ const PICKUP_TYPE = 'Asporto';
 const DELIVERY_TYPE = 'Delivery';
 const ORDERS_TRACKER = 'orders-tracker';
 const EMPTY_STRING = '';
+
+const Color OSTERIA_GOLD = Color.fromRGBO(130, 97, 60, 1.0);

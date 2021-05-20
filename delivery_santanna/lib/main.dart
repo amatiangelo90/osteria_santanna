@@ -1,8 +1,13 @@
-import 'package:delivery_santanna/screens/home_page_screen.dart';
-import 'package:delivery_santanna/screens/manage_item_page.dart';
+import 'package:delivery_santanna/screens/dash_menu/add_new_product.dart';
+import 'package:delivery_santanna/screens/dash_menu/admin_console_screen_menu.dart';
+import 'package:delivery_santanna/screens/dash_menu/manage_menu_item_page.dart';
+import 'package:delivery_santanna/screens/menu/a_la_carte_screen.dart';
+import 'package:delivery_santanna/screens/delivery/home_page_screen.dart';
+import 'package:delivery_santanna/screens/dash_delivery//manage_item_page.dart';
+import 'package:delivery_santanna/screens/menu_choose_screen.dart';
 import 'package:delivery_santanna/screens/splash_screen_santanna.dart';
-import 'package:delivery_santanna/screens/admin_console_screen.dart';
-import 'package:delivery_santanna/screens/add_new_product.dart';
+import 'package:delivery_santanna/screens/dash_delivery//admin_console_screen.dart';
+import 'package:delivery_santanna/screens/dash_delivery//add_new_product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -35,8 +40,13 @@ class MyApp extends StatelessWidget {
                   SplashScreenSantAnna.id : (context) => SplashScreenSantAnna(),
                   OsteriaSantAnnaHomePage.id : (context) => OsteriaSantAnnaHomePage(),
                   AdminConsoleScreen.id : (context) => AdminConsoleScreen(),
+                  AdminConsoleMenuScreen.id : (context) => AdminConsoleMenuScreen(),
+                  AddNewProductCarteScreen.id : (context) => AddNewProductCarteScreen(),
                   ManageItemPage.id : (context) => ManageItemPage(),
                   AddNewProductScreen.id : (context) => AddNewProductScreen(),
+                  MenuChooseScreen.id : (context) => MenuChooseScreen(),
+                  ALaCarteMenuScreen.id : (context) => ALaCarteMenuScreen(),
+                  ManageMenuItemPage.id : (context) => ManageMenuItemPage(),
                 }
             );
           }

@@ -1,7 +1,5 @@
-
 import 'package:delivery_santanna/models/product.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class Utils{
 
@@ -11,6 +9,34 @@ class Utils{
     dataIngredients.forEach((ingredient) {
       ingredientString = ingredientString + ingredient + " | ";
     });
+    return ingredientString.substring(0, ingredientString.length -2);
+
+
+  }
+
+  static getIngredientsFromProductALaCarte(Product product){
+    String ingredientString = "";
+    List<dynamic> dataIngredients = product.listIngredients;
+
+    if(dataIngredients.length == 0){
+      return ingredientString;
+    }
+
+    dataIngredients.forEach((ingredient) {
+      if(ingredient != ''){
+        ingredientString = ingredientString + ingredient + ",";
+      }
+    });
+    if(ingredientString.length < 1){
+      return ingredientString;
+    }
+    ingredientString = ingredientString.replaceAll(' , ', ',');
+    ingredientString = ingredientString.replaceAll(' , ', ',');
+    ingredientString = ingredientString.replaceAll(' ,', ',');
+    ingredientString = ingredientString.replaceAll(' ,', ',');
+    ingredientString = ingredientString.replaceAll(', ', ',');
+    ingredientString = ingredientString.replaceAll(', ', ',');
+    ingredientString = ingredientString.replaceAll(',', ', ');
     return ingredientString.substring(0, ingredientString.length -2);
 
 
@@ -27,29 +53,20 @@ class Utils{
 
   static List<DateTime> getAvailableData(){
     return [
-    DateTime.utc(2021,4 ,2 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,4 ,3 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,4 ,9 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,4 ,10 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,4 ,16 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,4 ,17 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,4 ,23 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,4 ,24 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,4 ,30 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,5 ,1 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,5 ,2 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,5 ,7 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,5 ,8 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,5 ,9 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,5 ,14 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,5 ,15 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,5 ,16 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,5 ,21 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,5 ,22 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,5 ,23 ,0 ,0 ,0 ,0 ,0),
     DateTime.utc(2021,5 ,28 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,5 ,29 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,5 ,30 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,4 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,6 ,5 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,6 ,11 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,6 ,12 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,6 ,18 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,6 ,19 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,6 ,25 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,6 ,29 ,0 ,0 ,0 ,0 ,0),
     ];
   }
 
