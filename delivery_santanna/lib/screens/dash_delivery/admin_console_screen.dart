@@ -532,7 +532,7 @@ class _AdminConsoleScreenState extends State<AdminConsoleScreen> {
   Future<List<Widget>> createSettingsListItem(DateTime date) async{
     List<Widget> items = <Widget>[];
     print(date);
-    if(!Utils.getAvailableData().contains(date)){
+    if(Utils.getUnavailableData().contains(date)){
       items.add(
         Column(
           children: [
@@ -833,7 +833,7 @@ class _AdminConsoleScreenState extends State<AdminConsoleScreen> {
             children: <Widget>[
               DatePicker(
                 DateTime.now(),
-                activeDates: Utils.getAvailableData(),
+                inactiveDates: Utils.getUnavailableData(),
                 dateTextStyle: TextStyle(color: Colors.green, fontSize: 16.0),
                 dayTextStyle: TextStyle(color: Colors.green, fontSize: 14.0),
                 monthTextStyle: TextStyle(color: Colors.green, fontSize: 12.0),

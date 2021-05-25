@@ -1,49 +1,51 @@
 import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:delivery_santanna/dao/crud_model.dart';
 import 'package:delivery_santanna/models/calendar_manager.dart';
-import 'package:delivery_santanna/models/cart.dart';
-import 'package:delivery_santanna/models/promoclass.dart';
 import 'package:delivery_santanna/models/timeslot.dart';
+import 'package:delivery_santanna/screens/menu/a_la_carte_screen.dart';
 import 'package:delivery_santanna/services/http_service.dart';
+import 'package:delivery_santanna/utils/costants.dart';
+import 'package:delivery_santanna/utils/round_icon_botton.dart';
 import 'package:delivery_santanna/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:delivery_santanna/utils/costants.dart';
 
-class PickupScreen extends StatefulWidget {
+class TableReservationScreen extends StatefulWidget {
 
-  final List<Cart> cartItems;
-  final double total;
-  final Promo promo;
-  final String uniqueId;
+  static String id = 'reservation';
+
   final List<CalendarManagerClass> listCalendarConfiguration;
 
-  PickupScreen({@required this.cartItems, this.total, this.promo,@required this.uniqueId, @required this.listCalendarConfiguration});
+  TableReservationScreen({@required this.listCalendarConfiguration});
 
   @override
-  _PickupScreenState createState() => _PickupScreenState();
+  _TableReservationScreenState createState() => _TableReservationScreenState();
 }
 
-class _PickupScreenState extends State<PickupScreen> {
+class _TableReservationScreenState extends State<TableReservationScreen> {
 
   DateTime _selectedDateTime;
   final _datePikerController = DatePickerController();
+  int _covers = 1;
 
   List<TimeSlotPickup> _slotsPicker = TimeSlotPickup.getTimeSlots();
   List<DropdownMenuItem<TimeSlotPickup>> _dropdownTimeSlotPickup;
   TimeSlotPickup _selectedTimeSlotPikup;
 
-
   final _nameController = TextEditingController();
+  final _detailsReservationController = TextEditingController();
 
   @override
   void dispose() {
     _nameController.dispose();
+    _detailsReservationController.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
+    print(this.widget.listCalendarConfiguration);
     _dropdownTimeSlotPickup = buildDropdownSlotPickup(_slotsPicker);
     _selectedTimeSlotPikup = _dropdownTimeSlotPickup[0].value;
     super.initState();
@@ -101,23 +103,27 @@ class _PickupScreenState extends State<PickupScreen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   GestureDetector(
-                                    child: Text('Indietro', style: TextStyle(color: Colors.black, fontSize: 17.0, fontFamily: 'LoraFont'),),
-                                    onTap: () => Navigator.of(context).pop(false),
+                                    child: Text('Vai al Menù', style: TextStyle(color: Colors.black, fontSize: 17.0, fontFamily: 'LoraFont'),),
+                                    onTap: ()=> Navigator.pushNamed(context, ALaCarteMenuScreen.id),
                                   ),
                                 ],
                               ),
-                              Center(child: Text('Dettagli Asporto', style: TextStyle(color: Colors.black, fontSize: 15.0, fontFamily: 'LoraFont'),),),
-                              Padding(
-                                padding: const EdgeInsets.all(1.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('Totale € ' + this.widget.total.toString() , style: TextStyle(color: Colors.black, fontSize: 20.0, fontFamily: 'LoraFont'),),
-                                  ],
-                                ),
-                              ),
+                              Center(child: Text('Richiesta Prenotazione', style: TextStyle(color: Colors.black, fontSize: 15.0, fontFamily: 'LoraFont'),),),
 
                             ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Card(
+                            elevation: 0.0,
+                            child: Column(
+                              children: [
+                                Text('Osteria Sant\'Anna', style: TextStyle(color: Colors.black, fontSize: 15.0, fontFamily: 'LoraFont'),),
+                                Text('Viale Stazione 12', style: TextStyle(color: Colors.black, fontSize: 15.0, fontFamily: 'LoraFont'),),
+                                Text('Cisternino (BR) - Cap 72014', style: TextStyle(color: Colors.black, fontSize: 15.0, fontFamily: 'LoraFont'),),
+                              ],
+                            ),
                           ),
                         ),
                         Padding(
@@ -136,19 +142,35 @@ class _PickupScreenState extends State<PickupScreen> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: Card(
-                            elevation: 0.0,
-                            child: Column(
-                              children: [
-                                Text('Indirizzo Ritiro', style: TextStyle(color: Colors.black, fontSize: 13.0, fontFamily: 'LoraFont'),),
-                                Text('Viale Stazione 12', style: TextStyle(color: Colors.black, fontSize: 15.0, fontFamily: 'LoraFont'),),
-                                Text('Cisternino (BR) - Cap 72014', style: TextStyle(color: Colors.black, fontSize: 15.0, fontFamily: 'LoraFont'),),
-                              ],
-                            ),
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              RoundIconButton(
+                                icon: FontAwesomeIcons.minus,
+                                function: () {
+                                  setState(() {
+                                    if(_covers > 1)
+                                      _covers = _covers - 1;
+                                  });
+                                },
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text('Coperti : ' + _covers.toString(), style: TextStyle(fontSize: 20.0, fontFamily: 'LoraFont'),),
+                              ),
+                              RoundIconButton(
+                                icon: FontAwesomeIcons.plus,
+                                function: () {
+                                  setState(() {
+                                    _covers = _covers + 1;
+                                  });
+                                },
+                              ),
+                            ],
                           ),
                         ),
-
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Column(
@@ -160,7 +182,6 @@ class _PickupScreenState extends State<PickupScreen> {
                                 dateTextStyle: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),
                                 dayTextStyle: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),
                                 monthTextStyle: TextStyle(color: Colors.black, fontSize: 12.0, fontFamily: 'LoraFont'),
-
                                 selectionColor: OSTERIA_GOLD,
                                 deactivatedColor: Colors.grey,
                                 selectedTextColor: Colors.white,
@@ -168,7 +189,7 @@ class _PickupScreenState extends State<PickupScreen> {
                                 locale: 'it',
                                 controller: _datePikerController,
                                 onDateChange: (date) {
-                                  setSelectedDate(date);
+                                  _setSelectedDate(date);
                                 },
                               ),
                             ],
@@ -197,6 +218,23 @@ class _PickupScreenState extends State<PickupScreen> {
                             ),
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                          child: Center(
+                            child: Card(
+                              child: TextField(
+                                controller: _detailsReservationController,
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Note',
+                                ),
+                                maxLines: 4,
+                              ),
+                            ),
+                          ),
+                        ),
+
                         IconButton(
                             icon: Image.asset('images/whatapp_icon_c.png'),
                             iconSize: 90.0, onPressed: () async {
@@ -223,7 +261,7 @@ class _PickupScreenState extends State<PickupScreen> {
                                 builder: (BuildContext context) {
                                   return AlertDialog(
                                     title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                    content: Text('Selezionare una data di ritiro valida', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                    content: Text('Selezionare la data per la prenotazione', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
                                     actions: <Widget>[
                                       FlatButton(
                                         onPressed: () => Navigator.of(context).pop(false),
@@ -233,56 +271,14 @@ class _PickupScreenState extends State<PickupScreen> {
                                   );
                                 },
                               );
-                            } else if(_selectedTimeSlotPikup.slot == 'Seleziona Orario Ritiro'){
+                            } else if(_selectedTimeSlotPikup.slot == 'Seleziona Orario'){
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
                                     title: const Text('', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                    content: Text('Seleziona Orario Ritiro', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                    content: Text('Seleziona Orario', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
                                     actions: <Widget>[
-                                      FlatButton(
-                                        onPressed: () => Navigator.of(context).pop(false),
-                                        child: const Text("Indietro"),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            } else if(_selectedDateTime.day == DateTime.now().day && DateTime.now().hour == 20) {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text('Attenzione', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                    content: Text('Non ci è possibile garantire la preparazione degli ordini asporto se effettuati dopo le ore 20, cercheremo di soddisfarla se è nelle nostre possibilità. Inoltri la richiesta d\'ordine e le risponderemo al più presto', style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                                    actions: <Widget>[
-                                      FlatButton(
-                                          onPressed: (){
-                                            HttpService.sendMessage(numberSantAnna,
-                                                buildMessageFromCartPickUp(
-                                                    this.widget.cartItems,
-                                                    _nameController.value.text,
-                                                    this.widget.total.toString(),
-                                                    getCurrentDateTime(),
-                                                    _selectedTimeSlotPikup.slot,
-                                                    _selectedDateTime,
-                                                    this.widget.promo),
-                                                _nameController.value.text,
-                                                this.widget.total.toString(),
-                                                getCurrentDateTime(),
-                                                this.widget.cartItems,
-                                                this.widget.uniqueId,
-                                                PICKUP_TYPE,
-                                                Utils.getWeekDay(_selectedDateTime.weekday) +" ${_selectedDateTime.day} " + Utils.getMonthDay(_selectedDateTime.month),
-                                                _selectedTimeSlotPikup.slot,
-                                                EMPTY_STRING,
-                                                EMPTY_STRING
-                                            );
-                                            Navigator.of(context).pop(true);
-                                          },
-                                          child: const Text("Procedi")
-                                      ),
                                       FlatButton(
                                         onPressed: () => Navigator.of(context).pop(false),
                                         child: const Text("Indietro"),
@@ -292,22 +288,20 @@ class _PickupScreenState extends State<PickupScreen> {
                                 },
                               );
                             } else {
-                              HttpService.sendMessage(
-                                  numberSantAnna,
-                                  buildMessageFromCartPickUp(
-                                      this.widget.cartItems,
+                              HttpService.sendMessage(numberSantAnna,
+                                  buildMessageReservation(
                                       _nameController.value.text,
-                                      this.widget.total.toString(),
                                       getCurrentDateTime(),
                                       _selectedTimeSlotPikup.slot,
                                       _selectedDateTime,
-                                      this.widget.promo),
+                                      _covers.toString(),
+                                      _detailsReservationController.value.text),
                                   _nameController.value.text,
-                                  this.widget.total.toString(),
+                                  '0',
                                   getCurrentDateTime(),
-                                  this.widget.cartItems,
-                                  this.widget.uniqueId,
-                                  PICKUP_TYPE,
+                                  null,
+                                  '',
+                                  '',
                                   Utils.getWeekDay(_selectedDateTime.weekday) +" ${_selectedDateTime.day} " + Utils.getMonthDay(_selectedDateTime.month),
                                   _selectedTimeSlotPikup.slot,
                                   EMPTY_STRING,
@@ -336,56 +330,30 @@ class _PickupScreenState extends State<PickupScreen> {
   }
 
 
-  String buildMessageFromCartPickUp(
-      List<Cart> cartItems,
+  String buildMessageReservation(
       String name,
-      String total,
       String date,
       String slot,
       DateTime selectedDateTime,
-      Promo promo) {
+      String coperti,
+      String detailsReservation
+      ) {
 
-    String itemList = '';
 
-    cartItems.forEach((element) {
-      itemList = itemList + "%0a" + element.numberOfItem.toString() + " x " + element.product.name;
-      if(element.changes.length != 0){
-        itemList = itemList + "%0a  " + element.changes.toString();
-      }
-    });
+    String message =
+        "RICHIESTA PRENOTAZIONE%0a" +
+            "%0aOsteria Sant'Anna%0a"+
+            "%0aNome: $name%0a" +
+            "%0aIndirizzo: Viale Stazione 12" +
+            "%0aCittà: Cisternino(BR) (72014)" +
+            "%0a" +
+            "%0aData Prenotazione: " + Utils.getWeekDay(selectedDateTime.weekday) +" ${selectedDateTime.day} " + Utils.getMonthDay(selectedDateTime.month) +
 
-    String message;
-    if(promo.isPromoApplied){
-      message =
-          "ORDINE ASPORTO%0a" +
-              "%0aOsteria Sant'Anna%0a"+
-              "%0aNome: $name" +
-              "%0aIndirizzo Ritiro: Viale Stazione 12" +
-              "%0aCittà: Cisternino (72014)" +
-              "%0aProvincia: BR" +
-              "%0aData Ritiro: " + Utils.getWeekDay(selectedDateTime.weekday) +" ${selectedDateTime.day} " + Utils.getMonthDay(selectedDateTime.month) +
-              "%0aOre Ritiro: $slot " +
-              "%0a%0a-------------------------------------------------%0a" +
-              itemList + "%0a"
+            "%0aOre: $slot " +
+            "%0aCoperti : $coperti"
+                "%0a%0aNote : $detailsReservation"
+    ;
 
-              "%0a%0aCodice promo applicato [" + this.widget.promo.code + "]" +
-              /*"%0aSconto Applicato: " + this.widget.promo.discount.toString() + " " +*/
-              "%0a"
-              + "%0aTot. " + total + " € ";
-    }else{
-      message =
-          "ORDINE ASPORTO%0a" +
-              "%0aOsteria Sant'Anna%0a"+
-              "%0aNome: $name" +
-              "%0aIndirizzo Ritiro: Viale Stazione 12" +
-              "%0aCittà: Cisternino (72014)" +
-              "%0aProvincia: BR" +
-              "%0aData Ritiro: " + Utils.getWeekDay(selectedDateTime.weekday) +" ${selectedDateTime.day} " + Utils.getMonthDay(selectedDateTime.month) +
-              "%0aOre Ritiro: $slot " +
-              "%0a%0a-------------------------------------------------%0a"
-              + itemList + "%0a"
-              + "%0aTot. " + total + " € ";
-    }
     message = message.replaceAll('&', '%26');
     return message;
 
@@ -398,7 +366,7 @@ class _PickupScreenState extends State<PickupScreen> {
     return formatter.format(now);
   }
 
-  void setSelectedDate(DateTime date) {
+  _setSelectedDate(DateTime date) {
     setState(() {
       _selectedDateTime = date;
     });

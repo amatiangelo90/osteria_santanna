@@ -12,7 +12,7 @@ import 'admin_console_screen_menu.dart';
 
 class AddNewProductCarteScreen extends StatefulWidget {
 
-  static String id = 'addproductcarte_page';
+  static String id = 'add_product';
 
   @override
   _AddNewProductCarteScreenState createState() => _AddNewProductCarteScreenState();
@@ -24,6 +24,7 @@ class _AddNewProductCarteScreenState extends State<AddNewProductCarteScreen> {
   double _price;
   TextEditingController _nameController;
   TextEditingController _ingredientsController;
+  TextEditingController _cantinaController;
 
   Category _selectedCategory;
   List<Category> _categoryPicker;
@@ -36,14 +37,14 @@ class _AddNewProductCarteScreenState extends State<AddNewProductCarteScreen> {
     productBase = Product('', '', 'images/sushi/default_sushi.jpg', [""], [""], 0.0, 0, ["-"], '', 'true');
     _nameController = TextEditingController(text: productBase.name);
     _ingredientsController = TextEditingController(text: Utils.getIngredientsFromProduct(productBase));
+    _cantinaController = TextEditingController(text: '');
     _price = 0.0;
     _categoryPicker = Category.getCategoryList();
     _dropdownCategory = buildDropdownSlotPickup(_categoryPicker);
     _selectedCategory = _dropdownCategory[0].value;
-
   }
 
-  onChangeDropTimeSlotPickup(Category currentCategory) {
+  onChangeCategory(Category currentCategory) {
     setState(() {
       _selectedCategory = currentCategory;
     });
@@ -55,7 +56,7 @@ class _AddNewProductCarteScreenState extends State<AddNewProductCarteScreen> {
       items.add(
         DropdownMenuItem(
           value: category,
-          child: Center(child: Text(category.menuType, style: TextStyle(color: Colors.black, fontSize: 16.0,),)),
+          child: Center(child: Text(category.nameItalian, style: TextStyle(color: Colors.black, fontSize: 16.0,),)),
         ),
       );
     }
@@ -69,7 +70,7 @@ class _AddNewProductCarteScreenState extends State<AddNewProductCarteScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Aggiungi Nuovo Piatto',style: TextStyle(color: Colors.white, fontSize: 20.0,)),
+          title: Text('Aggiungi Nuovo Prodotto',style: TextStyle(color: Colors.white, fontSize: 20.0,)),
           backgroundColor: Colors.black,
         ),
         body: Container(
@@ -97,7 +98,7 @@ class _AddNewProductCarteScreenState extends State<AddNewProductCarteScreen> {
                                       isExpanded: true,
                                       value: _selectedCategory,
                                       items: _dropdownCategory,
-                                      onChanged: onChangeDropTimeSlotPickup,
+                                      onChanged: onChangeCategory,
                                     ),
                                   ),
                                 ],
@@ -129,7 +130,7 @@ class _AddNewProductCarteScreenState extends State<AddNewProductCarteScreen> {
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(),
-                                  labelText: 'Ingredienti',
+                                  labelText: _selectedCategory.menuType == wineMenuType ? 'Uvaggio' :'Ingredienti',
                                 ),
                                 maxLines: 4,
                               ),
@@ -137,6 +138,21 @@ class _AddNewProductCarteScreenState extends State<AddNewProductCarteScreen> {
                           ),
                         ),
                         Text('*Ricorda di dividere la lista ingredienti con la virgola (,)', style: TextStyle(fontSize: 10),),
+                        _selectedCategory.menuType == wineMenuType ? Padding(
+                          padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                          child: Center(
+                            child: Card(
+                              child: TextField(
+                                controller: _cantinaController,
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Cantina',
+                                ),
+                              ),
+                            ),
+                          ),
+                        ) : SizedBox(height: 0,),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Row(
@@ -199,7 +215,7 @@ class _AddNewProductCarteScreenState extends State<AddNewProductCarteScreen> {
                                     icon: FontAwesomeIcons.plus,
                                     function: () {
                                       setState(() {
-                                        if(_price < 200)
+                                        if(_price < 1000)
                                           _price = _price + 5;
                                       });
                                     },
@@ -210,6 +226,43 @@ class _AddNewProductCarteScreenState extends State<AddNewProductCarteScreen> {
                             ],
                           ),
                         ),
+                        _selectedCategory.menuType == wineMenuType ? ButtonBar(
+                          alignment: MainAxisAlignment.center,
+                          children: [
+                            RaisedButton(
+                                child: Text('Rosso',style: TextStyle(color: Colors.white, fontSize: 20.0,)),
+                                color: productBase.category == 'redwine' ? Colors.red : Colors.grey,
+                                elevation: 5.0,
+                                onPressed: () async {
+                                  updateProductBaseCategoryWine('redwine');
+                                }
+                            ),
+                            RaisedButton(
+                                child: Text('Rosato',style: TextStyle(color: Colors.white, fontSize: 20.0,)),
+                                color: productBase.category == 'rosewine' ? Colors.pinkAccent : Colors.grey,
+                                elevation: 5.0,
+                                onPressed: () async {
+                                  updateProductBaseCategoryWine('rosewine');
+                                }
+                            ),
+                            RaisedButton(
+                                child: Text('Bianco',style: TextStyle(color: Colors.white, fontSize: 20.0,)),
+                                color: productBase.category == 'whitewine' ? Colors.yellow : Colors.grey,
+                                elevation: 5.0,
+                                onPressed: () async {
+                                  updateProductBaseCategoryWine('whitewine');
+                                }
+                            ),
+                            RaisedButton(
+                                child: Text('Bollicine',style: TextStyle(color: Colors.white, fontSize: 20.0,)),
+                                color: productBase.category == 'bollicine' ? Colors.blue : Colors.grey,
+                                elevation: 5.0,
+                                onPressed: () async {
+                                  updateProductBaseCategoryWine('bollicine');
+                                }
+                            ),
+                          ],
+                        ) : SizedBox(height: 0,),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
@@ -242,9 +295,8 @@ class _AddNewProductCarteScreenState extends State<AddNewProductCarteScreen> {
                             ],
                           ),
                         ),
-
                         RaisedButton(
-                            child: Text('Crea Prodotto',style: TextStyle(color: Colors.white, fontSize: 20.0,)),
+                            child: Text(_selectedCategory.menuType == wineMenuType ? 'Crea Vino' : 'Crea Prodotto',style: TextStyle(color: Colors.white, fontSize: 20.0,)),
                             color: Colors.teal.shade800,
                             elevation: 5.0,
                             onPressed: () async {
@@ -257,19 +309,26 @@ class _AddNewProductCarteScreenState extends State<AddNewProductCarteScreen> {
                                   if(_nameController.value.text == ''){
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(backgroundColor: Colors.deepOrange.shade800 ,
-                                        content: Text('Nome piatto mancante')));
+                                        content: Text('Nome prodotto mancante')));
                                   }else{
-                                    print('Creazione Prodotto');
-                                    CRUDModel crudModel = CRUDModel(_selectedCategory.menuType);
-                                    productBase.name = _nameController.value.text;
-                                    productBase.price = _price;
-                                    productBase.listIngredients = _ingredientsController.value.text.split(",");
-                                    print(productBase.toJson());
-                                    await crudModel.addProduct(productBase);
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(backgroundColor: Colors.green.shade500 ,
-                                        content: Text('${_nameController.value.text} creato per la categoria ${_selectedCategory.menuType}')));
-                                    Navigator.pushNamed(context, AdminConsoleMenuScreen.id);
+                                    if(_selectedCategory.menuType == wineMenuType && productBase.category == ''){
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(backgroundColor: Colors.deepOrange.shade800 ,
+                                          content: Text('Selezionare una fra le voci rosso, bianco, rosato o bollicine')));
+                                    }else{
+                                      print('Creazione Prodotto');
+                                      CRUDModel crudModel = CRUDModel(_selectedCategory.menuType);
+                                      productBase.name = _nameController.value.text;
+                                      productBase.price = _price;
+                                      productBase.listIngredients = _ingredientsController.value.text.split(",");
+                                      productBase.changes[0] = _cantinaController.value.text;
+                                      print(productBase.toJson());
+                                      await crudModel.addProduct(productBase);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(backgroundColor: Colors.green.shade500 ,
+                                          content: Text('${_nameController.value.text} creato per la categoria ${_selectedCategory.nameItalian}')));
+                                      Navigator.pushNamed(context, AdminConsoleMenuScreen.id);
+                                    }
                                   }
 
                                 }
@@ -279,10 +338,6 @@ class _AddNewProductCarteScreenState extends State<AddNewProductCarteScreen> {
                                     .showSnackBar(SnackBar(backgroundColor: Colors.deepOrange.shade800 ,
                                     content: Text('Seleziona un tipo di menu')));
                               }
-
-
-
-
                             }
                         ),
                       ],
@@ -356,25 +411,33 @@ class _AddNewProductCarteScreenState extends State<AddNewProductCarteScreen> {
       productBase.available = state;
     });
   }
+
+  void updateProductBaseCategoryWine(String categoryWine) {
+    setState(() {
+      productBase.category = categoryWine;
+    });
+  }
 }
 
 class Category {
   int id;
   String menuType;
+  String nameItalian;
 
-  Category(this.id, this.menuType);
+  Category(this.id, this.menuType, this.nameItalian);
 
   static List<Category> getCategoryList() {
 
     return <Category>[
-      Category(1, 'Scegli Tipo Menu'),
-      Category(2, startersMenuType),
-      Category(3, mainDishMenuType),
-      Category(4, secondMainDishMenuType),
-      Category(5, sushiMenuType),
-      Category(6, dessertMenuType),
-      Category(7, wineMenuType),
-      Category(8, drinkMenuType),
+      Category(1, 'Scegli Tipo Menu', 'Scegli Tipo Menu'),
+      Category(2, startersMenuType, 'Antipasti'),
+      Category(3, mainDishMenuType,'Primi'),
+      Category(4, secondMainDishMenuType, 'Secondi'),
+      Category(5, sideDishMenuType, 'Contorni'),
+      Category(6, sushiMenuType, 'Sushi'),
+      Category(7, dessertMenuType, 'Dolci'),
+      Category(8, wineMenuType, 'Vini'),
+      Category(9, drinkMenuType, 'Bevande'),
     ];
   }
 }

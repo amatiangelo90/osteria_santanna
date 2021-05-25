@@ -1,14 +1,18 @@
 import 'dart:async';
 
 import 'package:delivery_santanna/dao/crud_model.dart';
+import 'package:delivery_santanna/models/calendar_manager.dart';
 import 'package:delivery_santanna/models/cart.dart';
 import 'package:delivery_santanna/models/product.dart';
 import 'package:delivery_santanna/screens/dash_menu/admin_console_screen_menu.dart';
+import 'package:delivery_santanna/screens/delivery/home_page_screen.dart';
 import 'package:delivery_santanna/utils/costants.dart';
 import 'package:delivery_santanna/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
+import 'package:delivery_santanna/reservation/reservation.dart';
 
 class ALaCarteMenuScreen extends StatefulWidget {
   static String id = 'a_la_carte';
@@ -18,16 +22,28 @@ class ALaCarteMenuScreen extends StatefulWidget {
 }
 
 class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
+
   double width;
   double height;
   List<Product> sushiProductList = <Product>[];
   List<Product> startersMenuList = <Product>[];
   List<Product> mainDishProductList = <Product>[];
   List<Product> secondMainDishProductList = <Product>[];
+  List<Product> sideDishMenuTypeProductList = <Product>[];
   List<Product> dessertProductList = <Product>[];
-  List<Product> wineProductList = <Product>[];
   List<Product> drinkProductList = <Product>[];
   List<Cart> cartProductList = <Cart>[];
+
+  List<CalendarManagerClass> listCalendarConfiguration;
+  List<CalendarManagerClass> listCalendarConfigurationDelivery;
+  CRUDModel crudModelCalendar;
+  CRUDModel crudModelCalendarDelivery;
+
+  List<Product> wineProductList = <Product>[];
+  List<Product> wineProductDummyList = <Product>[];
+
+  final _passwordController = TextEditingController();
+  TextEditingController editingController = TextEditingController();
 
   final scaffoldState = GlobalKey<ScaffoldState>();
   String currentMenuType = sushiMenuType;
@@ -51,44 +67,50 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
         controller.jumpToPage(2);
         break;
       case 3:
-        currentMenuType = sushiMenuType;
+        currentMenuType = sideDishMenuType;
         controller.jumpToPage(3);
         break;
       case 4:
-        currentMenuType = dessertMenuType;
+        currentMenuType = sushiMenuType;
         controller.jumpToPage(4);
         break;
       case 5:
-        currentMenuType = wineMenuType;
+        currentMenuType = dessertMenuType;
         controller.jumpToPage(5);
         break;
       case 6:
-        currentMenuType = drinkMenuType;
+        currentMenuType = wineMenuType;
         controller.jumpToPage(6);
+        break;
+      case 7:
+        currentMenuType = drinkMenuType;
+        controller.jumpToPage(7);
         break;
     }
   }
 
-  ScrollController scrollViewColtroller = ScrollController();
+  ScrollController scrollViewController = ScrollController();
 
   @override
   void initState() {
-    scrollViewColtroller = ScrollController();
-    scrollViewColtroller.addListener(_scrollListener);
+    scrollViewController = ScrollController();
+    scrollViewController.addListener(_scrollListener);
+    crudModelCalendar = CRUDModel(calendarSettings);
+    crudModelCalendarDelivery = CRUDModel(calendarSettingsDelivery);
     super.initState();
   }
 
   _scrollListener() {
-    if (scrollViewColtroller.offset >=
-        scrollViewColtroller.position.maxScrollExtent &&
-        !scrollViewColtroller.position.outOfRange) {
+    if (scrollViewController.offset >=
+        scrollViewController.position.maxScrollExtent &&
+        !scrollViewController.position.outOfRange) {
       setState(() {
         _direction = true;
       });
     }
-    if (scrollViewColtroller.offset <=
-        scrollViewColtroller.position.minScrollExtent &&
-        !scrollViewColtroller.position.outOfRange) {
+    if (scrollViewController.offset <=
+        scrollViewController.position.minScrollExtent &&
+        !scrollViewController.position.outOfRange) {
       setState(() {
         _direction = false;
       });
@@ -100,16 +122,17 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
   @override
   void dispose() {
     super.dispose();
-    scrollViewColtroller.dispose();
+    _passwordController.dispose();
+    scrollViewController.dispose();
   }
 
   _moveUp() {
-    scrollViewColtroller.animateTo(scrollViewColtroller.offset - 450,
+    scrollViewController.animateTo(scrollViewController.offset - 450,
         curve: Curves.linear, duration: Duration(milliseconds: 200));
   }
 
   _moveDown() {
-    scrollViewColtroller.animateTo(scrollViewColtroller.offset + 450,
+    scrollViewController.animateTo(scrollViewController.offset + 450,
         curve: Curves.linear, duration: Duration(milliseconds: 500));
   }
 
@@ -156,13 +179,13 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
       key: scaffoldState,
       body: NotificationListener<ScrollUpdateNotification>(
         onNotification: (ScrollNotification scrollInfo) {
-          if (scrollViewColtroller.position.userScrollDirection ==
+          if (scrollViewController.position.userScrollDirection ==
               ScrollDirection.reverse) {
             setState(() {
               _direction = true;
             });
           } else {
-            if (scrollViewColtroller.position.userScrollDirection ==
+            if (scrollViewController.position.userScrollDirection ==
                 ScrollDirection.forward) {
               setState(() {
                 _direction = false;
@@ -181,11 +204,41 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
                 iconTheme: IconThemeData(color: OSTERIA_GOLD),
                 backgroundColor: Colors.black,
                 elevation: 0.0,
-                title: Text('A\' La Carte', style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
+                title: Text('À la Carte', style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
                 ),
                 centerTitle: true,
                 actions: [
-                  Image.asset('images/logo_santanna.png'),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 12, 0),
+                    child: GestureDetector(
+                      child: Icon(Icons.calendar_today,
+                        color: OSTERIA_GOLD,),
+                      onTap: () {
+                        Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => TableReservationScreen(
+                            listCalendarConfiguration: listCalendarConfiguration,
+                          ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 12, 0),
+                    child: GestureDetector(
+                      child: Icon(Icons.shopping_bag_outlined,
+                        color: OSTERIA_GOLD,
+                      size: 29,),
+                      onTap: () {
+                        Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => OsteriaSantAnnaHomePage(
+                            listCalendarConfiguration: listCalendarConfigurationDelivery,
+                          ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                   Column(
                     children: [
                       SizedBox(height: 4.0,),
@@ -195,132 +248,203 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
               ),
               drawer: Drawer(
                 elevation: 3.0,
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: <Widget>[
-                    SizedBox(height: 50.0,),
-                    DrawerHeader(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage("images/logo_santanna.png"),
-                            fit: BoxFit.cover),
-                        color: Colors.white38,
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        ListTile(
-                          title: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('Antipasti',
-                              style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
-                            ),
-                          ),
-                          onTap: () {
-                            setState(() {
-                              updateMenuType(0);
-                            });
-                            Navigator.pop(context);
-                          },
-                        ),
-                        ListTile(
-                          title: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('Primi',
-                              style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
-                            ),
-                          ),
-                          onTap: () {
-                            setState(() {
-                              updateMenuType(1);
-                            });
-                            Navigator.pop(context);
-                          },
-                        ),
-                        ListTile(
-                          title: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('Secondi',
-                              style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
-                            ),
-                          ),
-                          onTap: () {
-                            setState(() {
-                              updateMenuType(2);
-                            });
-                            Navigator.pop(context);
-                          },
-                        ),
-                        ListTile(
-                          title: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('Sushi & Susci',
-                              style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
-                            ),
-                          ),
-                          onTap: () {
-                            setState(() {
-                              updateMenuType(3);
-                            });
-                            Navigator.pop(context);
-                          },
-                        ),
-                        ListTile(
-                          title: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('Dolci',
-                              style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
-                            ),
-                          ),
-                          onTap: () {
-                            setState(() {
-                              updateMenuType(4);
-                            });
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    ),
-                    ListTile(
-                      title: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('Vini',
-                          style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
+                child: Container(
+                  color: Colors.black,
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: <Widget>[
+                      SizedBox(height: 40.0,
+                        child: Container(
+                          color: Colors.white,
+
                         ),
                       ),
-                      onTap: () {
-                        setState(() {
-                          updateMenuType(5);
-                        });
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      title: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('Bevande',
-                          style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, AdminConsoleMenuScreen.id);
+                        },
+                        child: Container(
+                          color: Colors.white,
+                          child: DrawerHeader(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage("images/logo_santanna.png"),
+                                  fit: BoxFit.cover),
+                              color: Colors.white38,
+                            ),
+                          ),
                         ),
                       ),
-                      onTap: () {
-                        setState(() {
-                          updateMenuType(6);
-                        });
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      title: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('Dashboard',
-                          style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
-                        ),
+
+                      Column(
+                        children: [
+                          ListTile(
+                            title: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.settings,
+                                    color: OSTERIA_GOLD,),
+                                  Text('  Settings',
+                                    style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            onTap: _showModalSettingsAccess,
+                          ),
+                          ListTile(
+                            title: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.calendar_today,
+                                    color: OSTERIA_GOLD,),
+                                  Text('  Prenota un tavolo',
+                                    style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.pushNamed(context, TableReservationScreen.id);
+                            },
+                          ),
+                          ListTile(
+                            title: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.shopping_bag_outlined,
+                                    color: OSTERIA_GOLD,
+                                  size: 29,),
+                                  Text('  Servizio Asporto',
+                                    style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.pushNamed(context, OsteriaSantAnnaHomePage.id);
+                            },
+                          ),
+                          SizedBox(height: 10,),
+                          ListTile(
+                            title: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Antipasti',
+                                style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
+                              ),
+                            ),
+                            onTap: () {
+                              setState(() {
+                                updateMenuType(0);
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ListTile(
+                            title: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Primi',
+                                style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
+                              ),
+                            ),
+                            onTap: () {
+                              setState(() {
+                                updateMenuType(1);
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ListTile(
+                            title: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Secondi',
+                                style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
+                              ),
+                            ),
+                            onTap: () {
+                              setState(() {
+                                updateMenuType(2);
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ListTile(
+                            title: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Contorni',
+                                style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
+                              ),
+                            ),
+                            onTap: () {
+                              setState(() {
+                                updateMenuType(3);
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ListTile(
+                            title: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Sushi & Susci',
+                                style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
+                              ),
+                            ),
+                            onTap: () {
+                              setState(() {
+                                updateMenuType(4);
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ListTile(
+                            title: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Dolci',
+                                style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
+                              ),
+                            ),
+                            onTap: () {
+                              setState(() {
+                                updateMenuType(5);
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
                       ),
-                      onTap: () {
-                        Navigator.pushNamed(context, AdminConsoleMenuScreen.id);
-                      },
-                    ),
-                  ],
+                      ListTile(
+                        title: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('Vini',
+                            style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
+                          ),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            updateMenuType(6);
+                          });
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        title: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('Bevande',
+                            style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
+                          ),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            updateMenuType(7);
+                          });
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
               body: SafeArea(
@@ -329,7 +453,7 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
                   scrollDirection: Axis.horizontal,
                   children: [
                     SingleChildScrollView(
-                      controller: scrollViewColtroller,
+                      controller: scrollViewController,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
@@ -365,7 +489,7 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
                       ),
                     ),
                     SingleChildScrollView(
-                      controller: scrollViewColtroller,
+                      controller: scrollViewController,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
@@ -401,7 +525,7 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
                       ),
                     ),
                     SingleChildScrollView(
-                      controller: scrollViewColtroller,
+                      controller: scrollViewController,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
@@ -437,7 +561,43 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
                       ),
                     ),
                     SingleChildScrollView(
-                      controller: scrollViewColtroller,
+                      controller: scrollViewController,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                              child: FutureBuilder(
+                                initialData: <Widget>[Column(
+                                  children: [
+                                    Center(child: CircularProgressIndicator()),
+                                    SizedBox(),
+                                    Center(child: Text('Caricamento menù..',
+                                      style: TextStyle(fontSize: 16.0, color: Colors.black, fontFamily: 'LoraFont'),
+                                    ),),
+                                  ],
+                                )],
+                                future: createList(sideDishMenuType),
+                                builder: (context, snapshot){
+                                  if(snapshot.hasData){
+                                    return Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: ListView(
+                                        primary: false,
+                                        shrinkWrap: true,
+                                        children: snapshot.data,
+                                      ),
+                                    );
+                                  }else{
+                                    return CircularProgressIndicator();
+                                  }
+                                },
+                              )
+                          ),
+                        ],
+                      ),
+                    ),
+                    SingleChildScrollView(
+                      controller: scrollViewController,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
@@ -473,7 +633,7 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
                       ),
                     ),
                     SingleChildScrollView(
-                      controller: scrollViewColtroller,
+                      controller: scrollViewController,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
@@ -509,7 +669,7 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
                       ),
                     ),
                     SingleChildScrollView(
-                      controller: scrollViewColtroller,
+                      controller: scrollViewController,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
@@ -545,7 +705,7 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
                       ),
                     ),
                     SingleChildScrollView(
-                      controller: scrollViewColtroller,
+                      controller: scrollViewController,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
@@ -593,6 +753,13 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
 
   Future<List<Widget>> createList(String currentMenuType) async{
 
+    if(listCalendarConfiguration == null || listCalendarConfiguration.length == 0){
+      listCalendarConfiguration = await crudModelCalendar.fetchCalendarConfiguration();
+    }
+    if(listCalendarConfigurationDelivery == null || listCalendarConfigurationDelivery.length == 0){
+      listCalendarConfigurationDelivery = await crudModelCalendarDelivery.fetchCalendarConfiguration();
+    }
+
     String menuType = '';
     int previousMenu;
     int nextMenu;
@@ -612,24 +779,29 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
         previousMenu = 1;
         nextMenu = 3;
         break;
-      case sushiMenuType:
-        menuType = 'Sushi & Susci';
+      case sideDishMenuType:
+        menuType = 'Contorni';
         previousMenu = 2;
         nextMenu = 4;
         break;
-      case dessertMenuType:
-        menuType = 'Dolci';
+      case sushiMenuType:
+        menuType = 'Sushi & Susci';
         previousMenu = 3;
         nextMenu = 5;
         break;
-      case wineMenuType:
-        menuType = 'Vini';
+      case dessertMenuType:
+        menuType = 'Dolci';
         previousMenu = 4;
         nextMenu = 6;
         break;
+      case wineMenuType:
+        menuType = 'Vini';
+        previousMenu = 5;
+        nextMenu = 7;
+        break;
       case drinkMenuType:
         menuType = 'Bevande';
-        previousMenu = 5;
+        previousMenu = 6;
         break;
     }
 
@@ -677,7 +849,7 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Divider(
               color: OSTERIA_GOLD,
-              height: 2,
+              height: 3,
               indent: 12,
             ),
           ),
@@ -686,15 +858,41 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
     ];
 
     List<Product> productList = await getCurrentProductList(currentMenuType);
-
-    print(productList);
-
-    productList.forEach((product) {
-      if(listTypeWine.contains(product.category)){
+    if(currentMenuType == wineMenuType){
+      items.add(
+        Container(
+          height: height * 1/10,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              child: TextField(
+                onChanged: (value) {
+                  filterSearchResults(value);
+                },
+                controller: editingController,
+                decoration: InputDecoration(
+                    labelText: "Ricerca per Nome, Uvaggio o Cantina",
+                    hintText: "Search",
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)))
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    reorderWineListByType(productList, currentMenuType).forEach((product) {
+      if(listTypeWine.contains(product.category) || currentMenuType == wineMenuType){
         items.add(
           Padding(
             padding: EdgeInsets.all(6.0),
             child: Container(
+              /*decoration: BoxDecoration(
+                  border: Border.all(color: product.available == 'false' ? Colors.red : Colors.white12 ),
+                  borderRadius: BorderRadius.circular(10),
+              ),*/
               child: ClipRect(
                 child: Banner(
                   message: getNameByType(product.category),
@@ -703,10 +901,6 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
-                      ClipRRect(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0)),
-                        child: Image.asset(product.image, width: 90.0, height: 90.0, fit: BoxFit.contain,),
-                      ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width - 200,
                         child: Padding(
@@ -722,9 +916,27 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
                                 padding: const EdgeInsets.only(left: 5.0),
                                 child: Text(Utils.getIngredientsFromProduct(product), overflow: TextOverflow.fade , style: TextStyle(fontSize: 11.0, color: Colors.black, fontFamily: 'LoraFont'),),
                               ),
+                              product.changes != null ? Padding(
+                                padding: const EdgeInsets.only(left: 5.0),
+                                child: Text('Cantina: ' + product.changes[0], overflow: TextOverflow.fade , style: TextStyle(fontSize: 11.0, color: Colors.black, fontFamily: 'LoraFont'),),
+                              ) : SizedBox(width: 0,),
+                              SizedBox(height: 13,),
                               Padding(
                                 padding: const EdgeInsets.only(left: 5.0),
-                                child: Text('€ ' + product.price.toString(), overflow: TextOverflow.ellipsis , style: TextStyle(color: OSTERIA_GOLD, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                                child: Row(
+                                  children: [
+                                    Text('€ ' + product.price.toString(), overflow: TextOverflow.ellipsis , style: TextStyle(color: OSTERIA_GOLD, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                                    product.available == 'false' ?
+                                    Row(
+                                      children: [
+                                        SizedBox(width: 50,),
+                                        Text('ESAURITO', overflow: TextOverflow.ellipsis ,
+                                          style: TextStyle(color: Colors.redAccent, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                                      ],
+                                    ) :
+                                        SizedBox(height: 0,)
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -773,9 +985,6 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
         if(sushiProductList.isEmpty){
           CRUDModel crudModel = CRUDModel(currentMenuType);
           sushiProductList = await crudModel.fetchProducts();
-          print('##############');
-          print(sushiProductList);
-          print('##############');
           return sushiProductList;
         }else{
           return sushiProductList;
@@ -812,6 +1021,16 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
           return secondMainDishProductList ;
         }
         break;
+
+      case sideDishMenuType:
+        if(sideDishMenuTypeProductList.isEmpty){
+          CRUDModel crudModel = CRUDModel(currentMenuType);
+          sideDishMenuTypeProductList = await crudModel.fetchProducts();
+          return sideDishMenuTypeProductList ;
+        }else{
+          return sideDishMenuTypeProductList ;
+        }
+        break;
       case dessertMenuType:
 
         if(dessertProductList.isEmpty){
@@ -827,9 +1046,11 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
         if(wineProductList.isEmpty){
           CRUDModel crudModel = CRUDModel(currentMenuType);
           wineProductList = await crudModel.fetchProducts();
-          return wineProductList;
+          wineProductDummyList = wineProductList;
+          return wineProductDummyList;
         }else{
-          return wineProductList;
+          wineProductDummyList = wineProductList;
+          return wineProductDummyList;
         }
         break;
       case drinkMenuType:
@@ -904,6 +1125,142 @@ class _ALaCarteMenuScreenState extends State<ALaCarteMenuScreen> {
       ],
     );
   }
+
+
+  void filterSearchResults(String query) {
+    List<Product> wineDummyProductList = List<Product>();
+    wineDummyProductList.addAll(wineProductList);
+
+    if(query.isNotEmpty) {
+      List<Product> dummyListData = List<Product>();
+      wineDummyProductList.forEach((item) {
+
+        if(item.name.toLowerCase().contains(query.toLowerCase()) ||
+            item.changes[0].toString().toLowerCase().contains(query.toLowerCase()) ||
+            listIngredientsContainsQuery(item, query)) {
+          dummyListData.add(item);
+        }
+      });
+      setState(() {
+        wineProductDummyList.clear();
+        wineProductDummyList.addAll(dummyListData);
+      });
+      return;
+    } else {
+      setState(() {
+        wineProductDummyList.clear();
+        wineProductDummyList.addAll(wineProductList);
+      });
+    }
+  }
+
+  bool listIngredientsContainsQuery(Product item, String query) {
+    bool contains = false;
+    item.listIngredients.forEach((element) {
+      if(element.toString().toLowerCase().contains(query.toLowerCase())){
+        contains = true;
+      }
+    });
+    return contains;
+  }
+
+  List<Product> reorderWineListByType(List<Product> productList, String currentMenuType) {
+    if(currentMenuType != wineMenuType){
+      return productList;
+    }
+    List<Product> reorderedBollicineList = <Product>[];
+    List<Product> reorderedRedList = <Product>[];
+    List<Product> reorderedRoseList = <Product>[];
+    List<Product> reorderedWitheList = <Product>[];
+    List<Product> fullList = <Product>[];
+
+    productList.forEach((element) {
+      if(element.category.toLowerCase() == 'Bollicine'.toLowerCase()){
+        reorderedBollicineList.add(element);
+      }
+      if(element.category.toLowerCase() == 'redwine'.toLowerCase()){
+        reorderedRedList.add(element);
+      }
+      if(element.category.toLowerCase() == 'rosewine'.toLowerCase()){
+        reorderedRoseList.add(element);
+      }
+      if(element.category.toLowerCase() == 'whitewine'.toLowerCase()){
+        reorderedWitheList.add(element);
+      }
+    });
+    fullList.addAll(reorderedWitheList);
+    fullList.addAll(reorderedRoseList);
+    fullList.addAll(reorderedRedList);
+    fullList.addAll(reorderedBollicineList);
+
+    return fullList;
+  }
+
+  _showModalSettingsAccess() {
+    showDialog(
+        context: context,
+        builder: (_) => new AlertDialog(
+          title: new Text("Settings"),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+              child: Center(
+                child: Card(
+                  color: Colors.white,
+                  child: TextField(
+                    style: TextStyle(color: Colors.black),
+                    keyboardType: TextInputType.number,
+                    cursorColor: Colors.black,
+                    controller: _passwordController,
+                    textAlign: TextAlign.center,
+                    decoration: InputDecoration(
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.black, width: 0.0),
+                      ),
+                      labelStyle: TextStyle(color: Colors.black),
+                      fillColor: Colors.black,
+                      labelText: 'Password',
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                FlatButton(
+                  child: Text('Chiudi'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                FlatButton(
+                    child: Text('Accedi'),
+                    onPressed: (){
+
+                      if(_passwordController.value.text == CURRENT_PASSWORD){
+                        setState(() {
+                          _passwordController.clear();
+                        });
+                        Navigator.of(context).pop();
+                        Navigator.pushNamed(context, AdminConsoleMenuScreen.id);
+                      }else{
+                        setState(() {
+                          _passwordController.clear();
+                        });
+
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(backgroundColor: Colors.red.shade500 ,
+                            content: Text('Password errata')));
+                      }
+                    }
+                ),
+              ],
+            )
+          ],
+        )
+    );
+  }
+
 }
 
 

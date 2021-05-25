@@ -103,7 +103,7 @@ class _ModalAddItemState extends State<ModalAddItem> {
                             child: Text(
                               "Aggiungi al Carrello", overflow: TextOverflow.ellipsis , style: TextStyle(color: Colors.white, fontSize: 20.0, fontFamily: 'LoraFont'),
                             ),
-                            color: Colors.teal.shade800,
+                            color: OSTERIA_GOLD,
                             onPressed: (){
                               if(_counter != 0){
                                 cartProductList.add(Cart(

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:delivery_santanna/dao/crud_model.dart';
 import 'package:delivery_santanna/models/cart.dart';
 import 'package:delivery_santanna/models/product.dart';
+import 'package:delivery_santanna/screens/menu/a_la_carte_screen.dart';
 import 'package:delivery_santanna/utils/costants.dart';
 import 'package:delivery_santanna/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,7 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'add_new_product.dart';
+import 'calendar_dash.dart';
+import 'calendar_dash_delivery.dart';
 import 'manage_menu_item_page.dart';
+import 'manage_wine_item.dart';
 
 class AdminConsoleMenuScreen extends StatefulWidget {
   static String id = 'dash_menu';
@@ -26,6 +30,7 @@ class _AdminConsoleMenuScreenState extends State<AdminConsoleMenuScreen> {
   List<Product> startersMenuList = <Product>[];
   List<Product> mainDishProductList = <Product>[];
   List<Product> secondMainDishProductList = <Product>[];
+  List<Product> sideDishProductList = <Product>[];
   List<Product> dessertProductList = <Product>[];
   List<Product> wineProductList = <Product>[];
   List<Product> drinkProductList = <Product>[];
@@ -53,20 +58,24 @@ class _AdminConsoleMenuScreenState extends State<AdminConsoleMenuScreen> {
         controller.jumpToPage(2);
         break;
       case 3:
-        currentMenuType = sushiMenuType;
+        currentMenuType = sideDishMenuType;
         controller.jumpToPage(3);
         break;
       case 4:
-        currentMenuType = dessertMenuType;
+        currentMenuType = sushiMenuType;
         controller.jumpToPage(4);
         break;
       case 5:
-        currentMenuType = wineMenuType;
+        currentMenuType = dessertMenuType;
         controller.jumpToPage(5);
         break;
       case 6:
-        currentMenuType = drinkMenuType;
+        currentMenuType = wineMenuType;
         controller.jumpToPage(6);
+        break;
+      case 7:
+        currentMenuType = drinkMenuType;
+        controller.jumpToPage(7);
         break;
     }
   }
@@ -187,6 +196,28 @@ class _AdminConsoleMenuScreenState extends State<AdminConsoleMenuScreen> {
                 centerTitle: true,
                 actions: [
                   Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                    child: IconButton(
+                      icon: const Icon(Icons.calendar_today, size: 37,),
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => CalendarManager())
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                    child: IconButton(
+                      icon: const Icon(Icons.delivery_dining, size: 37,),
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => CalendarManagerDelivery())
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                     child: IconButton(
                       icon: const Icon(Icons.add_circle, size: 40,),
@@ -223,8 +254,23 @@ class _AdminConsoleMenuScreenState extends State<AdminConsoleMenuScreen> {
                         ListTile(
                           title: Padding(
                             padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Icon(Icons.home,
+                                  color: OSTERIA_GOLD,),
+                                Text('  Home',
+                                  style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          onTap: () =>  Navigator.pushNamed(context, ALaCarteMenuScreen.id),
+                        ),
+                        ListTile(
+                          title: Padding(
+                            padding: const EdgeInsets.all(8.0),
                             child: Text('Antipasti',
-                              style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
+                              style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
                             ),
                           ),
                           onTap: () {
@@ -238,7 +284,7 @@ class _AdminConsoleMenuScreenState extends State<AdminConsoleMenuScreen> {
                           title: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text('Primi',
-                              style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
+                              style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
                             ),
                           ),
                           onTap: () {
@@ -252,7 +298,7 @@ class _AdminConsoleMenuScreenState extends State<AdminConsoleMenuScreen> {
                           title: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text('Secondi',
-                              style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
+                              style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
                             ),
                           ),
                           onTap: () {
@@ -265,8 +311,8 @@ class _AdminConsoleMenuScreenState extends State<AdminConsoleMenuScreen> {
                         ListTile(
                           title: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text('Sushi & Susci',
-                              style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
+                            child: Text('Contorni',
+                              style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
                             ),
                           ),
                           onTap: () {
@@ -279,13 +325,27 @@ class _AdminConsoleMenuScreenState extends State<AdminConsoleMenuScreen> {
                         ListTile(
                           title: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text('Dolci',
-                              style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
+                            child: Text('Sushi & Susci',
+                              style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
                             ),
                           ),
                           onTap: () {
                             setState(() {
                               updateMenuType(4);
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),
+                        ListTile(
+                          title: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('Dolci',
+                              style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
+                            ),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              updateMenuType(5);
                             });
                             Navigator.pop(context);
                           },
@@ -296,12 +356,12 @@ class _AdminConsoleMenuScreenState extends State<AdminConsoleMenuScreen> {
                       title: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text('Vini',
-                          style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
+                          style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
                         ),
                       ),
                       onTap: () {
                         setState(() {
-                          updateMenuType(5);
+                          updateMenuType(6);
                         });
                         Navigator.pop(context);
                       },
@@ -310,12 +370,12 @@ class _AdminConsoleMenuScreenState extends State<AdminConsoleMenuScreen> {
                       title: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text('Bevande',
-                          style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
+                          style: TextStyle(fontSize: 19.0, color: OSTERIA_GOLD, fontFamily: 'LoraFont'),
                         ),
                       ),
                       onTap: () {
                         setState(() {
-                          updateMenuType(6);
+                          updateMenuType(7);
                         });
                         Navigator.pop(context);
                       },
@@ -417,6 +477,42 @@ class _AdminConsoleMenuScreenState extends State<AdminConsoleMenuScreen> {
                                   ],
                                 )],
                                 future: createList(secondMainDishMenuType),
+                                builder: (context, snapshot){
+                                  if(snapshot.hasData){
+                                    return Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: ListView(
+                                        primary: false,
+                                        shrinkWrap: true,
+                                        children: snapshot.data,
+                                      ),
+                                    );
+                                  }else{
+                                    return CircularProgressIndicator();
+                                  }
+                                },
+                              )
+                          ),
+                        ],
+                      ),
+                    ),
+                    SingleChildScrollView(
+                      controller: scrollViewColtroller,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                              child: FutureBuilder(
+                                initialData: <Widget>[Column(
+                                  children: [
+                                    Center(child: CircularProgressIndicator()),
+                                    SizedBox(),
+                                    Center(child: Text('Caricamento menù..',
+                                      style: TextStyle(fontSize: 16.0, color: Colors.black, fontFamily: 'LoraFont'),
+                                    ),),
+                                  ],
+                                )],
+                                future: createList(sideDishMenuType),
                                 builder: (context, snapshot){
                                   if(snapshot.hasData){
                                     return Padding(
@@ -612,24 +708,29 @@ class _AdminConsoleMenuScreenState extends State<AdminConsoleMenuScreen> {
         previousMenu = 1;
         nextMenu = 3;
         break;
-      case sushiMenuType:
-        menuType = 'Sushi & Susci';
+      case sideDishMenuType:
+        menuType = 'Contorni';
         previousMenu = 2;
         nextMenu = 4;
         break;
-      case dessertMenuType:
-        menuType = 'Dolci';
+      case sushiMenuType:
+        menuType = 'Sushi & Susci';
         previousMenu = 3;
         nextMenu = 5;
         break;
-      case wineMenuType:
-        menuType = 'Vini';
+      case dessertMenuType:
+        menuType = 'Dolci';
         previousMenu = 4;
         nextMenu = 6;
         break;
+      case wineMenuType:
+        menuType = 'Vini';
+        previousMenu = 5;
+        nextMenu = 7;
+        break;
       case drinkMenuType:
         menuType = 'Bevande';
-        previousMenu = 5;
+        previousMenu = 6;
         break;
     }
 
@@ -690,46 +791,59 @@ class _AdminConsoleMenuScreenState extends State<AdminConsoleMenuScreen> {
     productList.forEach((product) {
       if(listTypeWine.contains(product.category)){
         items.add(
-          Padding(
-            padding: EdgeInsets.all(6.0),
-            child: Container(
-              child: ClipRect(
-                child: Banner(
-                  message: getNameByType(product.category),
-                  color: getColorByType(product.category),
-                  location: BannerLocation.topEnd,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      ClipRRect(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0)),
-                        child: Image.asset(product.image, width: 90.0, height: 90.0, fit: BoxFit.contain,),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width - 200,
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5.0, bottom: 5.0),
-                                child: Text(product.name, style: TextStyle(color: OSTERIA_GOLD, fontSize: 16.0, fontFamily: 'LoraFont'),),
-                              ),
-                              Utils.getIngredientsFromProductALaCarte(product) == '' ? SizedBox(height: 0,) : Padding(
-                                padding: const EdgeInsets.fromLTRB(15, 2, 15, 5),
-                                child: Text(Utils.getIngredientsFromProductALaCarte(product), overflow: TextOverflow.fade , style: TextStyle(fontSize: 13.0, fontFamily: 'LoraFont'),),
-                              ),
-                              Text('',),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5.0),
-                                child: Text('€ ' + product.price.toString(), overflow: TextOverflow.ellipsis , style: TextStyle(color: OSTERIA_GOLD, fontSize: 14.0, fontFamily: 'LoraFont'),),
-                              ),
-                            ],
+          InkWell(
+            onTap: () => Navigator.push(context,
+              MaterialPageRoute(builder: (context) => ManageMenuWinePage(product: product, menuType: currentMenuType,),),),
+            child: Padding(
+              padding: EdgeInsets.all(6.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: product.available == 'false' ? Colors.redAccent : Colors.black),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ClipRect(
+                  child: Banner(
+                    message: getNameByType(product.category),
+                    color: getColorByType(product.category),
+                    location: BannerLocation.topEnd,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width - 200,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                product.available == 'false' ? Padding(
+                                  padding: const EdgeInsets.fromLTRB(100,0,10,0),
+                                  child: Text('Esaurito', style: TextStyle(fontSize: 19, color: Colors.red),),
+                                ) : SizedBox(width: 0,),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5.0, bottom: 5.0),
+                                  child: Text(product.name, style: TextStyle(color: OSTERIA_GOLD, fontSize: 16.0, fontFamily: 'LoraFont'),),
+                                ),
+                                Utils.getIngredientsFromProductALaCarte(product) == '' ? SizedBox(height: 0,) : Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(Utils.getIngredientsFromProductALaCarte(product), overflow: TextOverflow.fade , style: TextStyle(fontSize: 13.0, fontFamily: 'LoraFont'),),
+                                ),
+                                product.changes != null ? Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Text('Cantina: ' + product.changes[0], overflow: TextOverflow.fade , style: TextStyle(fontSize: 13.0, color: Colors.black, fontFamily: 'LoraFont'),),
+                                ) : SizedBox(width: 0,),
+
+                                Text('',),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5.0),
+                                  child: Text('€ ' + product.price.toString(), overflow: TextOverflow.ellipsis , style: TextStyle(color: OSTERIA_GOLD, fontSize: 14.0, fontFamily: 'LoraFont'),),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -772,9 +886,6 @@ class _AdminConsoleMenuScreenState extends State<AdminConsoleMenuScreen> {
         if(sushiProductList.isEmpty){
           CRUDModel crudModel = CRUDModel(currentMenuType);
           sushiProductList = await crudModel.fetchProducts();
-          print('##############');
-          print(sushiProductList);
-          print('##############');
           return sushiProductList;
         }else{
           return sushiProductList;
@@ -811,6 +922,15 @@ class _AdminConsoleMenuScreenState extends State<AdminConsoleMenuScreen> {
           return secondMainDishProductList ;
         }
         break;
+      case sideDishMenuType:
+        if(sideDishProductList.isEmpty){
+          CRUDModel crudModel = CRUDModel(currentMenuType);
+          sideDishProductList = await crudModel.fetchProducts();
+          return sideDishProductList ;
+        }else{
+          return sideDishProductList ;
+        }
+        break;
       case dessertMenuType:
 
         if(dessertProductList.isEmpty){
@@ -826,9 +946,9 @@ class _AdminConsoleMenuScreenState extends State<AdminConsoleMenuScreen> {
         if(wineProductList.isEmpty){
           CRUDModel crudModel = CRUDModel(currentMenuType);
           wineProductList = await crudModel.fetchProducts();
-          return wineProductList;
+          return reorderWineListByType(wineProductList);
         }else{
-          return wineProductList;
+          return reorderWineListByType(wineProductList);
         }
         break;
       case drinkMenuType:
@@ -906,6 +1026,35 @@ class _AdminConsoleMenuScreenState extends State<AdminConsoleMenuScreen> {
         ],
       ),
     );
+  }
+
+  List<Product> reorderWineListByType(List<Product> wineProductList) {
+    List<Product> reorderedBollicineList = <Product>[];
+    List<Product> reorderedRedList = <Product>[];
+    List<Product> reorderedRoseList = <Product>[];
+    List<Product> reorderedWitheList = <Product>[];
+    List<Product> fullList = <Product>[];
+
+    wineProductList.forEach((element) {
+      if(element.category.toLowerCase() == 'Bollicine'.toLowerCase()){
+        reorderedBollicineList.add(element);
+      }
+      if(element.category.toLowerCase() == 'redwine'.toLowerCase()){
+        reorderedRedList.add(element);
+      }
+      if(element.category.toLowerCase() == 'rosewine'.toLowerCase()){
+        reorderedRoseList.add(element);
+      }
+      if(element.category.toLowerCase() == 'whitewine'.toLowerCase()){
+        reorderedWitheList.add(element);
+      }
+    });
+    fullList.addAll(reorderedWitheList);
+    fullList.addAll(reorderedRoseList);
+    fullList.addAll(reorderedRedList);
+    fullList.addAll(reorderedBollicineList);
+
+    return fullList;
   }
 }
 

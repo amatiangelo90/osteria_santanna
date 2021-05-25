@@ -1,3 +1,4 @@
+import 'package:delivery_santanna/models/calendar_manager.dart';
 import 'package:delivery_santanna/models/product.dart';
 import 'package:flutter/material.dart';
 
@@ -51,23 +52,37 @@ class Utils{
     return allergensString.substring(0, allergensString.length -2);
   }
 
-  static List<DateTime> getAvailableData(){
+  static List<DateTime> getUnavailableData(){
     return [
-    DateTime.utc(2021,5 ,7 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,5 ,8 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,5 ,15 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,5 ,21 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,5 ,22 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,5 ,28 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,5 ,4 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,6 ,5 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,6 ,11 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,6 ,12 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,6 ,18 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,6 ,19 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,6 ,25 ,0 ,0 ,0 ,0 ,0),
-    DateTime.utc(2021,6 ,29 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,3 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,10 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,17 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,24 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,5 ,31 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,6 ,7 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,6 ,14 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,6 ,21 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,6 ,28 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,7 ,5 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,7 ,12 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,7 ,19 ,0 ,0 ,0 ,0 ,0),
+    DateTime.utc(2021,7 ,26 ,0 ,0 ,0 ,0 ,0),
+
     ];
+  }
+
+  static List<DateTime> buildListDateActiveFromCalendarConfiguration(List<CalendarManagerClass> listCalendarConfiguration) {
+    List<DateTime> dateTimeActiveList = <DateTime>[];
+
+    print(dateTimeActiveList.length);
+    listCalendarConfiguration.forEach((calendarItem) {
+      if(calendarItem.isOpen){
+        dateTimeActiveList.add(DateTime.fromMicrosecondsSinceEpoch(int.parse(calendarItem.date)));
+      }
+
+    });
+    dateTimeActiveList.add(DateTime.utc(2021,5 ,27 ,0 ,0 ,0 ,0 ,0),);
+    return dateTimeActiveList;
   }
 
   static String getWeekDay(int weekday) {
@@ -127,7 +142,6 @@ class Utils{
     }
     changes.forEach((elementChanges) {
       if(!changesFromModal.contains(elementChanges)){
-        print('assign false');
         output = false;
       }
     });
@@ -249,7 +263,7 @@ class Utils{
           textDirection: TextDirection.ltr,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Padding(
+            /*Padding(
               padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
               child: Row(
                 children: [
@@ -259,7 +273,7 @@ class Utils{
                     style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14.0, fontFamily: 'LoraFont'),),
                 ],
               ),
-            ),
+            ),*/
             Padding(
               padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
               child: Row(
@@ -271,7 +285,7 @@ class Utils{
                 ],
               ),
             ),
-            Padding(
+            /*Padding(
               padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
               child: Row(
                 children: [
@@ -285,8 +299,8 @@ class Utils{
                     style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14.0, fontFamily: 'LoraFont'),),
                 ],
               ),
-            ),
-            Padding(
+            ),*/
+            /*Padding(
               padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
               child: Row(
                 children: [
@@ -296,13 +310,13 @@ class Utils{
                     style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14.0, fontFamily: 'LoraFont'),),
                 ],
               ),
-            ),
-            Row(
+            ),*/
+            /*Row(
               children: [
                 Text(' (Gratis per ordini superiori a 50 €)',
                   overflow: TextOverflow.visible, style: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),),
               ],
-            ),
+            ),*/
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(''),

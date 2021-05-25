@@ -1,5 +1,7 @@
+import 'package:delivery_santanna/models/calendar_manager.dart';
 import 'package:delivery_santanna/models/cart.dart';
 import 'package:delivery_santanna/models/promoclass.dart';
+import 'package:delivery_santanna/utils/costants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -10,10 +12,12 @@ class CartScreen extends StatefulWidget {
   final List<Cart> cartItems;
   final Function function;
   final String uniqueId;
+  final List<CalendarManagerClass> listCalendarConfiguration;
 
   CartScreen({@required this.cartItems,
     @required this.function,
-    @required this.uniqueId
+    @required this.uniqueId,
+    @required this.listCalendarConfiguration
   });
 
   @override
@@ -246,7 +250,7 @@ class _CartScreenState extends State<CartScreen> {
                               children: [
                                 RaisedButton(
                                     child: Text('Codice Promo',style: TextStyle(color: Colors.white, fontSize: 20.0, fontFamily: 'LoraFont')),
-                                    color: _total != 0.0 ? Colors.orangeAccent : Colors.grey,
+                                    color: _total != 0.0 ? OSTERIA_GOLD : Colors.grey,
                                     elevation: 5.0,
                                     onPressed: (){
                                       _discountApplied ?
@@ -345,6 +349,7 @@ class _CartScreenState extends State<CartScreen> {
                                             total: _total,
                                             promo: promo,
                                             uniqueId: this.widget.uniqueId,
+                                            listCalendarConfiguration: this.widget.listCalendarConfiguration,
                                           );
                                         }
                                     ) : showDialog(

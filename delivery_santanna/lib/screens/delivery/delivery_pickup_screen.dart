@@ -1,9 +1,11 @@
 import 'package:delivery_santanna/components/icon_content.dart';
 import 'package:delivery_santanna/components/reusable_card.dart';
+import 'package:delivery_santanna/models/calendar_manager.dart';
 import 'package:delivery_santanna/models/cart.dart';
 import 'package:delivery_santanna/models/promoclass.dart';
 import 'package:delivery_santanna/screens/delivery/delivery_screen.dart';
 import 'package:delivery_santanna/screens/delivery/pickup_screen.dart';
+import 'package:delivery_santanna/utils/costants.dart';
 import 'package:flutter/material.dart';
 
 class DeliveryPickupScreen extends StatefulWidget {
@@ -12,13 +14,15 @@ class DeliveryPickupScreen extends StatefulWidget {
   final double total;
   final Promo promo;
   final String uniqueId;
+  final List<CalendarManagerClass> listCalendarConfiguration;
 
   DeliveryPickupScreen({
     @required this.cartItems,
     this.total,
     this.promo,
-    this.uniqueId}
-      );
+    this.uniqueId,
+    @required this.listCalendarConfiguration});
+
 
   @override
   _DeliveryPickupScreenState createState() => _DeliveryPickupScreenState();
@@ -54,7 +58,7 @@ class _DeliveryPickupScreenState extends State<DeliveryPickupScreen> {
                   Expanded(
                     child: ReusableCard(
                       color: Colors.white,
-                      cardChild: IconContent(label: 'ASPORTO', icon: Icons.shopping_bag_outlined,color: Colors.teal.shade800,description: '',),
+                      cardChild: IconContent(label: 'ASPORTO', icon: Icons.shopping_bag_outlined,color: OSTERIA_GOLD, description: '',),
                       onPress: () {
                         showDialog(
                             context: context,
@@ -64,6 +68,7 @@ class _DeliveryPickupScreenState extends State<DeliveryPickupScreen> {
                                 total: this.widget.total,
                                 promo: this.widget.promo,
                                 uniqueId: this.widget.uniqueId,
+                                listCalendarConfiguration: this.widget.listCalendarConfiguration,
                               );
                             }
                         );
@@ -71,11 +76,14 @@ class _DeliveryPickupScreenState extends State<DeliveryPickupScreen> {
                     ),
                   ),
                   Expanded(
-                      child: ReusableCard(
-                        color: Colors.white,
-                        cardChild: IconContent(label: 'DELIVERY', icon: Icons.delivery_dining, color: Colors.teal.shade800, description: 'Costo spedizione €3. Per ordini superiori a 50 € la spedizione è gratuita',),
-                        onPress: () {
-                          if(DateTime.now().day == 2){
+                    child: ReusableCard(
+                      color: Colors.white,
+                      cardChild: IconContent(label: 'DELIVERY', icon: Icons.delivery_dining, color: OSTERIA_GOLD, description: 'Servizio delivery non attivo',),
+                      onPress: () {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(backgroundColor: Colors.red.shade900 ,
+                            content: Text('Attenzione! Servizio delivery non attivo')));
+                        /*if(DateTime.now().day == 2){
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -118,9 +126,10 @@ class _DeliveryPickupScreenState extends State<DeliveryPickupScreen> {
                                 );
                               },
                             );
-                          }
-                        },
-                      )),
+                          }*/
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),

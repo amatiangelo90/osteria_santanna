@@ -243,7 +243,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                         children: <Widget>[
                           DatePicker(
                             DateTime.now(),
-                            activeDates: Utils.getAvailableData(),
+                            inactiveDates: Utils.getUnavailableData(),
                             dateTextStyle: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'LoraFont'),
                             dayTextStyle: TextStyle(color: Colors.black, fontSize: 14.0, fontFamily: 'LoraFont'),
                             monthTextStyle: TextStyle(color: Colors.black, fontSize: 12.0, fontFamily: 'LoraFont'),

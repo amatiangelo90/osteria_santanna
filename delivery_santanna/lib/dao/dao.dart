@@ -13,6 +13,10 @@ class Dao{
     return _collectionReference.orderBy('category').get();
   }
 
+  Future<QuerySnapshot> getCalendarDataCollection(){
+    return _collectionReference.get();
+  }
+
   Future<QuerySnapshot> getOrdersStoreCollection() {
     return _collectionReference.orderBy('address',descending: false).orderBy('hourPickupDelivery', descending: false).get();
   }

@@ -19,7 +19,11 @@ const wineMenuType = 'menu-wine';
 const startersMenuType = 'menu-starters';
 const mainDishMenuType = 'menu-main';
 const secondMainDishMenuType = 'menu-second-main';
+const sideDishMenuType = 'menu-side-dish';
 const drinkMenuType = 'menu-drink';
+
+const calendarSettings = 'calendar-settings';
+const calendarSettingsDelivery = 'calendar-settings-delivery';
 
 const categoryTartare = 'tartare';
 const categoryNigiri = 'nigiri';
@@ -40,6 +44,7 @@ const categoryBollicineWine = 'bollicine';
 const PICKUP_TYPE = 'Asporto';
 const DELIVERY_TYPE = 'Delivery';
 const ORDERS_TRACKER = 'orders-tracker';
+const CURRENT_PASSWORD = '6007';
 const EMPTY_STRING = '';
 
 const Color OSTERIA_GOLD = Color.fromRGBO(130, 97, 60, 1.0);

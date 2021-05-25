@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:delivery_santanna/models/calendar_manager.dart';
 import 'package:delivery_santanna/models/cart.dart';
 import 'package:delivery_santanna/models/product.dart';
 import 'package:delivery_santanna/models/order_store.dart';
@@ -15,6 +16,7 @@ class CRUDModel{
 
   Dao _dao;
   List<Product> products;
+  List<CalendarManagerClass> calConfiguList;
   List<OrderStore> customerOrders;
 
   CRUDModel(this.collection){
@@ -28,6 +30,15 @@ class CRUDModel{
         .map((doc) => Product.fromMap(doc.data(), doc.id))
         .toList();
     return products;
+  }
+
+  Future<List<CalendarManagerClass>> fetchCalendarConfiguration() async {
+    var result = await _dao.getCalendarDataCollection();
+
+    calConfiguList = result.docs
+        .map((doc) => CalendarManagerClass.fromMap(doc.data(), doc.id))
+        .toList();
+    return calConfiguList;
   }
 
   Future<List<OrderStore>> fetchCustomersOrder() async {
@@ -64,6 +75,13 @@ class CRUDModel{
     await _dao.removeDocument(id) ;
     return ;
   }
+
+  Future removeCalendar(String id) async{
+    await _dao.removeDocument(id) ;
+    return ;
+  }
+
+
   Future updateProduct(Product data, String id) async{
     await _dao.updateDocument(data.toJson(), id) ;
     return ;
@@ -72,6 +90,13 @@ class CRUDModel{
   Future addProduct(Product data) async{
 
     await _dao.addDocument(data.toJson());
+    return ;
+
+  }
+
+  Future addCalendarConfiguration(CalendarManagerClass calendarManagerClass) async{
+
+    await _dao.addDocument(calendarManagerClass.toJson());
     return ;
 
   }

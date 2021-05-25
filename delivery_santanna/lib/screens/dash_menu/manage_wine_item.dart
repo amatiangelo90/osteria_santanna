@@ -10,20 +10,20 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'admin_console_screen_menu.dart';
 
 
-class ManageMenuItemPage extends StatefulWidget {
+class ManageMenuWinePage extends StatefulWidget {
 
-  static String id = 'manage_menu_page';
+  static String id = 'manage_wine_page';
 
   final Product product;
   final String menuType;
 
-  ManageMenuItemPage({@required this.product, @required this.menuType});
+  ManageMenuWinePage({@required this.product, @required this.menuType});
 
   @override
-  _ManageMenuItemPageState createState() => _ManageMenuItemPageState();
+  _ManageMenuWinePageState createState() => _ManageMenuWinePageState();
 }
 
-class _ManageMenuItemPageState extends State<ManageMenuItemPage> {
+class _ManageMenuWinePageState extends State<ManageMenuWinePage> {
   double _price;
   Product productBase;
 
@@ -32,6 +32,7 @@ class _ManageMenuItemPageState extends State<ManageMenuItemPage> {
   Category _selectedCategory;
 
   TextEditingController _nameController;
+  TextEditingController _cantinaController;
   TextEditingController _ingredientsController;
 
   @override
@@ -39,6 +40,13 @@ class _ManageMenuItemPageState extends State<ManageMenuItemPage> {
     super.initState();
     productBase = this.widget.product;
     _nameController = TextEditingController(text: productBase.name);
+    if(productBase.changes != null){
+      _cantinaController = TextEditingController(text: productBase.changes[0]);
+    }else{
+      _cantinaController = TextEditingController(text: '');
+    }
+
+
     _ingredientsController = TextEditingController(text: Utils.getIngredientsFromProductALaCarte(productBase));
     _categoryPicker = Category.getCategoryList(this.widget.menuType);
     _dropdownCategory = buildDropdownSlotPickup(_categoryPicker);
@@ -71,7 +79,7 @@ class _ManageMenuItemPageState extends State<ManageMenuItemPage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.green,
           title: Text(productBase.name,  style: TextStyle(fontSize: 20.0, color: Colors.white),),
         ),
         body: Container(
@@ -108,14 +116,29 @@ class _ManageMenuItemPageState extends State<ManageMenuItemPage> {
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(),
-                                  labelText: 'Ingredienti',
+                                  labelText: 'Uvaggio',
                                 ),
                                 maxLines: 4,
                               ),
                             ),
                           ),
                         ),
-                        Text('*Ricorda di dividere la lista ingredienti con la virgola (,)', style: TextStyle(fontSize: 10),),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                          child: Center(
+                            child: Card(
+                              child: TextField(
+                                controller: _cantinaController,
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Cantina',
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Text('*Ricorda di dividere i tipi di uva con la virgola (,)', style: TextStyle(fontSize: 10),),
                         this.widget.menuType == sushiMenuType ? Padding(
                           padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 3.0),
                           child: Center(
@@ -177,7 +200,7 @@ class _ManageMenuItemPageState extends State<ManageMenuItemPage> {
                                 color: productBase.available == 'true' ? Colors.blueAccent : Colors.grey,
                                 elevation: 5.0,
                                 onPressed: () async {
-                                  updateProductBase('true');
+                                  updateProductBaseAvailability('true');
 
                                 }
                             ),
@@ -186,7 +209,7 @@ class _ManageMenuItemPageState extends State<ManageMenuItemPage> {
                                 color: productBase.available == 'false' ? Colors.red : Colors.grey,
                                 elevation: 5.0,
                                 onPressed: () async {
-                                  updateProductBase('false');
+                                  updateProductBaseAvailability('false');
                                 }
                             ),
                             RaisedButton(
@@ -194,12 +217,49 @@ class _ManageMenuItemPageState extends State<ManageMenuItemPage> {
                                 color: productBase.available == 'new' ? Colors.green : Colors.grey,
                                 elevation: 5.0,
                                 onPressed: () async {
-                                  updateProductBase('new');
+                                  updateProductBaseAvailability('new');
                                 }
                             ),
                           ],
                         ),
+                        ButtonBar(
+                          alignment: MainAxisAlignment.center,
+                          children: [
+                            RaisedButton(
+                                child: Text('Rosso',style: TextStyle(color: Colors.white, fontSize: 20.0,)),
+                                color: productBase.category == 'redwine' ? Colors.red : Colors.grey,
+                                elevation: 5.0,
+                                onPressed: () async {
+                                  updateProductBaseCategoryWine('redwine');
 
+                                }
+                            ),
+                            RaisedButton(
+                                child: Text('Rosato',style: TextStyle(color: Colors.white, fontSize: 20.0,)),
+                                color: productBase.category == 'rosewine' ? Colors.pinkAccent : Colors.grey,
+                                elevation: 5.0,
+                                onPressed: () async {
+                                  updateProductBaseCategoryWine('rosewine');
+                                }
+                            ),
+                            RaisedButton(
+                                child: Text('Bianco',style: TextStyle(color: Colors.white, fontSize: 20.0,)),
+                                color: productBase.category == 'whitewine' ? Colors.yellow : Colors.grey,
+                                elevation: 5.0,
+                                onPressed: () async {
+                                  updateProductBaseCategoryWine('whitewine');
+                                }
+                            ),
+                            RaisedButton(
+                                child: Text('Bollicine',style: TextStyle(color: Colors.white, fontSize: 20.0,)),
+                                color: productBase.category == 'bollicine' ? Colors.blue : Colors.grey,
+                                elevation: 5.0,
+                                onPressed: () async {
+                                  updateProductBaseCategoryWine('bollicine');
+                                }
+                            ),
+                          ],
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(23.0),
                           child: Row(
@@ -217,7 +277,7 @@ class _ManageMenuItemPageState extends State<ManageMenuItemPage> {
                                   productBase.price = _price;
                                   productBase.name = _nameController.value.text;
                                   productBase.listIngredients = _ingredientsController.value.text.split(",");
-                                  productBase.category = _selectedCategory.cat;
+                                  productBase.changes[0] = _cantinaController.value.text;
                                   await crudModel.updateProduct(productBase, productBase.id);
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(backgroundColor: Colors.green.shade500 ,
@@ -341,9 +401,19 @@ class _ManageMenuItemPageState extends State<ManageMenuItemPage> {
     }
   }
 
-  void updateProductBase(String state) {
+  void updateProductBaseAvailability(String state) {
     setState(() {
       productBase.available = state;
+    });
+  }
+
+  void updateProductBaseCategoryWine(String categoryWine) {
+    print('@@@@@@@@');
+    print(categoryWine);
+    print('productBase.category ->' + productBase.category);
+    print('@@@@@@@@');
+    setState(() {
+      productBase.category = categoryWine;
     });
   }
 

@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'package:delivery_santanna/screens/delivery/home_page_screen.dart';
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
 import 'package:delivery_santanna/screens/menu/a_la_carte_screen.dart';
-import 'menu_choose_screen.dart';
 
 class SplashScreenSantAnna extends StatefulWidget {
-  static String id = 'delivery';
+  static String id = 'homeosteria';
   @override
   _SplashScreenSantAnnaState createState() => _SplashScreenSantAnnaState();
 }

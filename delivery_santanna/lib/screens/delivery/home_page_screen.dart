@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:delivery_santanna/models/calendar_manager.dart';
 import 'package:delivery_santanna/models/cart.dart';
 import 'package:delivery_santanna/models/product.dart';
 import 'package:delivery_santanna/screens/delivery/add_modal_screen.dart';
@@ -9,17 +9,15 @@ import 'package:delivery_santanna/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:delivery_santanna/screens/dash_delivery//admin_console_screen.dart';
 import 'package:delivery_santanna/dao/crud_model.dart';
-import 'package:passcode_screen/circle.dart';
-import 'package:passcode_screen/keyboard.dart';
-import 'package:passcode_screen/passcode_screen.dart';
 import 'package:uuid/uuid.dart';
 
-const String storedPasscode = '260700';
-
 class OsteriaSantAnnaHomePage extends StatefulWidget {
-  static String id = '/';
+  static String id = 'delivery-service';
+
+  final List<CalendarManagerClass> listCalendarConfiguration;
+
+  OsteriaSantAnnaHomePage({@required this.listCalendarConfiguration});
 
   @override
   _OsteriaSantAnnaHomePageState createState() => _OsteriaSantAnnaHomePageState();
@@ -27,16 +25,12 @@ class OsteriaSantAnnaHomePage extends StatefulWidget {
 
 class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
 
-  final StreamController<bool> _verificationNotifier =
-  StreamController<bool>.broadcast();
-
-  bool isAuthenticated = false;
   var uuid;
 
   List<Product> sushiProductList = <Product>[];
-  List<Product> kitchenProductList = <Product>[];
+  /*List<Product> kitchenProductList = <Product>[];
   List<Product> dessertProductList = <Product>[];
-  List<Product> wineProductList = <Product>[];
+  List<Product> wineProductList = <Product>[];*/
 
   List<Cart> cartProductList = <Cart>[];
 
@@ -165,7 +159,7 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
             visible: _direction,
             maintainSize: false,
             child: FloatingActionButton(
-              backgroundColor: Colors.teal.shade800,
+              backgroundColor: OSTERIA_GOLD,
               onPressed: () {
                 _moveUp();
               },
@@ -177,7 +171,7 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
             maintainSize: false,
             visible: !_direction,
             child: FloatingActionButton(
-              backgroundColor: Colors.teal.shade800,
+              backgroundColor: OSTERIA_GOLD,
               onPressed: () {
                 _moveDown();
               },
@@ -210,15 +204,14 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
           height: screenHeight,
           child: Scaffold(
             appBar: AppBar(
-
               iconTheme: IconThemeData(color: Colors.black),
               backgroundColor: Colors.white,
               elevation: 0.0,
-              title: Text('Osteria Sant\'Anna', style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
+              title: Text('Asporto Sant\'Anna', style: TextStyle(fontSize: 19.0, color: Colors.black, fontFamily: 'LoraFont'),
               ),
               centerTitle: true,
               actions: [
-                IconButton(icon: Icon(Icons.info_outline ,size: 30.0, color: Colors.teal.shade800,), onPressed: (){
+                IconButton(icon: Icon(Icons.info_outline ,size: 30.0, color: OSTERIA_GOLD,), onPressed: (){
                   showDialog(
                       context: context,
                       builder: (context) {
@@ -242,6 +235,7 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
                                   cartItems: cartProductList,
                                   function: removeProductFromCart,
                                   uniqueId: uuid,
+                                  listCalendarConfiguration: this.widget.listCalendarConfiguration,
                                 ),
                                 ),
                               );
@@ -269,7 +263,7 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
                 ),
               ],
             ),
-            drawer: Drawer(
+            /*drawer: Drawer(
               elevation: 3.0,
               child: ListView(
                 padding: EdgeInsets.zero,
@@ -299,7 +293,7 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
                           Navigator.pop(context);
                         },
                       ),
-                      ListTile(
+                      *//*ListTile(
                         title: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text('Dalla Cucina',
@@ -340,7 +334,7 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
                           });
                           Navigator.pop(context);
                         },
-                      ),
+                      ),*//*
                     ],
                   ),
                   SizedBox(height: 180.0),
@@ -365,7 +359,7 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
                   ),
                 ],
               ),
-            ),
+            ),*/
             body: SafeArea(
               child: PageView(
                 controller: controller,
@@ -406,7 +400,8 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
                         ),
                       ],
                     ),
-                  ),SingleChildScrollView(
+                  ),
+                  /*SingleChildScrollView(
                     controller: scrollViewColtroller,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -477,8 +472,8 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
                         ),
                       ],
                     ),
-                  ),
-                  SingleChildScrollView(
+                  ),*/
+                  /*SingleChildScrollView(
                     controller: scrollViewColtroller,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -513,7 +508,7 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             ),
@@ -558,7 +553,7 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            currentMenuType == sushiMenuType ? Text('') :
+            /*currentMenuType == sushiMenuType ? Text('') :
             GestureDetector(
               child: Icon(Icons.chevron_left,
                 color: Colors.black,),
@@ -567,14 +562,14 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
                   updateMenuType(previousMenu);
                 });
               },
-            ),
+            ),*/
             Center(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(menuType, style: TextStyle(fontSize: 18.0, color: Colors.black, fontFamily: 'LoraFont')),
               ),
             ),
-            currentMenuType == wineMenuType ? Text('') :
+            /*currentMenuType == wineMenuType ? Text('') :
             GestureDetector(
               child: Icon(
                 Icons.chevron_right,
@@ -585,7 +580,7 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
                   updateMenuType(nextMenu);
                 });
               },
-            ),
+            ),*/
           ],
         ),
       ),
@@ -925,26 +920,26 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
           return sushiProductList;
         }
         break;
-      case fromKitchenMenuType:
+    /* case fromKitchenMenuType:
         if(kitchenProductList.isEmpty){
           CRUDModel crudModel = CRUDModel(currentMenuType);
           kitchenProductList = await crudModel.fetchProducts();
           return kitchenProductList;
         }else{
-          /*CRUDModel crudModel = CRUDModel(currentMenuType);
-          kitchenProductList = await crudModel.fetchProducts();*/
+          *//*CRUDModel crudModel = CRUDModel(currentMenuType);
+          kitchenProductList = await crudModel.fetchProducts();*//*
           return kitchenProductList;
 
-        }
-        break;
-      case dessertMenuType:
+        }*/
+    /*break;*/
+    /*case dessertMenuType:
         if(dessertProductList.isEmpty){
           CRUDModel crudModel = CRUDModel(currentMenuType);
           dessertProductList = await crudModel.fetchProducts();
           return dessertProductList;
         }else{
-          /*CRUDModel crudModel = CRUDModel(currentMenuType);
-          dessertProductList = await crudModel.fetchProducts();*/
+          *//*CRUDModel crudModel = CRUDModel(currentMenuType);
+          dessertProductList = await crudModel.fetchProducts();*//*
           return dessertProductList;
         }
         break;
@@ -954,11 +949,11 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
           wineProductList = await crudModel.fetchProducts();
           return wineProductList;
         }else{
-          /*CRUDModel crudModel = CRUDModel(currentMenuType);
-          wineProductList = await crudModel.fetchProducts();*/
+          *//*CRUDModel crudModel = CRUDModel(currentMenuType);
+          wineProductList = await crudModel.fetchProducts();*//*
           return wineProductList;
-        }
-        break;
+        }*/
+    /*break;*/
     }
   }
   getNameByType(String type) {
@@ -992,60 +987,6 @@ class _OsteriaSantAnnaHomePageState extends State<OsteriaSantAnnaHomePage> {
         return Colors.pinkAccent.shade100;
     }
     return Colors.black;
-  }
-
-  _showLockScreen(
-      BuildContext context, {
-        @required bool opaque,
-        CircleUIConfig circleUIConfig,
-        KeyboardUIConfig keyboardUIConfig,
-        @required Widget cancelButton,
-        List<String> digits,
-      }) {
-    Navigator.push(
-        context,
-        PageRouteBuilder(
-          opaque: opaque,
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              Container(
-                child: PasscodeScreen(
-                  title: Text(
-                    'Password',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 28),
-                  ),
-                  circleUIConfig: circleUIConfig,
-                  keyboardUIConfig: keyboardUIConfig,
-                  passwordEnteredCallback: _onPasscodeEntered,
-                  cancelButton: cancelButton,
-                  deleteButton: Text(
-                    'Delete',
-                    style: const TextStyle(fontSize: 16, color: Colors.white),
-                    semanticsLabel: 'Delete',
-                  ),
-                  shouldTriggerVerification: _verificationNotifier.stream,
-                  backgroundColor: Colors.black.withOpacity(0.8),
-                  cancelCallback: _onPasscodeCancelled,
-                  digits: digits,
-                  passwordDigits: 6,
-                ),
-              ),
-        ));
-  }
-
-  _onPasscodeEntered(String enteredPasscode) {
-    bool isValid = storedPasscode == enteredPasscode;
-    _verificationNotifier.add(isValid);
-    if (isValid) {
-      setState(() {
-        this.isAuthenticated = isValid;
-      });
-      Navigator.pushNamed(context, AdminConsoleScreen.id);
-    }
-  }
-
-  _onPasscodeCancelled() {
-    Navigator.maybePop(context);
   }
 }
 
